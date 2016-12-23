@@ -1,0 +1,14 @@
+SMAP
+index_jsp.java
+JSP
+*S JSP
+*F
++ 0 index.jsp
+index.jsp
++ 1 includes.jspf
+WEB-INF/jspf/includes.jspf
+*L
+2,7:49
+1#1,3:56
+8#0,23:59
+*E
