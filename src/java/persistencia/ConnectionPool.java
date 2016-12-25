@@ -1,4 +1,4 @@
-package database;
+package persistencia;
 
 import java.sql.*;
 import javax.sql.DataSource;
