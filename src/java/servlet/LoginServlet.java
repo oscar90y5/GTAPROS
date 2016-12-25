@@ -5,20 +5,26 @@
  */
 package servlet;
 
+import dominio.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import modelo.model;
+import persistencia.UsuarioFacadeLocal;
 
 /**
  *
  * @author miki
  */
 public class LoginServlet extends HttpServlet {
+
+    @EJB
+    private UsuarioFacadeLocal usuarioFacade;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,25 +43,38 @@ public class LoginServlet extends HttpServlet {
             String email=request.getParameter("email");
             String password=request.getParameter("password");
 
-            int validation = model.validateUser(email,password);
-            if(validation == 1){
-                RequestDispatcher rd=request.getRequestDispatcher("jefeProyecto.jsp");
-                rd.forward(request,response);
+            ArrayList<Usuario> usuarios = (ArrayList<Usuario>) usuarioFacade.findAll();
+            for(Usuario user: usuarios){
+                if(email.equals(user.getDni()) && password.equals(user.getClave())){
+                    switch (user.getTipoCategoria()) {
+                        case 0:
+                            {
+                                RequestDispatcher rd=request.getRequestDispatcher("jefeProyecto.jsp");
+                                rd.forward(request,response);
+                                break;
+                            }
+                        case 1:
+                            {
+                                RequestDispatcher rd=request.getRequestDispatcher("desarrollador.jsp");
+                                rd.forward(request,response);
+                                break;
+                            }
+                        case 2:
+                            {
+                                RequestDispatcher rd=request.getRequestDispatcher("administrador.jsp");
+                                rd.forward(request,response);
+                                break;
+                            }
+                        default:
+                            break;
+                    }
+                }else{
+                    out.print("<p style=\"color:red\">Sorry username or password error</p>");
+                    RequestDispatcher rd=request.getRequestDispatcher("index.jsp");
+                    rd.include(request,response);
+                }
+                    
             }
-            if(validation == 2){
-                RequestDispatcher rd=request.getRequestDispatcher("desarrollador.jsp");
-                rd.forward(request,response);
-            }
-            if(validation == 3){
-                RequestDispatcher rd=request.getRequestDispatcher("administrador.jsp");
-                rd.forward(request,response);
-            }
-            if(validation == 0){
-                out.print("<p style=\"color:red\">Sorry username or password error</p>");
-                RequestDispatcher rd=request.getRequestDispatcher("index.jsp");
-                rd.include(request,response);
-            }
-
             out.close();
     }
 

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Context path="/GTAPROS">
-  <Resource auth="Container" 
-            driverClassName="com.mysql.jdbc.Driver" 
-            maxActive="100" maxIdle="30" maxWait="10000" 
-            name="jdbc/PGP_grupo02" password="Mj8hGn8h" 
-            type="javax.sql.DataSource" 
-            url="jdbc:mysql://migumar@jair.lab.inf.uva.es:22/PGP_grupo02" username="PGP_grupo02"/>
-</Context>
