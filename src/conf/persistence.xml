@@ -9,6 +9,13 @@
     <class>modelo.ProductCode</class>
     <class>modelo.MicroMarket</class>
     <class>modelo.Customer</class>
+    <class>dominio.Actividad</class>
+    <class>dominio.InformeTareas</class>
+    <class>dominio.Miembro</class>
+    <class>dominio.Proyecto</class>
+    <class>dominio.Tarea</class>
+    <class>dominio.Vacaciones</class>
+    <class>dominio.Usuario</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/sample"/>
