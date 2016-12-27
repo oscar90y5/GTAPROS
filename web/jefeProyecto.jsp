@@ -14,18 +14,20 @@
         <%@include file="WEB-INF/jspf/includes.jspf" %>
     </head>
     <body>
-        <section class="col-md-10 col-md-offset-5">
+        <section class="container">
+            <section class="login-form">
             <h1>Bienvenido <%=session.getAttribute("idUser")%></h1>
-            <h3>¿Qué quieres hacer?</h3>
-            <section class="btn-group-vertical">
-                <button type="button" name="estado" value="sinPlan" class="btn-block" onclick="/ProyectosServlet">Cargar Plan de proyecto</button>
-                <button type="button" name="estado" value="enCurso" class="btn-block" onclick="/ProyectosServlet">Añadir personas a proyecto</button>
-                <button type="button" name="estado" value="enCurso" class="btn-block" onclick="/ProyectosServlet">Añadir personas a actividad</button>
-                <button type="button" class="btn-block" onclick="actividades.jsp">Fijar fin de actividad</button>
-                <button type="button" name="estado" value="todos" class="btn-block" onclick="/ProyectosServlet">Obtener informes</button>
-                <button type="button" name="estado" value="enCurso" class="btn-block" onclick="/ProyectosServlet">Consultar datos de actividad</button>
-                <button type="button" class="btn-block" onclick="vacaciones.html">Fijar vacaciones</button>
-            </section>
+            <h2> Eliga qué desea hacer: </h2>
+            <form action="JefeProyecto" method="POST" style="margin-top: 20px;">
+                <input type="submit" name="accion" value="Cargar Plan de proyecto" class="btn btn-lg btn-primary btn-block"/>
+                <input type="submit" name="accion" value="Añadir personas a proyecto" class="btn btn-lg btn-primary btn-block"/>
+                <input type="submit" name="accion" value="Añadir personas a actividad" class="btn btn-lg btn-primary btn-block"/>
+                <input type="submit" name="accion" value="Fijar fin de actividad" class="btn btn-lg btn-primary btn-block"/>
+                <input type="submit" name="accion" value="Obtener informes" class="btn btn-lg btn-primary btn-block"/>
+                <input type="submit" name="accion" value="Consultar datos de actividad" class="btn btn-lg btn-primary btn-block"/>
+                <input type="submit" name="accion" value="Fijar vacaciones" class="btn btn-lg btn-primary btn-block"/>
+            </form>
+           </section>
         </section>
     </body>
 </html>

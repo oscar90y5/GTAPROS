@@ -18,7 +18,7 @@
     </head>
 
     <body>
-        <div class="col-md-12 col-lg-offset-4">
+        <div>
             <h1>Elija la fecha de vacaciones:</h1>
             <input type="hidden" name="fecha1" id="fecha1" />
             <input type="hidden" name="fecha2" id="fecha2" />
