@@ -9,6 +9,7 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -18,7 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Entity
 @Table(name = "Tarea")
@@ -27,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Tarea.findAll", query = "SELECT t FROM Tarea t")
     , @NamedQuery(name = "Tarea.findByEsfuerzoReal", query = "SELECT t FROM Tarea t WHERE t.esfuerzoReal = :esfuerzoReal")
     , @NamedQuery(name = "Tarea.findByTipo", query = "SELECT t FROM Tarea t WHERE t.tareaPK.tipo = :tipo")
-    , @NamedQuery(name = "Tarea.findByDni", query = "SELECT t FROM Tarea t WHERE t.tareaPK.dni = :dni")
+    , @NamedQuery(name = "Tarea.findByIdMiembro", query = "SELECT t FROM Tarea t WHERE t.tareaPK.idMiembro = :idMiembro")
     , @NamedQuery(name = "Tarea.findByIdActividad", query = "SELECT t FROM Tarea t WHERE t.tareaPK.idActividad = :idActividad")})
 public class Tarea implements Serializable {
 
@@ -36,14 +37,14 @@ public class Tarea implements Serializable {
     protected TareaPK tareaPK;
     @Column(name = "esfuerzoReal")
     private Integer esfuerzoReal;
-    @JoinColumn(name = "dni", referencedColumnName = "dni", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
+    @JoinColumn(name = "idMiembro", referencedColumnName = "idMiembro", insertable = false, updatable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Miembro miembro;
     @JoinColumn(name = "idActividad", referencedColumnName = "id", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Actividad actividad;
     @JoinColumn(name = "idInforme", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private InformeTareas idInforme;
 
     public Tarea() {
@@ -53,8 +54,8 @@ public class Tarea implements Serializable {
         this.tareaPK = tareaPK;
     }
 
-    public Tarea(String tipo, String dni, int idActividad) {
-        this.tareaPK = new TareaPK(tipo, dni, idActividad);
+    public Tarea(String tipo, int idMiembro, int idActividad) {
+        this.tareaPK = new TareaPK(tipo, idMiembro, idActividad);
     }
 
     public TareaPK getTareaPK() {

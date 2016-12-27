@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Embeddable
 public class TareaPK implements Serializable {
@@ -26,9 +26,8 @@ public class TareaPK implements Serializable {
     private String tipo;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 10)
-    @Column(name = "dni")
-    private String dni;
+    @Column(name = "idMiembro")
+    private int idMiembro;
     @Basic(optional = false)
     @NotNull
     @Column(name = "idActividad")
@@ -37,9 +36,9 @@ public class TareaPK implements Serializable {
     public TareaPK() {
     }
 
-    public TareaPK(String tipo, String dni, int idActividad) {
+    public TareaPK(String tipo, int idMiembro, int idActividad) {
         this.tipo = tipo;
-        this.dni = dni;
+        this.idMiembro = idMiembro;
         this.idActividad = idActividad;
     }
 
@@ -51,12 +50,12 @@ public class TareaPK implements Serializable {
         this.tipo = tipo;
     }
 
-    public String getDni() {
-        return dni;
+    public int getIdMiembro() {
+        return idMiembro;
     }
 
-    public void setDni(String dni) {
-        this.dni = dni;
+    public void setIdMiembro(int idMiembro) {
+        this.idMiembro = idMiembro;
     }
 
     public int getIdActividad() {
@@ -71,7 +70,7 @@ public class TareaPK implements Serializable {
     public int hashCode() {
         int hash = 0;
         hash += (tipo != null ? tipo.hashCode() : 0);
-        hash += (dni != null ? dni.hashCode() : 0);
+        hash += (int) idMiembro;
         hash += (int) idActividad;
         return hash;
     }
@@ -86,7 +85,7 @@ public class TareaPK implements Serializable {
         if ((this.tipo == null && other.tipo != null) || (this.tipo != null && !this.tipo.equals(other.tipo))) {
             return false;
         }
-        if ((this.dni == null && other.dni != null) || (this.dni != null && !this.dni.equals(other.dni))) {
+        if (this.idMiembro != other.idMiembro) {
             return false;
         }
         if (this.idActividad != other.idActividad) {
@@ -97,7 +96,7 @@ public class TareaPK implements Serializable {
 
     @Override
     public String toString() {
-        return "dominio.TareaPK[ tipo=" + tipo + ", dni=" + dni + ", idActividad=" + idActividad + " ]";
+        return "dominio.TareaPK[ tipo=" + tipo + ", idMiembro=" + idMiembro + ", idActividad=" + idActividad + " ]";
     }
     
 }

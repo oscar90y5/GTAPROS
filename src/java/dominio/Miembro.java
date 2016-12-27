@@ -6,11 +6,12 @@
 package dominio;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
@@ -18,7 +19,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -27,53 +27,60 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Entity
 @Table(name = "Miembro")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Miembro.findAll", query = "SELECT m FROM Miembro m")
+    , @NamedQuery(name = "Miembro.findByIdMiembro", query = "SELECT m FROM Miembro m WHERE m.idMiembro = :idMiembro")
     , @NamedQuery(name = "Miembro.findByTipoRol", query = "SELECT m FROM Miembro m WHERE m.tipoRol = :tipoRol")
-    , @NamedQuery(name = "Miembro.findByDni", query = "SELECT m FROM Miembro m WHERE m.dni = :dni")
     , @NamedQuery(name = "Miembro.findByParticipacion", query = "SELECT m FROM Miembro m WHERE m.participacion = :participacion")})
 public class Miembro implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "idMiembro")
+    private Integer idMiembro;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 19)
     @Column(name = "tipoRol")
     private String tipoRol;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 10)
-    @Column(name = "dni")
-    private String dni;
     @Column(name = "participacion")
     private Integer participacion;
-    @ManyToMany(mappedBy = "miembroCollection")
-    private Collection<Actividad> actividadCollection;
-    @JoinColumn(name = "dni", referencedColumnName = "dni", insertable = false, updatable = false)
-    @OneToOne(optional = false)
-    private Usuario usuario;
+    @ManyToMany(mappedBy = "miembroList", fetch = FetchType.EAGER)
+    private List<Actividad> actividadList;
+    @JoinColumn(name = "dni", referencedColumnName = "dni")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Usuario dni;
     @JoinColumn(name = "idProyecto", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Proyecto idProyecto;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "miembro")
-    private Collection<Tarea> tareaCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "miembro", fetch = FetchType.EAGER)
+    private List<Tarea> tareaList;
 
     public Miembro() {
     }
 
-    public Miembro(String dni) {
-        this.dni = dni;
+    public Miembro(Integer idMiembro) {
+        this.idMiembro = idMiembro;
     }
 
-    public Miembro(String dni, String tipoRol) {
-        this.dni = dni;
+    public Miembro(Integer idMiembro, String tipoRol) {
+        this.idMiembro = idMiembro;
         this.tipoRol = tipoRol;
+    }
+
+    public Integer getIdMiembro() {
+        return idMiembro;
+    }
+
+    public void setIdMiembro(Integer idMiembro) {
+        this.idMiembro = idMiembro;
     }
 
     public String getTipoRol() {
@@ -82,14 +89,6 @@ public class Miembro implements Serializable {
 
     public void setTipoRol(String tipoRol) {
         this.tipoRol = tipoRol;
-    }
-
-    public String getDni() {
-        return dni;
-    }
-
-    public void setDni(String dni) {
-        this.dni = dni;
     }
 
     public Integer getParticipacion() {
@@ -101,20 +100,20 @@ public class Miembro implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Actividad> getActividadCollection() {
-        return actividadCollection;
+    public List<Actividad> getActividadList() {
+        return actividadList;
     }
 
-    public void setActividadCollection(Collection<Actividad> actividadCollection) {
-        this.actividadCollection = actividadCollection;
+    public void setActividadList(List<Actividad> actividadList) {
+        this.actividadList = actividadList;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public Usuario getDni() {
+        return dni;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setDni(Usuario dni) {
+        this.dni = dni;
     }
 
     public Proyecto getIdProyecto() {
@@ -126,18 +125,18 @@ public class Miembro implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Tarea> getTareaCollection() {
-        return tareaCollection;
+    public List<Tarea> getTareaList() {
+        return tareaList;
     }
 
-    public void setTareaCollection(Collection<Tarea> tareaCollection) {
-        this.tareaCollection = tareaCollection;
+    public void setTareaList(List<Tarea> tareaList) {
+        this.tareaList = tareaList;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (dni != null ? dni.hashCode() : 0);
+        hash += (idMiembro != null ? idMiembro.hashCode() : 0);
         return hash;
     }
 
@@ -148,7 +147,7 @@ public class Miembro implements Serializable {
             return false;
         }
         Miembro other = (Miembro) object;
-        if ((this.dni == null && other.dni != null) || (this.dni != null && !this.dni.equals(other.dni))) {
+        if ((this.idMiembro == null && other.idMiembro != null) || (this.idMiembro != null && !this.idMiembro.equals(other.idMiembro))) {
             return false;
         }
         return true;
@@ -156,7 +155,7 @@ public class Miembro implements Serializable {
 
     @Override
     public String toString() {
-        return "dominio.Miembro[ dni=" + dni + " ]";
+        return "dominio.Miembro[ idMiembro=" + idMiembro + " ]";
     }
     
 }

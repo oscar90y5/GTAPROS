@@ -6,16 +6,16 @@
 package dominio;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Entity
 @Table(name = "Usuario")
@@ -35,7 +35,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByNombreCompleto", query = "SELECT u FROM Usuario u WHERE u.nombreCompleto = :nombreCompleto")
     , @NamedQuery(name = "Usuario.findByClave", query = "SELECT u FROM Usuario u WHERE u.clave = :clave")
     , @NamedQuery(name = "Usuario.findByVacacionesFijadas", query = "SELECT u FROM Usuario u WHERE u.vacacionesFijadas = :vacacionesFijadas")
-    , @NamedQuery(name = "Usuario.findByTipoCategoria", query = "SELECT u FROM Usuario u WHERE u.tipoCategoria = :tipoCategoria")})
+    , @NamedQuery(name = "Usuario.findByTipoCategoria", query = "SELECT u FROM Usuario u WHERE u.tipoCategoria = :tipoCategoria")
+    , @NamedQuery(name = "Usuario.findByEsAdmin", query = "SELECT u FROM Usuario u WHERE u.esAdmin = :esAdmin")})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,15 +55,17 @@ public class Usuario implements Serializable {
     @Column(name = "clave")
     private String clave;
     @Column(name = "vacacionesFijadas")
-    private Integer vacacionesFijadas;
+    private Boolean vacacionesFijadas;
     @Basic(optional = false)
     @NotNull
     @Column(name = "tipoCategoria")
     private int tipoCategoria;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuario")
-    private Miembro miembro;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
-    private Collection<Vacaciones> vacacionesCollection;
+    @Column(name = "esAdmin")
+    private Boolean esAdmin;
+    @OneToMany(mappedBy = "dni", fetch = FetchType.EAGER)
+    private List<Miembro> miembroList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.EAGER)
+    private List<Vacaciones> vacacionesList;
 
     public Usuario() {
     }
@@ -101,11 +104,11 @@ public class Usuario implements Serializable {
         this.clave = clave;
     }
 
-    public Integer getVacacionesFijadas() {
+    public Boolean getVacacionesFijadas() {
         return vacacionesFijadas;
     }
 
-    public void setVacacionesFijadas(Integer vacacionesFijadas) {
+    public void setVacacionesFijadas(Boolean vacacionesFijadas) {
         this.vacacionesFijadas = vacacionesFijadas;
     }
 
@@ -117,21 +120,30 @@ public class Usuario implements Serializable {
         this.tipoCategoria = tipoCategoria;
     }
 
-    public Miembro getMiembro() {
-        return miembro;
+    public Boolean getEsAdmin() {
+        return esAdmin;
     }
 
-    public void setMiembro(Miembro miembro) {
-        this.miembro = miembro;
+    public void setEsAdmin(Boolean esAdmin) {
+        this.esAdmin = esAdmin;
     }
 
     @XmlTransient
-    public Collection<Vacaciones> getVacacionesCollection() {
-        return vacacionesCollection;
+    public List<Miembro> getMiembroList() {
+        return miembroList;
     }
 
-    public void setVacacionesCollection(Collection<Vacaciones> vacacionesCollection) {
-        this.vacacionesCollection = vacacionesCollection;
+    public void setMiembroList(List<Miembro> miembroList) {
+        this.miembroList = miembroList;
+    }
+
+    @XmlTransient
+    public List<Vacaciones> getVacacionesList() {
+        return vacacionesList;
+    }
+
+    public void setVacacionesList(List<Vacaciones> vacacionesList) {
+        this.vacacionesList = vacacionesList;
     }
 
     @Override
