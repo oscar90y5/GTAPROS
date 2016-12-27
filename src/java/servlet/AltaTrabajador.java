@@ -8,12 +8,14 @@ package servlet;
 import dominio.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import persistencia.UsuarioFacadeLocal;
 
 /**
  *
@@ -21,6 +23,9 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "AltaTrabajador", urlPatterns = {"/AltaTrabajador"})
 public class AltaTrabajador extends HttpServlet {
+
+    @EJB
+    private UsuarioFacadeLocal usuarioFacade;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,8 +46,11 @@ public class AltaTrabajador extends HttpServlet {
             nombre = request.getParameter("nombreTrabajador");
             dni = request.getParameter("dniTrabajador");
             tipoCategoria = Integer.valueOf(request.getParameter("categoriaTrabajador"));
-            Usuario u = new Usuario(dni,dni,tipoCategoria);
-            
+            String clave = "abc";
+            Usuario u = new Usuario(dni,clave,tipoCategoria);
+            u.setNombreCompleto(nombre);
+            //Faltan comprobaciones y atributos
+            usuarioFacade.create(u);
         }
     }
 
