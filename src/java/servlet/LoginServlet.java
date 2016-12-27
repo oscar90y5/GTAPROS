@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import persistencia.UsuarioFacadeLocal;
 
 /**
@@ -39,29 +40,31 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
           response.setContentType("text/html");
             PrintWriter out = response.getWriter();
+            HttpSession sesion = request.getSession();
 
-            String email=request.getParameter("email");
+            String id=request.getParameter("id");
             String password=request.getParameter("password");
 
             ArrayList<Usuario> usuarios = (ArrayList<Usuario>) usuarioFacade.findAll();
             for(Usuario user: usuarios){
-                if(email.equals(user.getDni()) && password.equals(user.getClave())){
+                if(id.equals(user.getDni()) && password.equals(user.getClave())){
+                    sesion.setAttribute("idUser", id);
                     switch (user.getTipoCategoria()) {
                         case 0:
                             {
-                                RequestDispatcher rd=request.getRequestDispatcher("jefeProyecto.jsp");
+                                RequestDispatcher rd = request.getRequestDispatcher("jefeProyecto.jsp");
                                 rd.forward(request,response);
                                 break;
                             }
                         case 1:
                             {
-                                RequestDispatcher rd=request.getRequestDispatcher("desarrollador.jsp");
+                                RequestDispatcher rd = request.getRequestDispatcher("desarrollador.jsp");
                                 rd.forward(request,response);
                                 break;
                             }
                         case 2:
                             {
-                                RequestDispatcher rd=request.getRequestDispatcher("administrador.jsp");
+                                RequestDispatcher rd = request.getRequestDispatcher("administrador.jsp");
                                 rd.forward(request,response);
                                 break;
                             }

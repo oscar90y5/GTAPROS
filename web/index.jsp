@@ -12,7 +12,7 @@
             <section class="login-form">
                 <form method="post" action="login" role="login">
                     <img src="./images/logo.png" class="img-responsive" alt="" />
-                    <input type="email" name="email" placeholder="Email" required class="form-control input-lg" />
+                    <input type="text" name="id" placeholder="User" required class="form-control input-lg" />
                     <input type="password" name="password" placeholder="Password" required class="form-control input-lg" />
                     <button type="submit" name="go" class="btn btn-lg btn-primary btn-block">Entrar</button>
                 </form>
