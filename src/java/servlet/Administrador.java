@@ -18,8 +18,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author claramorrondo
  */
-@WebServlet(name = "Aministrador", urlPatterns = {"/Aministrador"})
-public class Aministrador extends HttpServlet {
+@WebServlet(name = "Administrador", urlPatterns = {"/Administrador"})
+public class Administrador extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,11 +36,11 @@ public class Aministrador extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             HttpSession sesion = request.getSession();
             String user = (String) sesion.getAttribute("user");
-            String accion = request.getParameter("aministrador");
+            String accion = request.getParameter("accion");
             if (accion != null) {
-                  if (accion.equals("altaTrabajador")) response.sendRedirect("AltaTrabajador.jsp");     
-                  if (accion.equals("altaProyecto")) response.sendRedirect("AltaProyecto.jsp");
-                  if (accion.equals("asignarRepsonsable")) response.sendRedirect("AsignarResponsable.jsp");
+                  if (accion.equals("Dar de Alta Trabajador")) response.sendRedirect("AltaTrabajador.jsp");     
+                  if (accion.equals("Dar de Alta Proyecto")) response.sendRedirect("AltaProyecto.jsp");
+                  if (accion.equals("Asignar Responsable")) response.sendRedirect("AsignarResponsable.jsp");
              }
           }
     }

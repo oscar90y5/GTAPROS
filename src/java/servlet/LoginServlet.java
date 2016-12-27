@@ -8,7 +8,7 @@ package servlet;
 import dominio.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -41,42 +41,28 @@ public class LoginServlet extends HttpServlet {
           response.setContentType("text/html");
             PrintWriter out = response.getWriter();
             HttpSession sesion = request.getSession();
-
             String id=request.getParameter("id");
             String password=request.getParameter("password");
 
-            ArrayList<Usuario> usuarios = (ArrayList<Usuario>) usuarioFacade.findAll();
-            for(Usuario user: usuarios){
-                if(id.equals(user.getDni()) && password.equals(user.getClave())){
+            Usuario user = usuarioFacade.find(id);
+            if(user!=null) {
+                if(password.equals(user.getClave())){
                     sesion.setAttribute("idUser", id);
-                    switch (user.getTipoCategoria()) {
-                        case 0:
-                            {
-                                RequestDispatcher rd = request.getRequestDispatcher("jefeProyecto.jsp");
-                                rd.forward(request,response);
-                                break;
-                            }
-                        case 1:
-                            {
-                                RequestDispatcher rd = request.getRequestDispatcher("desarrollador.jsp");
-                                rd.forward(request,response);
-                                break;
-                            }
-                        case 2:
-                            {
-                                RequestDispatcher rd = request.getRequestDispatcher("administrador.jsp");
-                                rd.forward(request,response);
-                                break;
-                            }
-                        default:
-                            break;
+                    if(user.getTipoCategoria()==1 && user.getEsAdmin()) {
+                        RequestDispatcher rd = request.getRequestDispatcher("administrador.jsp");
+                        rd.forward(request,response);
+                    }if(user.getTipoCategoria()==1 && !user.getEsAdmin()){
+                        RequestDispatcher rd = request.getRequestDispatcher("jefeProyecto.jsp");
+                        rd.forward(request,response);
+                    }if(user.getTipoCategoria()!=1){
+                        RequestDispatcher rd = request.getRequestDispatcher("desarrollador.jsp");
+                        rd.forward(request,response);
                     }
-                }else{
+                }    
+            }else{
                     out.print("<p style=\"color:red\">Sorry username or password error</p>");
                     RequestDispatcher rd=request.getRequestDispatcher("index.jsp");
                     rd.include(request,response);
-                }
-                    
             }
             out.close();
     }
