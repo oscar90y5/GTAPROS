@@ -23,6 +23,8 @@ public interface MiembroFacadeLocal {
     void remove(Miembro miembro);
 
     Miembro find(Object id);
+    
+    List<Miembro> findByDni(Object dni);
 
     List<Miembro> findAll();
 

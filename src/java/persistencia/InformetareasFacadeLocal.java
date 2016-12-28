@@ -5,7 +5,7 @@
  */
 package persistencia;
 
-import dominio.InformeTareas;
+import dominio.Informetareas;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -14,19 +14,19 @@ import javax.ejb.Local;
  * @author Rebeca
  */
 @Local
-public interface InformeTareasFacadeLocal {
+public interface InformetareasFacadeLocal {
 
-    void create(InformeTareas informeTareas);
+    void create(Informetareas informetareas);
 
-    void edit(InformeTareas informeTareas);
+    void edit(Informetareas informetareas);
 
-    void remove(InformeTareas informeTareas);
+    void remove(Informetareas informetareas);
 
-    InformeTareas find(Object id);
+    Informetareas find(Object id);
 
-    List<InformeTareas> findAll();
+    List<Informetareas> findAll();
 
-    List<InformeTareas> findRange(int[] range);
+    List<Informetareas> findRange(int[] range);
 
     int count();
     

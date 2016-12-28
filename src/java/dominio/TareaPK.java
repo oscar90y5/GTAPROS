@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author miki
+ * @author Rebeca
  */
 @Embeddable
 public class TareaPK implements Serializable {
