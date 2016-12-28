@@ -6,6 +6,7 @@
 package persistencia;
 
 import dominio.Miembro;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,6 +28,16 @@ public class MiembroFacade extends AbstractFacade<Miembro> implements MiembroFac
 
     public MiembroFacade() {
         super(Miembro.class);
+    }
+    
+    @Override
+    public List<Miembro> findByDni(String dni){
+        try {
+            return em.createNamedQuery("findByDni").setParameter("dni",
+                dni).getResultList();
+        }catch(Exception e){
+           return null; 
+        }
     }
     
 }

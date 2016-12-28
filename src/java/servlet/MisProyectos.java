@@ -5,30 +5,20 @@
  */
 package servlet;
 
-import dominio.Proyecto;
-import dominio.Actividad;
 import java.io.IOException;
-import java.util.List;
-import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import persistencia.ProyectoFacadeLocal;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  *
  * @author Rebeca
  */
-@WebServlet(name = "JefeProyecto", urlPatterns = {"/JefeProyecto"})
-public class JefeProyecto extends HttpServlet {
-    @EJB
-    private ProyectoFacadeLocal proyectoFacade;
-    
-    public static final ObjectMapper mapper = new ObjectMapper();
+@WebServlet(name = "MisProyectos", urlPatterns = {"/MisProyectos"})
+public class MisProyectos extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,54 +33,17 @@ public class JefeProyecto extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
-        String idProy = (String) sesion.getAttribute("proyect");
         String accion = request.getParameter("accion");
-        List<Proyecto> proyects = null;
-        Proyecto proyect = proyectoFacade.find(idProy);
-        List<Actividad> activities =  proyect.getActividadList();
-        String rd = "jefeProyecto.jsp";
-
-        if (accion != null) {
-            if (accion.equals("Cargar Plan de proyecto"))
-                 rd = "cargarPlan.jsp";  
-
-            if (accion.equals("AÃ±adir personas a proyecto"))
-                rd = "usuarios.jsp";
-
-            if (accion.equals("AÃ±adir personas a actividad")){
-                for(Actividad a: activities){
-                    if(!a.getEstado().equals("Abierto"))
-                        activities.remove(a);
-                }
-                rd = "actividades.jsp";
-            }
-            if (accion.equals("Fijar fin de actividad")){
-                for(Actividad a: activities){
-                    if(!a.getEstado().equals("PendienteDeCierre"))
-                        activities.remove(a);
-                }
-                rd = "actividades.jsp";
-            }
-            if (accion.equals("Obtener informes")){
-                proyects = proyectoFacade.findAll();
-                rd= "proyectos.jsp?accion=informes";
-            }
-            if (accion.equals("Consultar datos de actividad"))
-               rd = "actividades.jsp";
-
-            if (accion.equals("Fijar vacaciones")) 
-                rd = "vacaciones.jsp";
-        }
-
-        if(proyects!=null){
-            String json = mapper.writeValueAsString(proyects);
-            request.setAttribute("proyectos", json);
-        }
-        if(!activities.isEmpty()){
-            String json = mapper.writeValueAsString(activities);
-            request.setAttribute("actividades", json);
-        }
-
+        String rd;
+        int size = accion.length();
+        int proyect = accion.charAt(size-1);
+        sesion.setAttribute("proyect", proyect);
+        
+        if(accion.contains("JefeProyecto"))
+            rd = "jefeProyecto.jsp";
+        else
+            rd = "desarrollador.jsp";
+        
         response.sendRedirect(rd);
     }
 

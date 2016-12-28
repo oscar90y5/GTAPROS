@@ -5,24 +5,25 @@
  */
 package servlet;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import dominio.Miembro;
 import dominio.Usuario;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.ejb.EJB;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import persistencia.MiembroFacadeLocal;
 import persistencia.UsuarioFacadeLocal;
 
-/**
- *
- * @author miki
- */
 public class LoginServlet extends HttpServlet {
+    public static final ObjectMapper mapper = new ObjectMapper();
+    
+    @EJB
+    private MiembroFacadeLocal miembroFacade;
 
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
@@ -39,32 +40,35 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
           response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
             HttpSession sesion = request.getSession();
-            String id=request.getParameter("id");
+            String id= request.getParameter("id");
             String password=request.getParameter("password");
-
+            String rd = "index.jsp";
+            
             Usuario user = usuarioFacade.find(id);
+ 
             if(user!=null) {
                 if(password.equals(user.getClave())){
                     sesion.setAttribute("idUser", id);
-                    if(user.getTipoCategoria()==1 && user.getEsAdmin()) {
-                        RequestDispatcher rd = request.getRequestDispatcher("administrador.jsp");
-                        rd.forward(request,response);
-                    }if(user.getTipoCategoria()==1 && !user.getEsAdmin()){
-                        RequestDispatcher rd = request.getRequestDispatcher("jefeProyecto.jsp");
-                        rd.forward(request,response);
-                    }if(user.getTipoCategoria()!=1){
-                        RequestDispatcher rd = request.getRequestDispatcher("desarrollador.jsp");
-                        rd.forward(request,response);
-                    }
-                }    
-            }else{
-                    out.print("<p style=\"color:red\">Sorry username or password error</p>");
-                    RequestDispatcher rd=request.getRequestDispatcher("index.jsp");
-                    rd.include(request,response);
+                    if(user.getEsAdmin())
+                       rd = "administrador.jsp";
+                    else{
+                        List<Miembro> miembros = miembroFacade.findByDni(id);
+                        if(miembros.size()==1){
+                            request.setAttribute("idProy", miembros.get(0).getIdProyecto());
+                            if(miembros.get(0).getTipoRol().equals("JefeProyecto")) 
+                                rd = "jefeProyecto.jsp";
+                            else
+                                rd = "desarrollador.jsp";
+                        }else{
+                            String json = mapper.writeValueAsString(miembros);
+                            request.setAttribute("misProyects", json);
+                            rd = "misProyectos.jsp";
+                        }
+                    }     
+                }
             }
-            out.close();
+            response.sendRedirect(rd);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
