@@ -28,5 +28,9 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     public UsuarioFacade() {
         super(Usuario.class);
     }
+     @Override
+    public Usuario findByNombreCompleto(Object nombreCompleto){
+        return em.createNamedQuery("Usuario.findByNombreCompleto").setParameter("nombreCompleto", nombreCompleto).getSingleResult();
+    }
     
 }
