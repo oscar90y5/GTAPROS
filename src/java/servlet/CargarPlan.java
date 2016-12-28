@@ -6,8 +6,15 @@
 package servlet;
 
 import dominio.Proyecto;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.Reader;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +22,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 import persistencia.ProyectoFacadeLocal;
 
 /**
@@ -45,9 +53,13 @@ public class CargarPlan extends HttpServlet {
         Proyecto proyect = proyectoFacade.find(idProject);
         String rd = "cargarPlan.jsp";
         if(accion.equals("Cargar")){
-            //Tratar archivo
-       
+                //Subimos el archivo al servidor
+        try {
+           
             
+        } catch (Exception e) {
+            //Tratamiento del error de la excepcion
+        }   
         }if(accion.equals("Cancelar"))
             rd = "jefeProyecto.jsp";
         
