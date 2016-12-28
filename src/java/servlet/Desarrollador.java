@@ -37,10 +37,10 @@ public class Desarrollador extends HttpServlet {
             
             String accion = request.getParameter("accion");
             if(accion!=null){
-                if(accion.equals("Introducir datos de tareas")){
+                if(accion.equals("Introducir tarea")){
                     out.print("Introducir datos de tareas un desarrollo....");
                 }
-                if(accion.equals("Modificar datos de tareas")){
+                if(accion.equals("Modificar tareas activas")){
                     out.print("Modificar datos de tareas en desarrollo....");
                 }
                 if(accion.equals("Consultar datos de tareas")){
