@@ -46,7 +46,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Actividad.findByEstado", query = "SELECT a FROM Actividad a WHERE a.estado = :estado")
     , @NamedQuery(name = "Actividad.findByRol", query = "SELECT a FROM Actividad a WHERE a.rol = :rol")
     , @NamedQuery(name = "Actividad.findByDescripcion", query = "SELECT a FROM Actividad a WHERE a.descripcion = :descripcion")})
-@JsonIgnoreProperties(value={"miembroList", "actividadList", "actividadList1"})
+@JsonIgnoreProperties(value = {"miembroList", "actividadList", "actividadList1"})
 public class Actividad implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -102,6 +102,15 @@ public class Actividad implements Serializable {
     public Actividad(Integer id, String rol) {
         this.id = id;
         this.rol = rol;
+    }
+
+    public Actividad(String rol, Integer duracion, String descripcion, Proyecto idProyecto, List<Actividad> actividadList) {
+        this.duracion = duracion;
+        this.rol = rol;
+        this.descripcion = descripcion;
+        this.actividadList = actividadList;
+        this.idProyecto = idProyecto;
+        this.estado = "Abierto";
     }
 
     public Integer getId() {
@@ -228,5 +237,5 @@ public class Actividad implements Serializable {
     public String toString() {
         return "dominio.Actividad[ id=" + id + " ]";
     }
-    
+
 }
