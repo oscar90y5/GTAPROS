@@ -5,9 +5,11 @@
  */
 package servlet;
 
+import dominio.Proyecto;
 import dominio.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,17 +17,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import persistencia.ProyectoFacadeLocal;
 import persistencia.UsuarioFacadeLocal;
 
 /**
  *
  * @author claramorrondo
  */
-@WebServlet(name = "AltaTrabajador", urlPatterns = {"/AltaTrabajador"})
-public class AltaTrabajador extends HttpServlet {
+@WebServlet(name = "AsignarProyecto", urlPatterns = {"/AsignarProyecto"})
+public class AsignarProyecto extends HttpServlet {
 
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
+
+    @EJB
+    private ProyectoFacadeLocal proyectoFacade;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,17 +47,15 @@ public class AltaTrabajador extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession sesion = request.getSession();
-            String nombre, dni;
-            int tipoCategoria;
-            if(request.getParameter("altaTrabajadorBtn").equals("addTrabajador")){
-                nombre = request.getParameter("nombreTrabajador");
-                dni = request.getParameter("dniTrabajador");
-                tipoCategoria = Integer.valueOf(request.getParameter("categoriaTrabajador"));
-                Usuario u = new Usuario(dni,dni,tipoCategoria);
-                usuarioFacade.create(u);
-            } else {
-            }
-            response.sendRedirect("Administrador.jsp"); 
+           if(request.getParameter("altaTrabajadorBtn").equals("addTrabajador")){
+                String nombreProyecto = request.getParameter("nombreProyecto");
+                String jefeProyecto = request.getParameter("jefeProyecto");
+                Proyecto proyecto = proyectoFacade.find(nombreProyecto);
+                Usuario jefe = usuarioFacade.find(jefeProyecto);
+                proyecto.setJefeProyecto(jefe);
+           }
+            response.sendRedirect("Administrador.jsp");
+
         }
     }
 

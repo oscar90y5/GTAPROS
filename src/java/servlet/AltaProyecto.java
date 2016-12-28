@@ -5,7 +5,7 @@
  */
 package servlet;
 
-import dominio.Usuario;
+import dominio.Proyecto;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.ejb.EJB;
@@ -15,17 +15,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import persistencia.UsuarioFacadeLocal;
+import persistencia.ProyectoFacadeLocal;
 
 /**
  *
  * @author claramorrondo
  */
-@WebServlet(name = "AltaTrabajador", urlPatterns = {"/AltaTrabajador"})
-public class AltaTrabajador extends HttpServlet {
+@WebServlet(name = "AltaProyecto", urlPatterns = {"/AltaProyecto"})
+public class AltaProyecto extends HttpServlet {
 
     @EJB
-    private UsuarioFacadeLocal usuarioFacade;
+    private ProyectoFacadeLocal proyectoFacade;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,17 +41,27 @@ public class AltaTrabajador extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession sesion = request.getSession();
-            String nombre, dni;
-            int tipoCategoria;
-            if(request.getParameter("altaTrabajadorBtn").equals("addTrabajador")){
-                nombre = request.getParameter("nombreTrabajador");
-                dni = request.getParameter("dniTrabajador");
-                tipoCategoria = Integer.valueOf(request.getParameter("categoriaTrabajador"));
-                Usuario u = new Usuario(dni,dni,tipoCategoria);
-                usuarioFacade.create(u);
-            } else {
+            String nombreProyecto = request.getParameter("nombreProyecto");
+            
+            if(request.getParameter("altaProyectoBtn").equals("asignarJefe")){
+                Proyecto p = new Proyecto();
+                p.setNombre(nombreProyecto);
+                proyectoFacade.create(p);
+                //int idProyecto = p.getId();
+                //request.getSession().setAttribute("idProyecto", idProyecto);
+                response.sendRedirect("AsignarResponsable.jsp"); 
+
             }
-            response.sendRedirect("Administrador.jsp"); 
+            else{
+                if(request.getParameter("altaProyectoBtn").equals("asignarJefeLater")){
+                    Proyecto p = new Proyecto();
+                    p.setNombre(nombreProyecto);
+                    proyectoFacade.create(p);
+                }
+                response.sendRedirect("Administrador.jsp"); 
+
+            }
+
         }
     }
 

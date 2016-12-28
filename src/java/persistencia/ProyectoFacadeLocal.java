@@ -27,7 +27,7 @@ public interface ProyectoFacadeLocal {
     List<Proyecto> findAll();
 
     List<Proyecto> findRange(int[] range);
-
+    
     int count();
     
 }

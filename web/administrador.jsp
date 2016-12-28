@@ -13,9 +13,9 @@
             <h1>Bienvenido</h1>
             <h2> Eliga qué desea hacer: </h2>
             <form action="Administrador" method="POST" style="margin-top: 20px;">
-             <input type="submit" name="altaTrabajador" value="Dar de Alta Trabajador" class="btn btn-lg btn-primary btn-block"/>
-             <input type="submit" name="altaProyecto" value="Dar de Alta Proyecto" class="btn btn-lg btn-primary btn-block"/>
-             <input type="submit" name="asignarRepsonsable" value="Asignar Responsable" class="btn btn-lg btn-primary btn-block"/>
+             <input type="submit" name="altaTrabajador" value="altaTrabajador" class="btn btn-lg btn-primary btn-block"/>
+             <input type="submit" name="altaProyecto" value="altaProyecto" class="btn btn-lg btn-primary btn-block"/>
+             <input type="submit" name="asignarRepsonsable" value="asignarRepsonsable" class="btn btn-lg btn-primary btn-block"/>
             </form>
            </section>
         </section>

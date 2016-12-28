@@ -8,6 +8,7 @@
             <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/Miembro.java</file>
             <file>file:/Users/claramorrondo/GTAPROS/web/AltaTrabajador.jsp</file>
             <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/Tarea.java</file>
+            <file>file:/Users/claramorrondo/GTAPROS/src/java/persistencia/UsuarioFacade.java</file>
             <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/LoginServlet.java</file>
             <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/Actividad.java</file>
             <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/Proyecto.java</file>
@@ -20,7 +21,9 @@
             <file>file:/Users/claramorrondo/GTAPROS/src/java/persistencia/AbstractFacade.java</file>
             <file>file:/Users/claramorrondo/GTAPROS/web/proyecto.jsp</file>
             <file>file:/Users/claramorrondo/GTAPROS/src/java/persistencia/ActividadFacadeLocal.java</file>
+            <file>file:/Users/claramorrondo/GTAPROS/src/java/persistencia/ProyectoFacadeLocal.java</file>
             <file>file:/Users/claramorrondo/GTAPROS/src/java/persistencia/VacacionesFacadeLocal.java</file>
+            <file>file:/Users/claramorrondo/GTAPROS/web/administrador.jsp</file>
             <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/InformeTareas.java</file>
         </group>
     </open-files>

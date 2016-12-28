@@ -27,8 +27,8 @@
              </div>
          </div><!-- /.box-body -->
          <div class="box-footer">
-             <button type="submit" class="btn btn-primary" name="altaTrabajador" value="crearProyecto">Añadir Trabajador</button>
-             <a href=><span class="btn btn-default">Cancelar</span></a>
+             <button type="submit" class="btn btn-primary" name="altaTrabajadorBtn" value="addTrabajador">Añadir Trabajador</button>
+             <button type="submit" class="btn btn-primary" name="altaTrabajadorBtn" value="addTrabajadorCancel">Cancelar</button>
          </div>
         </form>
            </section>

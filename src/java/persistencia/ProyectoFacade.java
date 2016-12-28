@@ -6,6 +6,7 @@
 package persistencia;
 
 import dominio.Proyecto;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

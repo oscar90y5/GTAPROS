@@ -5,14 +5,20 @@
  */
 package servlet;
 
+import dominio.Proyecto;
+import dominio.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import persistencia.ProyectoFacadeLocal;
+import persistencia.UsuarioFacadeLocal;
 
 /**
  *
@@ -20,6 +26,12 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "Aministrador", urlPatterns = {"/Aministrador"})
 public class Aministrador extends HttpServlet {
+
+    @EJB
+    private UsuarioFacadeLocal usuarioFacade;
+
+    @EJB
+    private ProyectoFacadeLocal proyectoFacade;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,7 +52,13 @@ public class Aministrador extends HttpServlet {
             if (accion != null) {
                   if (accion.equals("altaTrabajador")) response.sendRedirect("AltaTrabajador.jsp");     
                   if (accion.equals("altaProyecto")) response.sendRedirect("AltaProyecto.jsp");
-                  if (accion.equals("asignarRepsonsable")) response.sendRedirect("AsignarResponsable.jsp");
+                  if (accion.equals("asignarRepsonsable")){
+                      List<Proyecto> proyectosList = proyectoFacade.findAll();
+                      List<Usuario> usuariosList = usuarioFacade.findAll();
+                      request.setAttribute("usuarios", usuariosList);
+                      request.setAttribute("proyectos", proyectosList);
+                      response.sendRedirect("AsignarResponsable.jsp");
+                  }
              }
           }
     }
