@@ -1,3 +1,4 @@
+
 <%@page import="dominio.Proyecto"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
@@ -27,7 +28,7 @@
                     <%
                         List<Proyecto> proyectos=(ArrayList<Proyecto>)request.getAttribute("proyectos");
                         if(proyectos==null){
-                            %><i>No estás ni has estado involucrado en ningún proyecto.</i><%
+                            %><i>No estÃ¡s ni has estado involucrado en ningÃºn proyecto.</i><%
                         }
                         
                         %>
@@ -36,3 +37,4 @@
         </section>
     </body>
 </html>
+
