@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author claramorrondo
+ * @author Rebeca
  */
 @Embeddable
 public class TareaPK implements Serializable {
@@ -97,7 +97,7 @@ public class TareaPK implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.TareaPK[ tipo=" + tipo + ", dni=" + dni + ", idActividad=" + idActividad + " ]";
+        return "dominio.TareaPK[ tipo=" + tipo + ", dni=" + dni + ", idActividad=" + idActividad + " ]";
     }
     
 }

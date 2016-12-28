@@ -5,15 +5,12 @@
  */
 package dominio;
 
-import dominio.Miembro;
-import dominio.Actividad;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -28,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author claramorrondo
+ * @author Rebeca
  */
 @Entity
 @Table(name = "Proyecto")
@@ -62,10 +59,10 @@ public class Proyecto implements Serializable {
     @Size(max = 10)
     @Column(name = "estado")
     private String estado;
-    @OneToMany(mappedBy = "idProyecto", fetch = FetchType.EAGER)
-    private List<Miembro> miembroList;
-    @OneToMany(mappedBy = "idProyecto", fetch = FetchType.EAGER)
-    private List<Actividad> actividadList;
+    @OneToMany(mappedBy = "idProyecto")
+    private Collection<Miembro> miembroCollection;
+    @OneToMany(mappedBy = "idProyecto")
+    private Collection<Actividad> actividadCollection;
 
     public Proyecto() {
     }
@@ -120,21 +117,21 @@ public class Proyecto implements Serializable {
     }
 
     @XmlTransient
-    public List<Miembro> getMiembroList() {
-        return miembroList;
+    public Collection<Miembro> getMiembroCollection() {
+        return miembroCollection;
     }
 
-    public void setMiembroList(List<Miembro> miembroList) {
-        this.miembroList = miembroList;
+    public void setMiembroCollection(Collection<Miembro> miembroCollection) {
+        this.miembroCollection = miembroCollection;
     }
 
     @XmlTransient
-    public List<Actividad> getActividadList() {
-        return actividadList;
+    public Collection<Actividad> getActividadCollection() {
+        return actividadCollection;
     }
 
-    public void setActividadList(List<Actividad> actividadList) {
-        this.actividadList = actividadList;
+    public void setActividadCollection(Collection<Actividad> actividadCollection) {
+        this.actividadCollection = actividadCollection;
     }
 
     @Override
@@ -159,7 +156,7 @@ public class Proyecto implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.Proyecto[ id=" + id + " ]";
+        return "dominio.Proyecto[ id=" + id + " ]";
     }
     
 }

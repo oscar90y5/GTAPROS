@@ -6,12 +6,11 @@
 package dominio;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -26,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author claramorrondo
+ * @author Rebeca
  */
 @Entity
 @Table(name = "InformeTareas")
@@ -54,8 +53,8 @@ public class InformeTareas implements Serializable {
     @Column(name = "semana")
     @Temporal(TemporalType.DATE)
     private Date semana;
-    @OneToMany(mappedBy = "idInforme", fetch = FetchType.EAGER)
-    private List<Tarea> tareaList;
+    @OneToMany(mappedBy = "idInforme")
+    private Collection<Tarea> tareaCollection;
 
     public InformeTareas() {
     }
@@ -97,12 +96,12 @@ public class InformeTareas implements Serializable {
     }
 
     @XmlTransient
-    public List<Tarea> getTareaList() {
-        return tareaList;
+    public Collection<Tarea> getTareaCollection() {
+        return tareaCollection;
     }
 
-    public void setTareaList(List<Tarea> tareaList) {
-        this.tareaList = tareaList;
+    public void setTareaCollection(Collection<Tarea> tareaCollection) {
+        this.tareaCollection = tareaCollection;
     }
 
     @Override
@@ -127,7 +126,7 @@ public class InformeTareas implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.InformeTareas[ id=" + id + " ]";
+        return "dominio.InformeTareas[ id=" + id + " ]";
     }
     
 }

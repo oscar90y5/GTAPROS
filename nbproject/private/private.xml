@@ -3,16 +3,25 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/src/java/modelo/TipoCategoria.java</file>
-            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/src/java/database/ConnectionPool.java</file>
-            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/web/WEB-INF/web.xml</file>
-            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/web/WEB-INF/jspf/includes.jspf</file>
-            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/src/java/database/Consulta.java</file>
-            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/src/java/modelo/Usuario.java</file>
-            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/web/WEB-INF/jspf/header.jspf</file>
-            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/src/java/modelo/model.java</file>
-            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/src/java/servlet/LoginServlet.java</file>
-            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/web/index.jsp</file>
+            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/AltaTrabajador.java</file>
+            <file>file:/Users/claramorrondo/GTAPROS/src/java/persistencia/ActividadFacade.java</file>
+            <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/Miembro.java</file>
+            <file>file:/Users/claramorrondo/GTAPROS/web/AltaTrabajador.jsp</file>
+            <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/Tarea.java</file>
+            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/LoginServlet.java</file>
+            <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/Actividad.java</file>
+            <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/Proyecto.java</file>
+            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/Proyectos.java</file>
+            <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/VacacionesPK.java</file>
+            <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/Vacaciones.java</file>
+            <file>file:/Users/claramorrondo/GTAPROS/nbproject/build-impl.xml</file>
+            <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/TareaPK.java</file>
+            <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/Usuario.java</file>
+            <file>file:/Users/claramorrondo/GTAPROS/src/java/persistencia/AbstractFacade.java</file>
+            <file>file:/Users/claramorrondo/GTAPROS/web/proyecto.jsp</file>
+            <file>file:/Users/claramorrondo/GTAPROS/src/java/persistencia/ActividadFacadeLocal.java</file>
+            <file>file:/Users/claramorrondo/GTAPROS/src/java/persistencia/VacacionesFacadeLocal.java</file>
+            <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/InformeTareas.java</file>
         </group>
     </open-files>
 </project-private>

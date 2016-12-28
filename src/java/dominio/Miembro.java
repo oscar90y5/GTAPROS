@@ -5,14 +5,12 @@
  */
 package dominio;
 
-import dominio.Actividad;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
@@ -29,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author claramorrondo
+ * @author Rebeca
  */
 @Entity
 @Table(name = "Miembro")
@@ -55,16 +53,16 @@ public class Miembro implements Serializable {
     private String dni;
     @Column(name = "participacion")
     private Integer participacion;
-    @ManyToMany(mappedBy = "miembroList", fetch = FetchType.EAGER)
-    private List<Actividad> actividadList;
-    @JoinColumn(name = "idProyecto", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Proyecto idProyecto;
+    @ManyToMany(mappedBy = "miembroCollection")
+    private Collection<Actividad> actividadCollection;
     @JoinColumn(name = "dni", referencedColumnName = "dni", insertable = false, updatable = false)
-    @OneToOne(optional = false, fetch = FetchType.EAGER)
+    @OneToOne(optional = false)
     private Usuario usuario;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "miembro", fetch = FetchType.EAGER)
-    private List<Tarea> tareaList;
+    @JoinColumn(name = "idProyecto", referencedColumnName = "id")
+    @ManyToOne
+    private Proyecto idProyecto;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "miembro")
+    private Collection<Tarea> tareaCollection;
 
     public Miembro() {
     }
@@ -103,20 +101,12 @@ public class Miembro implements Serializable {
     }
 
     @XmlTransient
-    public List<Actividad> getActividadList() {
-        return actividadList;
+    public Collection<Actividad> getActividadCollection() {
+        return actividadCollection;
     }
 
-    public void setActividadList(List<Actividad> actividadList) {
-        this.actividadList = actividadList;
-    }
-
-    public Proyecto getIdProyecto() {
-        return idProyecto;
-    }
-
-    public void setIdProyecto(Proyecto idProyecto) {
-        this.idProyecto = idProyecto;
+    public void setActividadCollection(Collection<Actividad> actividadCollection) {
+        this.actividadCollection = actividadCollection;
     }
 
     public Usuario getUsuario() {
@@ -127,13 +117,21 @@ public class Miembro implements Serializable {
         this.usuario = usuario;
     }
 
-    @XmlTransient
-    public List<Tarea> getTareaList() {
-        return tareaList;
+    public Proyecto getIdProyecto() {
+        return idProyecto;
     }
 
-    public void setTareaList(List<Tarea> tareaList) {
-        this.tareaList = tareaList;
+    public void setIdProyecto(Proyecto idProyecto) {
+        this.idProyecto = idProyecto;
+    }
+
+    @XmlTransient
+    public Collection<Tarea> getTareaCollection() {
+        return tareaCollection;
+    }
+
+    public void setTareaCollection(Collection<Tarea> tareaCollection) {
+        this.tareaCollection = tareaCollection;
     }
 
     @Override
@@ -158,7 +156,7 @@ public class Miembro implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.Miembro[ dni=" + dni + " ]";
+        return "dominio.Miembro[ dni=" + dni + " ]";
     }
     
 }

@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -17,7 +18,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author claramorrondo
+ * @author Rebeca
  */
 @Embeddable
 public class VacacionesPK implements Serializable {
@@ -83,7 +84,8 @@ public class VacacionesPK implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.VacacionesPK[ fechaInicio=" + fechaInicio + ", dni=" + dni + " ]";
+        return "dominio.VacacionesPK[ fechaInicio=" + fechaInicio + ", dni=" + dni + " ]";
     }
     
 }
+

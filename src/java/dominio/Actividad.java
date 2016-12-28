@@ -6,13 +6,12 @@
 package dominio;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -31,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author claramorrondo
+ * @author Rebeca
  */
 @Entity
 @Table(name = "Actividad")
@@ -69,20 +68,20 @@ public class Actividad implements Serializable {
     @JoinTable(name = "AsignacionActividad", joinColumns = {
         @JoinColumn(name = "idActividad", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "dni", referencedColumnName = "dni")})
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Miembro> miembroList;
+    @ManyToMany
+    private Collection<Miembro> miembroCollection;
     @JoinTable(name = "Predecesora", joinColumns = {
         @JoinColumn(name = "idPredecedora", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idSucesora", referencedColumnName = "id")})
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Actividad> actividadList;
-    @ManyToMany(mappedBy = "actividadList", fetch = FetchType.EAGER)
-    private List<Actividad> actividadList1;
+    @ManyToMany
+    private Collection<Actividad> actividadCollection;
+    @ManyToMany(mappedBy = "actividadCollection")
+    private Collection<Actividad> actividadCollection1;
     @JoinColumn(name = "idProyecto", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private Proyecto idProyecto;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actividad", fetch = FetchType.EAGER)
-    private List<Tarea> tareaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actividad")
+    private Collection<Tarea> tareaCollection;
 
     public Actividad() {
     }
@@ -140,30 +139,30 @@ public class Actividad implements Serializable {
     }
 
     @XmlTransient
-    public List<Miembro> getMiembroList() {
-        return miembroList;
+    public Collection<Miembro> getMiembroCollection() {
+        return miembroCollection;
     }
 
-    public void setMiembroList(List<Miembro> miembroList) {
-        this.miembroList = miembroList;
-    }
-
-    @XmlTransient
-    public List<Actividad> getActividadList() {
-        return actividadList;
-    }
-
-    public void setActividadList(List<Actividad> actividadList) {
-        this.actividadList = actividadList;
+    public void setMiembroCollection(Collection<Miembro> miembroCollection) {
+        this.miembroCollection = miembroCollection;
     }
 
     @XmlTransient
-    public List<Actividad> getActividadList1() {
-        return actividadList1;
+    public Collection<Actividad> getActividadCollection() {
+        return actividadCollection;
     }
 
-    public void setActividadList1(List<Actividad> actividadList1) {
-        this.actividadList1 = actividadList1;
+    public void setActividadCollection(Collection<Actividad> actividadCollection) {
+        this.actividadCollection = actividadCollection;
+    }
+
+    @XmlTransient
+    public Collection<Actividad> getActividadCollection1() {
+        return actividadCollection1;
+    }
+
+    public void setActividadCollection1(Collection<Actividad> actividadCollection1) {
+        this.actividadCollection1 = actividadCollection1;
     }
 
     public Proyecto getIdProyecto() {
@@ -175,12 +174,12 @@ public class Actividad implements Serializable {
     }
 
     @XmlTransient
-    public List<Tarea> getTareaList() {
-        return tareaList;
+    public Collection<Tarea> getTareaCollection() {
+        return tareaCollection;
     }
 
-    public void setTareaList(List<Tarea> tareaList) {
-        this.tareaList = tareaList;
+    public void setTareaCollection(Collection<Tarea> tareaCollection) {
+        this.tareaCollection = tareaCollection;
     }
 
     @Override
@@ -205,7 +204,7 @@ public class Actividad implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.Actividad[ id=" + id + " ]";
+        return "dominio.Actividad[ id=" + id + " ]";
     }
     
 }

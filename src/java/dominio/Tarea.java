@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -5,14 +6,10 @@
  */
 package dominio;
 
-import dominio.Miembro;
-import dominio.InformeTareas;
-import dominio.Actividad;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -22,7 +19,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author claramorrondo
+ * @author Rebeca
  */
 @Entity
 @Table(name = "Tarea")
@@ -40,15 +37,15 @@ public class Tarea implements Serializable {
     protected TareaPK tareaPK;
     @Column(name = "esfuerzoReal")
     private Integer esfuerzoReal;
+    @JoinColumn(name = "dni", referencedColumnName = "dni", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Miembro miembro;
     @JoinColumn(name = "idActividad", referencedColumnName = "id", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false)
     private Actividad actividad;
     @JoinColumn(name = "idInforme", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private InformeTareas idInforme;
-    @JoinColumn(name = "dni", referencedColumnName = "dni", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Miembro miembro;
 
     public Tarea() {
     }
@@ -77,6 +74,14 @@ public class Tarea implements Serializable {
         this.esfuerzoReal = esfuerzoReal;
     }
 
+    public Miembro getMiembro() {
+        return miembro;
+    }
+
+    public void setMiembro(Miembro miembro) {
+        this.miembro = miembro;
+    }
+
     public Actividad getActividad() {
         return actividad;
     }
@@ -91,14 +96,6 @@ public class Tarea implements Serializable {
 
     public void setIdInforme(InformeTareas idInforme) {
         this.idInforme = idInforme;
-    }
-
-    public Miembro getMiembro() {
-        return miembro;
-    }
-
-    public void setMiembro(Miembro miembro) {
-        this.miembro = miembro;
     }
 
     @Override
@@ -123,7 +120,7 @@ public class Tarea implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.Tarea[ tareaPK=" + tareaPK + " ]";
+        return "dominio.Tarea[ tareaPK=" + tareaPK + " ]";
     }
     
 }

@@ -5,14 +5,12 @@
  */
 package dominio;
 
-import dominio.Miembro;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -26,7 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author claramorrondo
+ * @author Rebeca
  */
 @Entity
 @Table(name = "Usuario")
@@ -35,10 +33,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
     , @NamedQuery(name = "Usuario.findByDni", query = "SELECT u FROM Usuario u WHERE u.dni = :dni")
     , @NamedQuery(name = "Usuario.findByNombreCompleto", query = "SELECT u FROM Usuario u WHERE u.nombreCompleto = :nombreCompleto")
-    , @NamedQuery(name = "Usuario.findByClave", query = "SELECT u FROM Usuario_1 u WHERE u.clave = :clave")
+    , @NamedQuery(name = "Usuario.findByClave", query = "SELECT u FROM Usuario u WHERE u.clave = :clave")
     , @NamedQuery(name = "Usuario.findByVacacionesFijadas", query = "SELECT u FROM Usuario u WHERE u.vacacionesFijadas = :vacacionesFijadas")
-    , @NamedQuery(name = "Usuario.findByTipoCategoria", query = "SELECT u FROM Usuario u WHERE u.tipoCategoria = :tipoCategoria")
-    , @NamedQuery(name = "Usuario.findByAvailabilityProyect", query = "SELECT u FROM Usuario u WHERE dni NOT IN (SELECT dni FROM Proyecto WHERE estado = 'EnCurso')")})
+    , @NamedQuery(name = "Usuario.findByTipoCategoria", query = "SELECT u FROM Usuario u WHERE u.tipoCategoria = :tipoCategoria")})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -62,10 +59,10 @@ public class Usuario implements Serializable {
     @NotNull
     @Column(name = "tipoCategoria")
     private int tipoCategoria;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuario")
     private Miembro miembro;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.EAGER)
-    private List<Vacaciones> vacacionesList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario")
+    private Collection<Vacaciones> vacacionesCollection;
 
     public Usuario() {
     }
@@ -129,12 +126,12 @@ public class Usuario implements Serializable {
     }
 
     @XmlTransient
-    public List<Vacaciones> getVacacionesList() {
-        return vacacionesList;
+    public Collection<Vacaciones> getVacacionesCollection() {
+        return vacacionesCollection;
     }
 
-    public void setVacacionesList(List<Vacaciones> vacacionesList) {
-        this.vacacionesList = vacacionesList;
+    public void setVacacionesCollection(Collection<Vacaciones> vacacionesCollection) {
+        this.vacacionesCollection = vacacionesCollection;
     }
 
     @Override
@@ -159,7 +156,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "modelo.Usuario_1[ dni=" + dni + " ]";
+        return "dominio.Usuario[ dni=" + dni + " ]";
     }
     
 }
