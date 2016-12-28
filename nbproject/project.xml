@@ -11,15 +11,19 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.com.fasterxml.jackson.annotations.jar-1}</file>
+                    <file>${file.reference.com.fasterxml.jackson.annotations.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.com.fasterxml.jackson.core.jar-1}</file>
+                    <file>${file.reference.com.fasterxml.jackson.core.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.com.fasterxml.jackson.databind.jar-1}</file>
+                    <file>${file.reference.com.fasterxml.jackson.databind.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.mysql-connector-java-5.1.38-bin.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>
