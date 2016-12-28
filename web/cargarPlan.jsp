@@ -16,6 +16,7 @@
         <section class="container">
             <section class="login-form">
             <h2> Cargar plan de proyecto: </h2>
+            <div class="columna_caja_principal"> 
             <form role="form" action="CargarPlan" name="CargarPlan" method="post">
             <div class=>
                 <div class="">
@@ -27,6 +28,7 @@
                 </div>
             </div>
            </form>
+            </div>
            </section>
         </section>
     </body>

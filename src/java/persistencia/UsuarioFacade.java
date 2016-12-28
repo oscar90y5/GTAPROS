@@ -6,6 +6,7 @@
 package persistencia;
 
 import dominio.Usuario;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,6 +28,10 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
 
     public UsuarioFacade() {
         super(Usuario.class);
+    }
+    
+    public List<Usuario> finByAdmin(Boolean admin){
+        return em.createNamedQuery("Usuario.findByEsAdmin").setParameter("esAdmin", admin).getResultList();
     }
     
 }

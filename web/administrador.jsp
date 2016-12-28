@@ -10,9 +10,9 @@
     <body>
         <section class="container">
             <section class="login-form">
+                <h1>Bienvenido <%=session.getAttribute("idUser")%></h1>
+                <h2> Elija qué desea hacer: </h2>
                 <div class="columna_caja_principal">
-                    <h1>Bienvenido <%=session.getAttribute("idUser")%></h1>
-                    <h2> Elija qué desea hacer: </h2>
                     <form action="Administrador" method="POST" style="margin-top: 20px;">
                         <input type="submit" name="accion" value="Dar de Alta Trabajador" class="btn btn-lg btn-primary btn-block"/>
                         <input type="submit" name="accion" value="Dar de Alta Proyecto" class="btn btn-lg btn-primary btn-block"/>
