@@ -3,22 +3,29 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/MiembroFacade.java</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/jefeProyecto.jsp</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/proyectos.jsp</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/servlet/Proyectos.java</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/MiembroFacadeLocal.java</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/conf/persistence.xml</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/dominio/Miembro.java</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/servlet/Administrador.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/WEB-INF/web.xml</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/UsuarioFacadeLocal.java</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/InformetareasFacadeLocal.java</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/AltaTrabajador.jsp</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/misProyectos.jsp</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/index.jsp</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/dominio/Informetareas.java</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/dominio/Tarea.java</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/dominio/Usuario.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/administrador.jsp</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/servlet/MisProyectos.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/error_java.jsp</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/InformetareasFacade.java</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/servlet/CargarPlan.java</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/ProyectoFacadeLocal.java</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/servlet/LoginServlet.java</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/servlet/JefeProyecto.java</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/dominio/Actividad.java</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/cargarPlan.jsp</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/ProyectoFacade.java</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/dominio/Proyecto.java</file>
         </group>
     </open-files>
 </project-private>
