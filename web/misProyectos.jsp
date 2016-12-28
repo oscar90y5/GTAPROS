@@ -16,7 +16,7 @@
         <section class="container">
             <section class="login-form">
             <h1>Bienvenido <%=session.getAttribute("idUser")%></h1>
-            <h2> Eliga con qué rol desea trabajar: </h2>
+            <h2> Elija con qué rol desea trabajar: </h2>
             <form action="MisProyectos" method="POST" style="margin-top: 20px;">
                 <% 
                 ObjectMapper mapper = new ObjectMapper();
