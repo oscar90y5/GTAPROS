@@ -6,6 +6,7 @@
 package persistencia;
 
 import dominio.Proyecto;
+import dominio.Usuario;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -28,6 +29,10 @@ public class ProyectoFacade extends AbstractFacade<Proyecto> implements Proyecto
 
     public ProyectoFacade() {
         super(Proyecto.class);
+    }
+      @Override
+    public Proyecto findByNombre(Object nombreProyecto){
+        return em.createNamedQuery("Proyecto.findByNombre").setParameter("nombre", nombreProyecto).getSingleResult();
     }
     
 }
