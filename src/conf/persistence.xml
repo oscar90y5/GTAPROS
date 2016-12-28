@@ -10,8 +10,6 @@
     <class>dominio.Usuario</class>
     <class>dominio.Vacaciones</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties>
-        <property name="hibernate.classloading.use_current_tccl_as_parent" value="false" />
-    </properties>
+    <properties />
   </persistence-unit>
 </persistence>

@@ -5,6 +5,7 @@
  */
 package dominio;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -31,10 +32,10 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author miki
+ * @author Rebeca
  */
 @Entity
-@Table(name = "Actividad")
+@Table(name = "actividad")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Actividad.findAll", query = "SELECT a FROM Actividad a")
@@ -45,6 +46,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Actividad.findByEstado", query = "SELECT a FROM Actividad a WHERE a.estado = :estado")
     , @NamedQuery(name = "Actividad.findByRol", query = "SELECT a FROM Actividad a WHERE a.rol = :rol")
     , @NamedQuery(name = "Actividad.findByDescripcion", query = "SELECT a FROM Actividad a WHERE a.descripcion = :descripcion")})
+@JsonIgnoreProperties(value={"miembroList", "actividadList", "actividadList1"})
 public class Actividad implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -72,23 +74,23 @@ public class Actividad implements Serializable {
     @Size(max = 300)
     @Column(name = "descripcion")
     private String descripcion;
-    @JoinTable(name = "AsignacionActividad", joinColumns = {
+    @JoinTable(name = "asignacionactividad", joinColumns = {
         @JoinColumn(name = "idActividad", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idMiembro", referencedColumnName = "idMiembro")})
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Miembro> miembroList;
-    @JoinTable(name = "Predecesora", joinColumns = {
+    @JoinTable(name = "predecesora", joinColumns = {
         @JoinColumn(name = "idPredecedora", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idSucesora", referencedColumnName = "id")})
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Actividad> actividadList;
-    @ManyToMany(mappedBy = "actividadList", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "actividadList", fetch = FetchType.LAZY)
     private List<Actividad> actividadList1;
-    @JoinColumn(name = "idProyecto", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Proyecto idProyecto;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actividad", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actividad", fetch = FetchType.LAZY)
     private List<Tarea> tareaList;
+    @JoinColumn(name = "idProyecto", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Proyecto idProyecto;
 
     public Actividad() {
     }
@@ -185,14 +187,6 @@ public class Actividad implements Serializable {
         this.actividadList1 = actividadList1;
     }
 
-    public Proyecto getIdProyecto() {
-        return idProyecto;
-    }
-
-    public void setIdProyecto(Proyecto idProyecto) {
-        this.idProyecto = idProyecto;
-    }
-
     @XmlTransient
     public List<Tarea> getTareaList() {
         return tareaList;
@@ -200,6 +194,14 @@ public class Actividad implements Serializable {
 
     public void setTareaList(List<Tarea> tareaList) {
         this.tareaList = tareaList;
+    }
+
+    public Proyecto getIdProyecto() {
+        return idProyecto;
+    }
+
+    public void setIdProyecto(Proyecto idProyecto) {
+        this.idProyecto = idProyecto;
     }
 
     @Override

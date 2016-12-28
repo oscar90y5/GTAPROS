@@ -31,13 +31,8 @@ public class MiembroFacade extends AbstractFacade<Miembro> implements MiembroFac
     }
     
     @Override
-    public List<Miembro> findByDni(String dni){
-        try {
-            return em.createNamedQuery("findByDni").setParameter("dni",
-                dni).getResultList();
-        }catch(Exception e){
-           return null; 
-        }
+    public List<Miembro> findByDni(Object dni){
+        return em.createNamedQuery("Miembro.findByDni").setParameter("dni", dni).getResultList();
     }
     
 }

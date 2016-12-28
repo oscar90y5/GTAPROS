@@ -16,10 +16,14 @@
         <section class="container">
             <section class="login-form">
             <h2> Cargar plan de proyecto: </h2>
-            <form role="form" action="CargaPlan" name="CargaPlan" method="post">
+            <form role="form" action="CargarPlan" name="CargarPlan" method="post">
             <div class=>
                 <div class="">
                     <input type="file" accept="text/plain" class="btn btn-lg btn-primary btn-block" id="plan" name="Plan de Proyecto">
+                </div>
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary" name="accion" value="Cargar">Aceptar</button>
+                    <button type="submit" class="btn btn-danger" name="accion" value="Cancelar">Cancelar</button>
                 </div>
             </div>
            </form>

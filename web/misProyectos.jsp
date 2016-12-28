@@ -20,11 +20,12 @@
             <form action="MisProyectos" method="POST" style="margin-top: 20px;">
                 <% 
                 ObjectMapper mapper = new ObjectMapper();
-                String json = request.getParameter("misProyects");
-                List<Miembro> misProyects = mapper.readValue(json, new TypeReference<List<Miembro>>(){});
+                String json = (String) request.getAttribute("misProjects");
+                System.out.print(json);
+                List<Miembro> misProyects = mapper.readValue(json, mapper.getTypeFactory().constructCollectionType(List.class, Miembro.class));
                 for(Miembro m: misProyects){
                 %>
-                <input type="submit" name="accion" value="<%=m.getTipoRol()%>, Proyecto:<%=m.getIdProyecto()%>" class="btn btn-lg btn-primary btn-block" />
+                <input type="submit" name="accion" value="<%=m.getTipoRol()%>, Proyecto:<%=m.getIdProyecto().getId()%>" class="btn btn-lg btn-primary btn-block" />
                 <%}%>
             </form>
            </section>

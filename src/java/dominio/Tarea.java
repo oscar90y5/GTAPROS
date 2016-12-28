@@ -19,10 +19,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author miki
+ * @author Rebeca
  */
 @Entity
-@Table(name = "Tarea")
+@Table(name = "tarea")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Tarea.findAll", query = "SELECT t FROM Tarea t")
@@ -37,15 +37,15 @@ public class Tarea implements Serializable {
     protected TareaPK tareaPK;
     @Column(name = "esfuerzoReal")
     private Integer esfuerzoReal;
-    @JoinColumn(name = "idMiembro", referencedColumnName = "idMiembro", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Miembro miembro;
     @JoinColumn(name = "idActividad", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Actividad actividad;
     @JoinColumn(name = "idInforme", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.EAGER)
-    private InformeTareas idInforme;
+    private Informetareas idInforme;
+    @JoinColumn(name = "idMiembro", referencedColumnName = "idMiembro", insertable = false, updatable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Miembro miembro;
 
     public Tarea() {
     }
@@ -74,14 +74,6 @@ public class Tarea implements Serializable {
         this.esfuerzoReal = esfuerzoReal;
     }
 
-    public Miembro getMiembro() {
-        return miembro;
-    }
-
-    public void setMiembro(Miembro miembro) {
-        this.miembro = miembro;
-    }
-
     public Actividad getActividad() {
         return actividad;
     }
@@ -90,12 +82,20 @@ public class Tarea implements Serializable {
         this.actividad = actividad;
     }
 
-    public InformeTareas getIdInforme() {
+    public Informetareas getIdInforme() {
         return idInforme;
     }
 
-    public void setIdInforme(InformeTareas idInforme) {
+    public void setIdInforme(Informetareas idInforme) {
         this.idInforme = idInforme;
+    }
+
+    public Miembro getMiembro() {
+        return miembro;
+    }
+
+    public void setMiembro(Miembro miembro) {
+        this.miembro = miembro;
     }
 
     @Override

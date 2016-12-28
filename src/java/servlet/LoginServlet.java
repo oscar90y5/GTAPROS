@@ -53,22 +53,24 @@ public class LoginServlet extends HttpServlet {
                     if(user.getEsAdmin())
                        rd = "administrador.jsp";
                     else{
-                        List<Miembro> miembros = miembroFacade.findByDni(id);
+                        List<Miembro> miembros = miembroFacade.findByDni(user);
                         if(miembros.size()==1){
-                            request.setAttribute("idProy", miembros.get(0).getIdProyecto());
+                            int idProject =  miembros.get(0).getIdProyecto().getId();
+                            sesion.setAttribute("idProject", idProject);
                             if(miembros.get(0).getTipoRol().equals("JefeProyecto")) 
                                 rd = "jefeProyecto.jsp";
                             else
                                 rd = "desarrollador.jsp";
                         }else{
                             String json = mapper.writeValueAsString(miembros);
-                            request.setAttribute("misProyects", json);
+                            System.out.println("servlet.LoginServlet.processRequest()" + json);
+                            request.setAttribute("misProjects", json);
                             rd = "misProyectos.jsp";
                         }
                     }     
                 }
             }
-            response.sendRedirect(rd);
+            request.getRequestDispatcher(rd).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -24,7 +24,7 @@ public interface MiembroFacadeLocal {
 
     Miembro find(Object id);
     
-    List<Miembro> findByDni(String dni);
+    List<Miembro> findByDni(Object dni);
 
     List<Miembro> findAll();
 

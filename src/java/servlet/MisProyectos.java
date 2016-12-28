@@ -37,7 +37,7 @@ public class MisProyectos extends HttpServlet {
         String rd;
         int size = accion.length();
         int proyect = accion.charAt(size-1);
-        sesion.setAttribute("proyect", proyect);
+        sesion.setAttribute("idProject", proyect);
         
         if(accion.contains("JefeProyecto"))
             rd = "jefeProyecto.jsp";
