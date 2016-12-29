@@ -98,7 +98,7 @@ public class CargarPlan extends HttpServlet {
                 mapaPres.put(nombre, array[array.length - 2].split(","));
                 actividadFacade.create(actual);
             }
-            //Movida de predecesoras
+            //Predecesoras
             List<Actividad> pred, suce;
             for (String s : mapaActs.keySet()) {
                 pred = new ArrayList<>();
@@ -114,6 +114,8 @@ public class CargarPlan extends HttpServlet {
                 System.out.println("Actividad " + actual.toString());
                 actividadFacade.edit(actual);
             }
+            //Fechas inicio y fin
+            
             System.out.println("Fin");
         }
         if (accion.equals("Cancelar")) {

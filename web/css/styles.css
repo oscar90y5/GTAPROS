@@ -63,6 +63,11 @@ form[role=login] > div {
     margin-left: 10px; 
 } 
 
+.caja_small {
+    margin: 0 auto;
+    width: 50%;
+}
+
 .columna_caja_principal{ 
     color: #5d5d5d; 
     background: #f2f2f2; 
