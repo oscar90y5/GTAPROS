@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Entity
 @Table(name = "actividad")
@@ -40,13 +40,13 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Actividad.findAll", query = "SELECT a FROM Actividad a")
     , @NamedQuery(name = "Actividad.findById", query = "SELECT a FROM Actividad a WHERE a.id = :id")
+    , @NamedQuery(name = "Actividad.findByNombre", query = "SELECT a FROM Actividad a WHERE a.nombre = :nombre")
     , @NamedQuery(name = "Actividad.findByFechaInicio", query = "SELECT a FROM Actividad a WHERE a.fechaInicio = :fechaInicio")
     , @NamedQuery(name = "Actividad.findByFechaFin", query = "SELECT a FROM Actividad a WHERE a.fechaFin = :fechaFin")
     , @NamedQuery(name = "Actividad.findByDuracion", query = "SELECT a FROM Actividad a WHERE a.duracion = :duracion")
     , @NamedQuery(name = "Actividad.findByEstado", query = "SELECT a FROM Actividad a WHERE a.estado = :estado")
-    , @NamedQuery(name = "Actividad.findByRol", query = "SELECT a FROM Actividad a WHERE a.rol = :rol")
     , @NamedQuery(name = "Actividad.findByDescripcion", query = "SELECT a FROM Actividad a WHERE a.descripcion = :descripcion")})
-@JsonIgnoreProperties(value={"miembroList", "actividadList", "actividadList1"})
+@JsonIgnoreProperties(value = {"miembroList", "actividadList", "actividadList1"})
 public class Actividad implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -55,6 +55,9 @@ public class Actividad implements Serializable {
     @NotNull
     @Column(name = "id")
     private Integer id;
+    @Size(max = 30)
+    @Column(name = "nombre")
+    private String nombre;
     @Column(name = "fechaInicio")
     @Temporal(TemporalType.DATE)
     private Date fechaInicio;
@@ -66,30 +69,28 @@ public class Actividad implements Serializable {
     @Size(max = 17)
     @Column(name = "estado")
     private String estado;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 19)
-    @Column(name = "rol")
-    private String rol;
     @Size(max = 300)
     @Column(name = "descripcion")
     private String descripcion;
     @JoinTable(name = "asignacionactividad", joinColumns = {
         @JoinColumn(name = "idActividad", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idMiembro", referencedColumnName = "idMiembro")})
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Miembro> miembroList;
     @JoinTable(name = "predecesora", joinColumns = {
         @JoinColumn(name = "idPredecedora", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idSucesora", referencedColumnName = "id")})
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Actividad> actividadList;
-    @ManyToMany(mappedBy = "actividadList", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "actividadList", fetch = FetchType.EAGER)
     private List<Actividad> actividadList1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actividad", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actividad", fetch = FetchType.EAGER)
     private List<Tarea> tareaList;
+    @JoinColumn(name = "idRol", referencedColumnName = "idRol")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Rol idRol;
     @JoinColumn(name = "idProyecto", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Proyecto idProyecto;
 
     public Actividad() {
@@ -99,9 +100,12 @@ public class Actividad implements Serializable {
         this.id = id;
     }
 
-    public Actividad(Integer id, String rol) {
-        this.id = id;
-        this.rol = rol;
+    public Actividad(Rol idRol, String nombre, Integer duracion, String descripcion, Proyecto idProyecto) {
+        this.nombre = nombre;
+        this.duracion = duracion;
+        this.descripcion = descripcion;
+        this.idRol = idRol;
+        this.idProyecto = idProyecto;
     }
 
     public Integer getId() {
@@ -110,6 +114,14 @@ public class Actividad implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public Date getFechaInicio() {
@@ -142,14 +154,6 @@ public class Actividad implements Serializable {
 
     public void setEstado(String estado) {
         this.estado = estado;
-    }
-
-    public String getRol() {
-        return rol;
-    }
-
-    public void setRol(String rol) {
-        this.rol = rol;
     }
 
     public String getDescripcion() {
@@ -196,6 +200,14 @@ public class Actividad implements Serializable {
         this.tareaList = tareaList;
     }
 
+    public Rol getIdRol() {
+        return idRol;
+    }
+
+    public void setIdRol(Rol idRol) {
+        this.idRol = idRol;
+    }
+
     public Proyecto getIdProyecto() {
         return idProyecto;
     }
@@ -228,5 +240,5 @@ public class Actividad implements Serializable {
     public String toString() {
         return "dominio.Actividad[ id=" + id + " ]";
     }
-    
+
 }

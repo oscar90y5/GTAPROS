@@ -13,7 +13,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Stateless
 public class MiembroFacade extends AbstractFacade<Miembro> implements MiembroFacadeLocal {
@@ -29,9 +29,9 @@ public class MiembroFacade extends AbstractFacade<Miembro> implements MiembroFac
     public MiembroFacade() {
         super(Miembro.class);
     }
-    
+
     @Override
-    public List<Miembro> findByDni(Object dni){
+    public List<Miembro> findByDni(Object dni) {
         return em.createNamedQuery("Miembro.findByDni").setParameter("dni", dni).getResultList();
     }
     

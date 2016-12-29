@@ -11,7 +11,7 @@ import javax.ejb.Local;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Local
 public interface MiembroFacadeLocal {
@@ -23,7 +23,7 @@ public interface MiembroFacadeLocal {
     void remove(Miembro miembro);
 
     Miembro find(Object id);
-    
+
     List<Miembro> findByDni(Object dni);
     
     List<Miembro> findByIdProyecto(Object proyecto);
@@ -33,5 +33,6 @@ public interface MiembroFacadeLocal {
     List<Miembro> findRange(int[] range);
 
     int count();
-    
+
+    List<Miembro> findByDni(Object dni);
 }

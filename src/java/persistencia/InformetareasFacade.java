@@ -13,7 +13,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Stateless
 public class InformetareasFacade extends AbstractFacade<Informetareas> implements InformetareasFacadeLocal {
