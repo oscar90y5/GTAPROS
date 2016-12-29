@@ -81,22 +81,24 @@ public class CargarPlan extends HttpServlet {
             String[] predecesoras;
             String nombre;
             List<Actividad> pres;
-//            HashMap<String, Actividad> mapaActs = new HashMap<>();
-//            HashMap<String, String[]> mapaPres = new HashMap<>();
+           HashMap<String, Actividad> mapaActs = new HashMap<>();
+           HashMap<String, String[]> mapaPres = new HashMap<>();
             while ((line = br.readLine()) != null) {
                 System.out.println(line);
                 array = line.split(";");
                 nombre = array[0];
                 predecesoras = array[array.length - 2].split(",");
                 pres = new ArrayList<>();
-//                for (String predecesora : predecesoras) {
-//                    pres.add(actividadFacade.find(predecesora));
-//                }
-                a = new Actividad(array[2], Integer.parseInt(array[array.length - 1]), array[1], proyect, pres);
-//                mapaActs.put(nombre, a);
-//                mapaPres.put(nombre, predecesoras);
-                actividadFacade.create(a);
+                a = new Actividad(null, nombre,Integer.parseInt(array[array.length - 1]), array[1], proyect);
+               mapaActs.put(nombre, a);
+               mapaPres.put(nombre, predecesoras);
             }
+            //Movida de predecesoras
+            
+            
+            
+            
+            
             System.out.println("Termina");
         }
         if (accion.equals("Cancelar")) {

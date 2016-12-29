@@ -5,6 +5,7 @@
  */
 package dominio;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -99,18 +100,12 @@ public class Actividad implements Serializable {
         this.id = id;
     }
 
-    public Actividad(Integer id, String rol) {
-        this.id = id;
-        this.rol = rol;
-    }
-
-    public Actividad(String rol, Integer duracion, String descripcion, Proyecto idProyecto, List<Actividad> actividadList) {
+    public Actividad(Rol idRol, String nombre, Integer duracion, String descripcion, Proyecto idProyecto) {
+        this.nombre = nombre;
         this.duracion = duracion;
-        this.rol = rol;
         this.descripcion = descripcion;
-        this.actividadList = actividadList;
+        this.idRol = idRol;
         this.idProyecto = idProyecto;
-        this.estado = "Abierto";
     }
 
     public Integer getId() {
