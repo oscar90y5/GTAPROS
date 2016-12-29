@@ -5,13 +5,21 @@
  */
 package servlet;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import dominio.Actividad;
+import dominio.Proyecto;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import persistencia.ActividadFacadeLocal;
+import persistencia.ProyectoFacadeLocal;
 
 /**
  *
@@ -19,6 +27,14 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "Desarrollador", urlPatterns = {"/Desarrollador"})
 public class Desarrollador extends HttpServlet {
+
+    @EJB
+    private ActividadFacadeLocal actividadFacade;
+
+    @EJB
+    private ProyectoFacadeLocal proyectoFacade;
+    
+    public static final ObjectMapper mapper = new ObjectMapper();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,12 +49,37 @@ public class Desarrollador extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-
+            HttpSession sesion = request.getSession();
+            
+            //String idProject = (String) sesion.getAttribute("idProject");
+            //BORRAR
+            int idProject = 1;
             
             String accion = request.getParameter("accion");
+            System.out.print("request "+accion+"\n");
             if(accion!=null){
+                System.out.print("not null\n");
                 if(accion.equals("Introducir tarea")){
-                    out.print("Introducir datos de tareas un desarrollo....");
+                    System.out.print("introducir tarea\n");
+                    Proyecto proyecto = proyectoFacade.find(Integer.valueOf(idProject));
+                    List<Actividad> actividades = proyecto.getActividadList();
+                    //HACER NUEVA CONSULTA QUE DEVUELVA LAS ACTIVIDADES ACTIVAS DE EL USUARIO Y EL PROYECTO
+                    if(actividades.size()==1){
+                        System.out.print("size 1\n");
+                        //redirigimos a introducir tareas con el id de la actividad
+                        response.sendRedirect("introducirTareas.jsp?id="+actividades.get(0).getId());
+                    } else {
+                        System.out.print("size * "+actividades.size()+"\n");
+                        //Añadimos las actividades a un json
+                        String json = mapper.writeValueAsString(actividades);
+                        System.out.print("bieeeen\n");
+                        request.setAttribute("actividades", json);
+                        System.out.print("bieeeeeeeeeeeeeeeeeeeeen\n");
+                        response.sendRedirect("actividades.jsp");
+                        System.out.print("mal\n");
+                    }
+
+                    
                 }
                 if(accion.equals("Modificar tareas activas")){
                     out.print("Modificar datos de tareas en desarrollo....");
