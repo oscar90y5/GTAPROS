@@ -43,7 +43,28 @@
                    });
                </script>
            </p>
-           <p><button type="button" id="aceptar" disabled="true" >Aceptar</button></p>
+           <button type="submit" id="aceptar" class="btn btn-primary" name="accion" value="Cargar" disabled="disabled()">Aceptar</button>
+           <button type="submit" class="btn btn-danger" name="accion" value="Cancelar">Cancelar</button>
+           <script>
+               function disabled(){
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
+                String fecha1 = document.getElementById("fecha1").value;
+                String fecha2 = document.getElementById("fecha2").value;
+                Date fechaInicio = sdf.parse(fecha1);
+                Date fechaFinal = sdf.parse(fecha2);
+                Date dias = fechaFinal - fechaInicio;
+
+                String idUser = (String) sesion.getAttribute("idUser");
+                //find Usuario y getVacaciones()
+                if(!fechaInicio.before(fechaFinal)
+                        alert("La fecha Inicial es posterior a la final");
+                //if(vacaciones<=28) alert("Ya tienes fijadas el maximo de vacaciones/año")
+                //if(dias<14) alert("No puedes fijar vacaciones de más de 2 semanas de duración)
+                //if(vacaciones+dias<=28) alert("No puedes fijar tantos días, excedes el máximo de vacaciones/año")
+                document.getElementById("aceptar").disabled = false;
+                }
+            }
+           </script>
        </div>
     </body>
 </html>

@@ -36,6 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Miembro.findAll", query = "SELECT m FROM Miembro m")
     , @NamedQuery(name = "Miembro.findByDni", query = "SELECT m FROM Miembro m WHERE m.dni = :dni")
+    , @NamedQuery(name = "Miembro.findByIdProyecto", query = "SELECT m FROM Miembro m WHERE m.idProyecto = :idProyecto")
     , @NamedQuery(name = "Miembro.findByIdMiembro", query = "SELECT m FROM Miembro m WHERE m.idMiembro = :idMiembro")
     , @NamedQuery(name = "Miembro.findByParticipacion", query = "SELECT m FROM Miembro m WHERE m.participacion = :participacion")})
 @JsonIgnoreProperties(value={"actividadList"})

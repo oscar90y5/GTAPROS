@@ -21,7 +21,6 @@
                 <% 
                 ObjectMapper mapper = new ObjectMapper();
                 String json = (String) request.getAttribute("misProjects");
-                System.out.print(json);
                 List<Miembro> misProyects = mapper.readValue(json, mapper.getTypeFactory().constructCollectionType(List.class, Miembro.class));
                 for(Miembro m: misProyects){
                 %>

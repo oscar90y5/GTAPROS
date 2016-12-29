@@ -10,13 +10,13 @@
     <body>
         <section class="container">
             <section class="login-form">
-                <div class="columna_caja_principal">
-                    <h1>Bienvenido <%=session.getAttribute("idUser")%></h1>
-                    <h2> Elija qué desea hacer: </h2>
+                <h1>Bienvenido <%=session.getAttribute("idUser")%></h1>
+                <h2> Elija qué desea hacer: </h2>
+                <div class="columna_caja_principal"> 
                     <form action="JefeProyecto" method="POST" style="margin-top: 20px;">
                         <input type="submit" name="accion" value="Cargar Plan de proyecto" class="btn btn-lg btn-primary btn-block"/>
-                        <input type="submit" name="accion" value="Añadir personas a proyecto" class="btn btn-lg btn-primary btn-block"/>
-                        <input type="submit" name="accion" value="Añadir personas a actividad" class="btn btn-lg btn-primary btn-block"/>
+                        <input type="submit" name="accion" value="Asignar personas a proyecto" class="btn btn-lg btn-primary btn-block"/>
+                        <input type="submit" name="accion" value="Asignar personas a actividad" class="btn btn-lg btn-primary btn-block"/>
                         <input type="submit" name="accion" value="Fijar fin de actividad" class="btn btn-lg btn-primary btn-block"/>
                         <input type="submit" name="accion" value="Obtener informes" class="btn btn-lg btn-primary btn-block"/>
                         <input type="submit" name="accion" value="Consultar datos de actividad" class="btn btn-lg btn-primary btn-block"/>

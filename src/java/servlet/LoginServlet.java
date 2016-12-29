@@ -67,7 +67,6 @@ public class LoginServlet extends HttpServlet {
                                 rd = "desarrollador.jsp";
                         }else{
                             String json = mapper.writeValueAsString(miembros);
-                            System.out.println("servlet.LoginServlet.processRequest()" + json);
                             request.setAttribute("misProjects", json);
                             rd = "misProyectos.jsp";
                         }

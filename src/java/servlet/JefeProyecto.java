@@ -18,6 +18,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import persistencia.ProyectoFacadeLocal;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dominio.Miembro;
+import dominio.Usuario;
+import java.util.ArrayList;
+import persistencia.MiembroFacadeLocal;
+import persistencia.UsuarioFacadeLocal;
 
 /**
  *
@@ -25,10 +30,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 @WebServlet(name = "JefeProyecto", urlPatterns = {"/JefeProyecto"})
 public class JefeProyecto extends HttpServlet {
+
+    @EJB
+    private MiembroFacadeLocal miembroFacade;
+
+    @EJB
+    private UsuarioFacadeLocal usuarioFacade;
+    
     @EJB
     private ProyectoFacadeLocal proyectoFacade;
     
     public static final ObjectMapper mapper = new ObjectMapper();
+    public static ArrayList<Integer> participacion = new ArrayList<>();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,8 +57,10 @@ public class JefeProyecto extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
         int idProject = (Integer) sesion.getAttribute("idProject");
+        String dni = (String) sesion.getAttribute("idUser");
         String accion = request.getParameter("accion");
         List<Proyecto> proyects = null;
+        List<Usuario> users = null;
         Proyecto proyect = proyectoFacade.find(idProject);
         List<Actividad> activities =  proyect.getActividadList();
         String rd = "jefeProyecto.jsp";
@@ -54,10 +69,11 @@ public class JefeProyecto extends HttpServlet {
             if (accion.equals("Cargar Plan de proyecto"))
                  rd = "cargarPlan.jsp";  
 
-            if (accion.equals("AÃ±adir personas a proyecto"))
+            if (accion.equals("Asignar personas a proyecto")){
+                users = usuariosDisponibles(dni);
                 rd = "usuarios.jsp";
-
-            if (accion.equals("AÃ±adir personas a actividad")){
+            }
+            if (accion.equals("Asignar personas a actividad")){
                 for(Actividad a: activities){
                     if(!a.getEstado().equals("Abierto"))
                         activities.remove(a);
@@ -86,12 +102,22 @@ public class JefeProyecto extends HttpServlet {
             String json = mapper.writeValueAsString(proyects);
             request.setAttribute("proyectos", json);
         }
+        if(users!=null){
+            String jsonU = null;
+            String jsonP = null;
+            if(!users.isEmpty()){
+                jsonU = mapper.writeValueAsString(users);
+                jsonP = mapper.writeValueAsString(participacion);
+            }
+            request.setAttribute("usuarios", jsonU); 
+            request.setAttribute("participacion", jsonP);
+        }
         if(!activities.isEmpty()){
             String json = mapper.writeValueAsString(activities);
             request.setAttribute("actividades", json);
         }
-
-         request.getRequestDispatcher(rd).forward(request, response);
+        
+       request.getRequestDispatcher(rd).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -132,5 +158,23 @@ public class JefeProyecto extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private List<Usuario> usuariosDisponibles(String dni) {
+        //Busco todos los empleados menos el administrador
+        List<Usuario> users = usuarioFacade.finByAdmin(Boolean.FALSE);
+        List<Usuario> aux = new ArrayList<>();
+        users.stream().filter((u) -> (!u.getDni().equals(dni))).forEachOrdered((u) -> {
+            int porcent = 0;
+            List<Miembro> members = miembroFacade.findByDni(u);
+            //Compruebo su participacion total en todos los proyectos de los que son miembros
+            for(Miembro m: members)
+                porcent += m.getParticipacion();
+            if (porcent<100) {
+                aux.add(u);
+                participacion.add(porcent);
+            }
+        });
+        return aux;
+    }
 
 }
