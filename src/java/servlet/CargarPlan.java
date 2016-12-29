@@ -106,6 +106,7 @@ public class CargarPlan extends HttpServlet {
                 a.setEstado("Abierto");
                 mapaActs.put(nombre, a);
                 mapaPres.put(nombre, predecesoras);
+                actividadFacade.create(a);
             }
             //Movida de predecesoras
             List<Actividad> pred;
@@ -123,7 +124,7 @@ public class CargarPlan extends HttpServlet {
                 actual.setActividadList1(suce);
                 //Creaccion
                 System.out.println("Actividad " + actual.toString());
-                actividadFacade.create(actual);
+                actividadFacade.edit(actual);
             }
 
             System.out.println("Termina");
