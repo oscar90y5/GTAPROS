@@ -66,6 +66,7 @@ public class CargarPlan extends HttpServlet {
         int idProject = (Integer) sesion.getAttribute("idProject");
         System.out.println(accion + " " + idProject);
         Proyecto proyect = proyectoFacade.find(idProject);
+        System.out.println("proyecto"+proyect.getCargado());
         String rd = "cargarPlan.jsp";
         if (accion.equals("Cargar")) {
             //Recogida del archivo
@@ -91,7 +92,7 @@ public class CargarPlan extends HttpServlet {
 //                for (String predecesora : predecesoras) {
 //                    pres.add(actividadFacade.find(predecesora));
 //                }
-                a = new Actividad(array[2], Integer.parseInt(array[array.length - 1]), array[1], proyect, null);
+                a = new Actividad(array[2], Integer.parseInt(array[array.length - 1]), array[1], proyect, pres);
 //                mapaActs.put(nombre, a);
 //                mapaPres.put(nombre, predecesoras);
                 actividadFacade.create(a);
