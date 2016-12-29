@@ -12,9 +12,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -60,6 +67,7 @@ public class CargarPlan extends HttpServlet {
         HttpSession sesion = request.getSession();
         String accion = (String) request.getParameter("accion");
         int idProject = (Integer) sesion.getAttribute("idProject");
+        String fecha = (String) request.getParameter("fecha");
         System.out.println(accion + " " + idProject);
         Proyecto proyect = proyectoFacade.find(idProject);
         System.out.println("proyecto" + proyect.getCargado());
@@ -98,7 +106,13 @@ public class CargarPlan extends HttpServlet {
                 mapaPres.put(nombre, array[array.length - 2].split(","));
                 actividadFacade.create(actual);
             }
-            //Predecesoras
+            //Predecesoras y fecha de inicio
+            String[] partes = fecha.split("/");
+            int dia, mes, anyo;
+            dia = Integer.parseInt(partes[0]);
+            mes = Integer.parseInt(partes[1]);
+            anyo = Integer.parseInt(partes[2]);
+            GregorianCalendar c = new GregorianCalendar(anyo, mes, dia);
             List<Actividad> pred, suce;
             for (String s : mapaActs.keySet()) {
                 pred = new ArrayList<>();
@@ -110,12 +124,13 @@ public class CargarPlan extends HttpServlet {
                 }
                 actual.setActividadList(pred);
                 actual.setActividadList1(suce);
-                //Creaccion
+                if (pred.isEmpty()) {
+                    actual.setFechaInicio(c.getTime());
+                }
+                //Modificacion
                 System.out.println("Actividad " + actual.toString());
                 actividadFacade.edit(actual);
             }
-            //Fechas inicio y fin
-            
             System.out.println("Fin");
         }
         if (accion.equals("Cancelar")) {
