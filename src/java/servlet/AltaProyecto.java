@@ -8,6 +8,8 @@ package servlet;
 import dominio.Proyecto;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -42,24 +44,28 @@ public class AltaProyecto extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             HttpSession sesion = request.getSession();
             String nombreProyecto = request.getParameter("nombreProyecto");
-            
-            if(request.getParameter("altaProyectoBtn").equals("asignarJefe")){
+            String [] roles = (String[]) request.getAttribute("roles[]");
+            List<Rol> listaRol;
+            for(int i =0;i<roles.length;i++){
+          
+            }
+            if(request.getParameter("altaProyectoBtn").equals("asignarJefe")){ 
                 Proyecto p = new Proyecto();
+                listaRol = request.getAttribute("listaRoles");
                 p.setNombre(nombreProyecto);
+                p.setRolList(listaRol);
                 proyectoFacade.create(p);
-                //int idProyecto = p.getId();
-                //request.getSession().setAttribute("idProyecto", idProyecto);
                 response.sendRedirect("AsignarResponsable.jsp"); 
-
             }
             else{
                 if(request.getParameter("altaProyectoBtn").equals("asignarJefeLater")){
                     Proyecto p = new Proyecto();
+                listaRol = request.getAttribute("listaRoles");
                     p.setNombre(nombreProyecto);
+                    p.setRolList(listaRol);
                     proyectoFacade.create(p);
                 }
                 response.sendRedirect("Administrador.jsp"); 
-
             }
 
         }

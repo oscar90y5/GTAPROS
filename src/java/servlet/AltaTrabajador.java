@@ -41,14 +41,17 @@ public class AltaTrabajador extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession sesion = request.getSession();
-            String nombre, dni;
+            String nombre, dni, clave;
             int tipoCategoria;
             if(request.getParameter("altaTrabajadorBtn").equals("addTrabajador")){
                 nombre = request.getParameter("nombreTrabajador");
                 dni = request.getParameter("dniTrabajador");
                 tipoCategoria = Integer.valueOf(request.getParameter("categoriaTrabajador"));
-                Usuario u = new Usuario(dni,dni,tipoCategoria);
+                clave = nombre + "1234";
+                Usuario u = new Usuario(dni, clave, tipoCategoria);
+                u.setNombreCompleto(nombre);
                 usuarioFacade.create(u);
+                
             } else {
             }
             response.sendRedirect("Administrador.jsp"); 

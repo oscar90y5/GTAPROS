@@ -32,7 +32,7 @@ public class ProyectoFacade extends AbstractFacade<Proyecto> implements Proyecto
     }
       @Override
     public Proyecto findByNombre(Object nombreProyecto){
-        return em.createNamedQuery("Proyecto.findByNombre").setParameter("nombre", nombreProyecto).getSingleResult();
+        return (Proyecto)em.createNamedQuery("Proyecto.findByNombre").setParameter("nombre", nombreProyecto).getSingleResult();
     }
     
 }

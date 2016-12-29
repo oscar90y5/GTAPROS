@@ -6,8 +6,22 @@
         <meta name="viewport" content="width=1,initial-scale=1,user-scalable=1" />
         <title>GTAPROS</title>
         <%@include file="WEB-INF/jspf/includes.jspf" %>
+        
+        <script type='text/javascript'>
+             var counter = 1;
+             var limit = 1000;
+             function addRol(divName){
+                  if (counter <= limit)  {
+                       var newdiv = document.createElement('div');
+                       newdiv.innerHTML = "Rol " + (counter + 1) + " <br><input type='text' name='roles[]'>";
+                       document.getElementById(divName).appendChild(newdiv);
+                       counter++;
+                  }
+             }
+    </script>
     </head>
     <body>
+       
        
         <section class="container">
             <section class="login-form">
@@ -19,8 +33,9 @@
                  <input type="text" class="form-control" id="nombreProyecto" placeholder="Introduzca el nombre del trabajador" name="nombreProyecto">
              </div>
              <div class="">
-                 <label for="nombreProyecto">Roles y categorías</label>
-                 <input type="text" class="form-control" id="dniTrabajador" placeholder="Introduzca el dni del trabajador" name="dniTrabajador">
+                 <label for="nombreProyecto">Roles y categorías (Al menos debe asignar el Jefe de Proyecto)</label><br />
+                <div id="dynamicInput">Rol 1<br><input type="text" name="roles[]"></div>
+                <input type="button" value="Añadir nuevo Rol" onClick="addRol('dynamicInput');">
              </div>
          </div><!-- /.box-body -->
          <div class="box-footer">

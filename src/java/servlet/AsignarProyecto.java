@@ -52,7 +52,7 @@ public class AsignarProyecto extends HttpServlet {
                 String jefeProyecto = request.getParameter("jefeProyecto");
                 Proyecto proyecto = proyectoFacade.findByNombre(nombreProyecto);
                 Usuario jefe = usuarioFacade.findByNombreCompleto(jefeProyecto);
-               // proyecto.setJefeProyecto(jefe);
+                //proyecto.setJefeProyecto(jefe);
            }
             response.sendRedirect("Administrador.jsp");
 
