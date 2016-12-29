@@ -34,7 +34,6 @@
                 <td><h4>Nombre</h4></td>
                 <td><h4>TipoCategoria</h4></td>
             </tr>
-            <p></p>
             <% if(jsonU==null){%>
             <tr>No existen usuarios disponibles</tr>
             <%}else{
@@ -42,7 +41,6 @@
                     List<Integer> porcents = mapper.readValue(jsonP, new TypeReference<List<Integer>>(){});
                     for(int i=0; i<users.size();i++){
                         Usuario u = users.get(i);
-                        System.out.println("className.methodName()"+porcents.get(i));
             %>
             <tr>
                 <td><input type="checkbox" name="dni" value="<%= u.getDni()%>"></td>
@@ -56,16 +54,16 @@
                             <option selected disabled>Elija categoria</option>
                             <option value="Analista">Analista</option> 
                             <option value="Disenador">Diseñador</option> 
-                            <option value="Analista-programador">Analista-programador</option>
-                            <option value="Responsable equipo de pruebas">Responsable equipo de pruebas</option> 
+                            <option value="AnalistaProgramador">Analista-programador</option>
+                            <option value="RespEquipoPruebas">Responsable equipo de pruebas</option> 
                             <option value="Programador">Programador</option> 
                             <option value="Probador">Probador</option> 
                             <%break;
                             case 3:%>
                             <option selected disabled>Elija categoria</option>
                             <option value="Disenador">Diseñador</option> 
-                            <option value="Analista-programador">Analista-programador</option>
-                            <option value="Responsable equipo de pruebas">Responsable equipo de pruebas</option> 
+                            <option value="AnalistaProgramador">Analista-programador</option>
+                            <option value="RespEquipoPruebas">Responsable equipo de pruebas</option> 
                             <option value="Programador">Programador</option> 
                             <option value="Probador">Probador</option> 
                             <%break;

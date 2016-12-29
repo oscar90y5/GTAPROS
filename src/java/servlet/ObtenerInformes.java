@@ -5,27 +5,20 @@
  */
 package servlet;
 
-import dominio.Proyecto;
 import java.io.IOException;
-import java.io.PrintWriter;
-import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import persistencia.ProyectoFacadeLocal;
 
 /**
  *
  * @author Rebeca
  */
-@WebServlet(name = "CargarPlan", urlPatterns = {"/CargarPlan"})
-public class CargarPlan extends HttpServlet {
-
-    @EJB
-    private ProyectoFacadeLocal proyectoFacade;
+@WebServlet(name = "ObtenerInformes", urlPatterns = {"/ObtenerInformes"})
+public class ObtenerInformes extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,18 +33,12 @@ public class CargarPlan extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
-        String accion = (String) request.getParameter("accion");
+        String url = request.getRequestURL().toString();
+        //ObtenerInformes?id= son 19 chars
+        int proyecto = Integer.parseInt(url.substring(19));
+        String idUser = (String) sesion.getAttribute("idUser");
         int idProject = (Integer) sesion.getAttribute("idProject");
-        Proyecto proyect = proyectoFacade.find(idProject);
-        String rd = "cargarPlan.jsp";
-        if(accion.equals("Cargar")){
-            //Tratar archivo
-       
-            rd = "exito.jsp";
-        }if(accion.equals("Cancelar"))
-            rd = "jefeProyecto.jsp";
         
-         request.getRequestDispatcher(rd).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
