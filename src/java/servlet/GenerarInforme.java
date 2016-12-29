@@ -6,10 +6,11 @@
 package servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dominio.Informetareas;
 import dominio.Miembro;
 import dominio.Proyecto;
-import dominio.Usuario;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -17,26 +18,21 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import persistencia.InformetareasFacadeLocal;
 import persistencia.MiembroFacadeLocal;
-import persistencia.ProyectoFacadeLocal;
-import persistencia.UsuarioFacadeLocal;
 
 /**
  *
  * @author Rebeca
  */
-@WebServlet(name = "ObtenerInformes", urlPatterns = {"/ObtenerInformes"})
-public class ObtenerInformes extends HttpServlet {
-
-    @EJB
-    private UsuarioFacadeLocal usuarioFacade;
-
-    @EJB
-    private ProyectoFacadeLocal proyectoFacade;
+@WebServlet(name = "GenerarInforme", urlPatterns = {"/GenerarInforme"})
+public class GenerarInforme extends HttpServlet {
 
     @EJB
     private MiembroFacadeLocal miembroFacade;
+
+    @EJB
+    private InformetareasFacadeLocal informetareasFacade;
 
     public static final ObjectMapper mapper = new ObjectMapper();
     
@@ -52,32 +48,35 @@ public class ObtenerInformes extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession sesion = request.getSession();
-        String url = request.getParameter("id");
-        System.out.println("servlet.ObtenerInformes.processRequest()"+url);
-        int idP = Integer.parseInt(url);
-        String idUser = (String) sesion.getAttribute("idUser");
-        int idProject = (Integer) sesion.getAttribute("idProject");
-        Proyecto proyecto = proyectoFacade.find(idP);
-        Usuario user = usuarioFacade.find(idUser);
-        List<Miembro> roles = miembroFacade.findByDni(user);
+        String informe = request.getParameter("informe");
+        String json = (String) request.getAttribute("proyecto");
+        Proyecto p = mapper.readValue(json, Proyecto.class);
         
-        String rd = "proyectos.jsp";
-        
-        for(Miembro m: roles){
-            if(m.getIdProyecto().getId().equals(idP)){
-                if(m.getTipoRol().equals("JefeProyecto")){
-                    String json = mapper.writeValueAsString(proyecto);
-                    request.setAttribute("proyecto", json);
-                    rd = "informes.jsp";
-                }else{
-                    request.setAttribute("proyecto", proyecto);
-                    rd = "informeDesarrollador.jsp";
-                }
-                
-            }
+        if(informe.equals("Trabajadores/Actividades por periodo semanal")){
+            //Primero selecciona semana, luego genera informe
         }
-        request.getRequestDispatcher(rd).forward(request, response);
+        if(informe.equals("Trabajadores/Informes pendientes de Envio")){
+            List<Miembro> trabajadores = miembroFacade.findByIdProyecto(p);
+            List<Informetareas> pendientesEnvio = informetareasFacade.findByEstado("PendienteEnvio");
+        }
+        if(informe.equals("Trabajadores/Informes pendientes de Aprobación")){
+             List<Informetareas> pendientesAprob = informetareasFacade.findByEstado("PendienteAprobacion");
+        }
+        if(informe.equals("Tiempo real/planificado de actividades por periodo")){
+            //Primero mostrar calendario (similar vacaciones.jsp), luego generar informe
+        }
+        if(informe.equals("Actividades con tiempo real mayor del esperado")){
+            //Generar informe
+        }
+        if(informe.equals("Actividades/Recursos por periodo posterior")){
+            //Primero pedir días despues de fecha actual, luego genera informe
+        }
+        if(informe.equals("Trabajadores/Actividades/Tiempo por periodo posterior")){
+            //Primero pedir días despues de fecha actual, luego genera informe
+        }
+        if(informe.equals("Informe general")){
+            //Generar informe
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

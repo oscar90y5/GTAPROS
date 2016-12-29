@@ -36,6 +36,7 @@ public class JefeProyecto extends HttpServlet {
 
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
+    
     @EJB
     private ProyectoFacadeLocal proyectoFacade;
     

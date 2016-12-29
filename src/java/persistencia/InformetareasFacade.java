@@ -6,6 +6,7 @@
 package persistencia;
 
 import dominio.Informetareas;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,4 +30,8 @@ public class InformetareasFacade extends AbstractFacade<Informetareas> implement
         super(Informetareas.class);
     }
     
+    @Override
+    public List<Informetareas> findByEstado(String estado){
+        return em.createNamedQuery("Informetareas.findByEstado").setParameter("estado", estado).getResultList();
+    }
 }
