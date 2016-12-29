@@ -90,21 +90,41 @@ public class CargarPlan extends HttpServlet {
             List<Actividad> pres;
             HashMap<String, Actividad> mapaActs = new HashMap<>();
             HashMap<String, String[]> mapaPres = new HashMap<>();
+            //Obtencion del siguiente indice
+            int nextId = actividadFacade.findAll().size() + 1;
             while ((line = br.readLine()) != null) {
                 System.out.println(line);
                 array = line.split(";");
                 nombre = array[0];
                 rol = array[2];
-                r=rolFacade.findByNombreRolAndIdProyecto(rol,proyect);
-                System.out.println("rol "+r.getNombreRol());
+                r = rolFacade.findByNombreRolAndIdProyecto(rol, proyect);
+                System.out.println("rol " + r.getNombreRol());
                 predecesoras = array[array.length - 2].split(",");
                 pres = new ArrayList<>();
-                a = new Actividad(r, nombre, Integer.parseInt(array[array.length - 1]), array[1], proyect);
+                a = new Actividad(nextId, r, nombre, Integer.parseInt(array[array.length - 1]), array[1], proyect);
+                nextId = nextId + 1;
+                a.setEstado("Abierto");
                 mapaActs.put(nombre, a);
                 mapaPres.put(nombre, predecesoras);
             }
             //Movida de predecesoras
-            
+            List<Actividad> pred;
+            List<Actividad> suce;
+            Actividad actual;
+            for (String s : mapaActs.keySet()) {
+                pred = new ArrayList<>();
+                suce = new ArrayList<>();
+                actual = mapaActs.get(s);
+                for (String p : mapaPres.get(actual.getNombre())) {
+                    suce.add(actual);
+                    pred.add(mapaActs.get(p));
+                }
+                actual.setActividadList(pred);
+                actual.setActividadList1(suce);
+                //Creaccion
+                System.out.println("Actividad " + actual.toString());
+                actividadFacade.create(actual);
+            }
 
             System.out.println("Termina");
         }

@@ -100,7 +100,8 @@ public class Actividad implements Serializable {
         this.id = id;
     }
 
-    public Actividad(Rol idRol, String nombre, Integer duracion, String descripcion, Proyecto idProyecto) {
+    public Actividad(Integer id, Rol idRol, String nombre, Integer duracion, String descripcion, Proyecto idProyecto) {
+        this.id = id;
         this.nombre = nombre;
         this.duracion = duracion;
         this.descripcion = descripcion;
@@ -238,7 +239,7 @@ public class Actividad implements Serializable {
 
     @Override
     public String toString() {
-        return "dominio.Actividad[ id=" + id + " ]";
+        return "dominio.Actividad[ id=" + id + " nombre " + nombre + " predecesoras:" + actividadList.toString() + "]";
     }
 
 }
