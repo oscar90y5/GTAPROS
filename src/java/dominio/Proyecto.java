@@ -5,7 +5,6 @@
  */
 package dominio;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +12,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -27,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Entity
 @Table(name = "proyecto")
@@ -41,13 +42,12 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Proyecto.findByEstado", query = "SELECT p FROM Proyecto p WHERE p.estado = :estado")
     , @NamedQuery(name = "Proyecto.findByDescripcion", query = "SELECT p FROM Proyecto p WHERE p.descripcion = :descripcion")
     , @NamedQuery(name = "Proyecto.findByCargado", query = "SELECT p FROM Proyecto p WHERE p.cargado = :cargado")})
-@JsonIgnoreProperties(value = {"miembroList", "actividadList"})
 public class Proyecto implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
@@ -71,6 +71,8 @@ public class Proyecto implements Serializable {
     private Boolean cargado;
     @OneToMany(mappedBy = "idProyecto", fetch = FetchType.EAGER)
     private List<Miembro> miembroList;
+    @OneToMany(mappedBy = "idProyecto", fetch = FetchType.EAGER)
+    private List<Rol> rolList;
     @OneToMany(mappedBy = "idProyecto", fetch = FetchType.EAGER)
     private List<Actividad> actividadList;
 
@@ -149,6 +151,15 @@ public class Proyecto implements Serializable {
 
     public void setMiembroList(List<Miembro> miembroList) {
         this.miembroList = miembroList;
+    }
+
+    @XmlTransient
+    public List<Rol> getRolList() {
+        return rolList;
+    }
+
+    public void setRolList(List<Rol> rolList) {
+        this.rolList = rolList;
     }
 
     @XmlTransient

@@ -17,9 +17,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import persistencia.MiembroFacadeLocal;
+import persistencia.RolFacadeLocal;
 import persistencia.UsuarioFacadeLocal;
 
 public class LoginServlet extends HttpServlet {
+
+    @EJB
+    private RolFacadeLocal rolFacade;
     public static final ObjectMapper mapper = new ObjectMapper();
     
     @EJB
@@ -57,7 +61,7 @@ public class LoginServlet extends HttpServlet {
                         if(miembros.size()==1){
                             int idProject =  miembros.get(0).getIdProyecto().getId();
                             sesion.setAttribute("idProject", idProject);
-                            if(miembros.get(0).getTipoRol().equals("JefeProyecto")) 
+                            if(miembros.get(0).getIdRol().getNombreRol().equals("JefeProyecto")) 
                                 rd = "jefeProyecto.jsp";
                             else
                                 rd = "desarrollador.jsp";

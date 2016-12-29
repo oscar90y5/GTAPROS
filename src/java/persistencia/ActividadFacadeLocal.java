@@ -11,7 +11,7 @@ import javax.ejb.Local;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Local
 public interface ActividadFacadeLocal {
@@ -25,7 +25,7 @@ public interface ActividadFacadeLocal {
     Actividad find(Object id);
 
     List<Actividad> findAll();
-    
+
     List<Actividad> findRange(int[] range);
 
     int count();

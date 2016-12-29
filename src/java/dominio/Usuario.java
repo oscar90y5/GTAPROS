@@ -5,7 +5,6 @@
  */
 package dominio;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -25,7 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Entity
 @Table(name = "usuario")
@@ -38,7 +37,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByVacacionesFijadas", query = "SELECT u FROM Usuario u WHERE u.vacacionesFijadas = :vacacionesFijadas")
     , @NamedQuery(name = "Usuario.findByTipoCategoria", query = "SELECT u FROM Usuario u WHERE u.tipoCategoria = :tipoCategoria")
     , @NamedQuery(name = "Usuario.findByEsAdmin", query = "SELECT u FROM Usuario u WHERE u.esAdmin = :esAdmin")})
-@JsonIgnoreProperties(value={"miembroList"})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -57,7 +55,7 @@ public class Usuario implements Serializable {
     @Column(name = "clave")
     private String clave;
     @Column(name = "vacacionesFijadas")
-    private Boolean vacacionesFijadas;
+    private Integer vacacionesFijadas;
     @Basic(optional = false)
     @NotNull
     @Column(name = "tipoCategoria")
@@ -106,11 +104,11 @@ public class Usuario implements Serializable {
         this.clave = clave;
     }
 
-    public Boolean getVacacionesFijadas() {
+    public Integer getVacacionesFijadas() {
         return vacacionesFijadas;
     }
 
-    public void setVacacionesFijadas(Boolean vacacionesFijadas) {
+    public void setVacacionesFijadas(Integer vacacionesFijadas) {
         this.vacacionesFijadas = vacacionesFijadas;
     }
 
