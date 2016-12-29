@@ -7,6 +7,7 @@ package servlet;
 
 import dominio.Actividad;
 import dominio.Proyecto;
+import dominio.Rol;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,6 +33,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import persistencia.ActividadFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
+import persistencia.RolFacadeLocal;
 
 /**
  *
@@ -40,6 +42,9 @@ import persistencia.ProyectoFacadeLocal;
 @WebServlet(name = "CargarPlan", urlPatterns = {"/CargarPlan"})
 @MultipartConfig
 public class CargarPlan extends HttpServlet {
+
+    @EJB
+    private RolFacadeLocal rolFacade;
 
     @EJB
     private ActividadFacadeLocal actividadFacade;
@@ -66,7 +71,7 @@ public class CargarPlan extends HttpServlet {
         int idProject = (Integer) sesion.getAttribute("idProject");
         System.out.println(accion + " " + idProject);
         Proyecto proyect = proyectoFacade.find(idProject);
-        System.out.println("proyecto"+proyect.getCargado());
+        System.out.println("proyecto" + proyect.getCargado());
         String rd = "cargarPlan.jsp";
         if (accion.equals("Cargar")) {
             //Recogida del archivo
@@ -80,25 +85,27 @@ public class CargarPlan extends HttpServlet {
             Actividad a;
             String[] predecesoras;
             String nombre;
+            String rol;
+            Rol r;
             List<Actividad> pres;
-           HashMap<String, Actividad> mapaActs = new HashMap<>();
-           HashMap<String, String[]> mapaPres = new HashMap<>();
+            HashMap<String, Actividad> mapaActs = new HashMap<>();
+            HashMap<String, String[]> mapaPres = new HashMap<>();
             while ((line = br.readLine()) != null) {
                 System.out.println(line);
                 array = line.split(";");
                 nombre = array[0];
+                rol = array[2];
+                r=rolFacade.findByNombreRolAndIdProyecto(rol,proyect);
+                System.out.println("rol "+r.getNombreRol());
                 predecesoras = array[array.length - 2].split(",");
                 pres = new ArrayList<>();
-                a = new Actividad(null, nombre,Integer.parseInt(array[array.length - 1]), array[1], proyect);
-               mapaActs.put(nombre, a);
-               mapaPres.put(nombre, predecesoras);
+                a = new Actividad(r, nombre, Integer.parseInt(array[array.length - 1]), array[1], proyect);
+                mapaActs.put(nombre, a);
+                mapaPres.put(nombre, predecesoras);
             }
             //Movida de predecesoras
             
-            
-            
-            
-            
+
             System.out.println("Termina");
         }
         if (accion.equals("Cancelar")) {

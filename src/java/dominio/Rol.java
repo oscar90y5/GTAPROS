@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Rol.findAll", query = "SELECT r FROM Rol r")
     , @NamedQuery(name = "Rol.findByIdRol", query = "SELECT r FROM Rol r WHERE r.idRol = :idRol")
     , @NamedQuery(name = "Rol.findByNombreRol", query = "SELECT r FROM Rol r WHERE r.nombreRol = :nombreRol")
-    , @NamedQuery(name = "Rol.findByTipoCategoria", query = "SELECT r FROM Rol r WHERE r.tipoCategoria = :tipoCategoria")})
+    , @NamedQuery(name = "Rol.findByTipoCategoria", query = "SELECT r FROM Rol r WHERE r.tipoCategoria = :tipoCategoria")
+    , @NamedQuery(name = "Rol.findByNombreRolAndIdProyecto", query = "SELECT r FROM Rol r WHERE r.nombreRol = :nombreRol AND r.idProyecto = :idProyecto")})
 @JsonIgnoreProperties(value = {"miembroList", "actividadList"})
 public class Rol implements Serializable {
 
