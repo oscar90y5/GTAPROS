@@ -9,16 +9,9 @@ import dominio.Actividad;
 import dominio.Proyecto;
 import dominio.Rol;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,8 +56,6 @@ public class CargarPlan extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        System.out.println("LLEGA 1");
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
         String accion = (String) request.getParameter("accion");
@@ -78,40 +69,37 @@ public class CargarPlan extends HttpServlet {
             Part filePart = request.getPart("file");
             InputStream fileContent = filePart.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(fileContent));
-            System.out.println("LLEGA 4");
             //Tratamiento de actividades
-            String line;
+            String line, nombre;
             String[] array;
-            Actividad a;
-            String[] predecesoras;
-            String nombre;
-            String rol;
+            Actividad actual;
             Rol r;
+            Integer duracion;
             List<Actividad> pres;
+            //Para tratamiento de predecesoras
             HashMap<String, Actividad> mapaActs = new HashMap<>();
             HashMap<String, String[]> mapaPres = new HashMap<>();
-            //Obtencion del siguiente indice
-            int nextId = actividadFacade.findAll().size() + 1;
+            int nextId = actividadFacade.findAll().size() + 1; //getNextId
             while ((line = br.readLine()) != null) {
                 System.out.println(line);
                 array = line.split(";");
+                duracion = Integer.parseInt(array[array.length - 1]);
                 nombre = array[0];
-                rol = array[2];
-                r = rolFacade.findByNombreRolAndIdProyecto(rol, proyect);
-                System.out.println("rol " + r.getNombreRol());
-                predecesoras = array[array.length - 2].split(",");
                 pres = new ArrayList<>();
-                a = new Actividad(nextId, r, nombre, Integer.parseInt(array[array.length - 1]), array[1], proyect);
+                actual = new Actividad(nextId, nombre, duracion, array[1], proyect);
                 nextId = nextId + 1;
-                a.setEstado("Abierto");
-                mapaActs.put(nombre, a);
-                mapaPres.put(nombre, predecesoras);
-                actividadFacade.create(a);
+                actual.setEstado("Abierto");
+                if (duracion != 0) {
+                    r = rolFacade.findByNombreRolAndIdProyecto(array[2], proyect);
+                    actual.setIdRol(r);
+                }
+                mapaActs.put(nombre, actual);
+
+                mapaPres.put(nombre, array[array.length - 2].split(","));
+                actividadFacade.create(actual);
             }
             //Movida de predecesoras
-            List<Actividad> pred;
-            List<Actividad> suce;
-            Actividad actual;
+            List<Actividad> pred, suce;
             for (String s : mapaActs.keySet()) {
                 pred = new ArrayList<>();
                 suce = new ArrayList<>();
@@ -126,8 +114,7 @@ public class CargarPlan extends HttpServlet {
                 System.out.println("Actividad " + actual.toString());
                 actividadFacade.edit(actual);
             }
-
-            System.out.println("Termina");
+            System.out.println("Fin");
         }
         if (accion.equals("Cancelar")) {
             rd = "jefeProyecto.jsp";

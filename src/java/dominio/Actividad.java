@@ -100,12 +100,11 @@ public class Actividad implements Serializable {
         this.id = id;
     }
 
-    public Actividad(Integer id, Rol idRol, String nombre, Integer duracion, String descripcion, Proyecto idProyecto) {
+    public Actividad(Integer id, String nombre, Integer duracion, String descripcion, Proyecto idProyecto) {
         this.id = id;
         this.nombre = nombre;
         this.duracion = duracion;
         this.descripcion = descripcion;
-        this.idRol = idRol;
         this.idProyecto = idProyecto;
     }
 
