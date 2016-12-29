@@ -47,7 +47,7 @@ public class AltaProyecto extends HttpServlet {
             String [] roles = (String[]) request.getAttribute("roles[]");
             List<Rol> listaRol;
             for(int i =0;i<roles.length;i++){
-          
+                
             }
             if(request.getParameter("altaProyectoBtn").equals("asignarJefe")){ 
                 Proyecto p = new Proyecto();
@@ -55,7 +55,6 @@ public class AltaProyecto extends HttpServlet {
                 p.setNombre(nombreProyecto);
                 p.setRolList(listaRol);
                 proyectoFacade.create(p);
-                response.sendRedirect("AsignarResponsable.jsp"); 
             }
             else{
                 if(request.getParameter("altaProyectoBtn").equals("asignarJefeLater")){
