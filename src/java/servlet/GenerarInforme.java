@@ -9,8 +9,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dominio.Informetareas;
 import dominio.Miembro;
 import dominio.Proyecto;
+import dominio.Tarea;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import persistencia.InformetareasFacadeLocal;
 import persistencia.MiembroFacadeLocal;
+import persistencia.ProyectoFacadeLocal;
 
 /**
  *
@@ -29,11 +31,15 @@ import persistencia.MiembroFacadeLocal;
 public class GenerarInforme extends HttpServlet {
 
     @EJB
+    private ProyectoFacadeLocal proyectoFacade;
+
+    @EJB
     private MiembroFacadeLocal miembroFacade;
 
     @EJB
     private InformetareasFacadeLocal informetareasFacade;
 
+    
     public static final ObjectMapper mapper = new ObjectMapper();
     
     /**
@@ -49,18 +55,40 @@ public class GenerarInforme extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String informe = request.getParameter("informe");
-        String json = (String) request.getAttribute("proyecto");
-        Proyecto p = mapper.readValue(json, Proyecto.class);
+        String stringP = request.getParameter("proyecto");
+        int idP = Integer.parseInt(stringP);
+        System.out.println("servlet.GenerarInforme.processRequest()"+informe);
+        System.out.println("servlet.GenerarInforme.processRequest()"+idP);
+        Proyecto p = proyectoFacade.find(idP);
+        List<Tarea> trabInfor = new ArrayList<>();
+        String rd = "informes.jsp";
         
         if(informe.equals("Trabajadores/Actividades por periodo semanal")){
             //Primero selecciona semana, luego genera informe
         }
         if(informe.equals("Trabajadores/Informes pendientes de Envio")){
             List<Miembro> trabajadores = miembroFacade.findByIdProyecto(p);
-            List<Informetareas> pendientesEnvio = informetareasFacade.findByEstado("PendienteEnvio");
+            for(Miembro m: trabajadores){
+                List<Tarea> tareas = m.getTareaList();
+                for(Tarea t: tareas){
+                    Informetareas inf = t.getIdInforme();
+                    if(inf.getEstado().equals("PendienteEnvio"))
+                        trabInfor.add(t);
+                }
+            }
+            rd = "informe.jsp?estado=pendienteEnvio";
         }
-        if(informe.equals("Trabajadores/Informes pendientes de Aprobación")){
-             List<Informetareas> pendientesAprob = informetareasFacade.findByEstado("PendienteAprobacion");
+        if(informe.equals("Trabajadores/Informes pendientes de Aprobacion")){
+            List<Miembro> trabajadores = miembroFacade.findByIdProyecto(p);
+            for(Miembro m: trabajadores){
+                List<Tarea> tareas = m.getTareaList();
+                for(Tarea t: tareas){
+                    Informetareas inf = t.getIdInforme();
+                    if(inf.getEstado().equals("PendienteAprobacion"))
+                        trabInfor.add(t);
+                }
+            }
+            rd = "informe.jsp?estado=pendienteAprob";
         }
         if(informe.equals("Tiempo real/planificado de actividades por periodo")){
             //Primero mostrar calendario (similar vacaciones.jsp), luego generar informe
@@ -77,6 +105,13 @@ public class GenerarInforme extends HttpServlet {
         if(informe.equals("Informe general")){
             //Generar informe
         }
+        
+        if(!trabInfor.isEmpty()){
+            String json = mapper.writeValueAsString(trabInfor);
+            request.setAttribute("datos", json);
+        }
+        
+        request.getRequestDispatcher(rd).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

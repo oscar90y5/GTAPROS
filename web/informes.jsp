@@ -17,30 +17,34 @@
     </head>
     <body>
         <section class="container">
-            <section class="login-form">
-                <% 
-                ObjectMapper mapper = new ObjectMapper();
-                String json = (String) request.getAttribute("proyecto");
-                Proyecto p = mapper.readValue(json, Proyecto.class);
-                request.setAttribute("proyecto", json);
-                %>
-                <h1>Elija el informe que desea obtener:</h1>
-                <div class="columna_caja_principal"> 
-                    <form action="GenerarInforme" method="POST" style="margin-top: 20px;">
-                        <input type="submit" name="informe" value="Trabajadores/Actividades por periodo semanal" class="btn btn-lg btn-primary btn-block"/>
-                        <input type="submit" name="informe" value="Trabajadores/Informes pendientes de Envio" class="btn btn-lg btn-primary btn-block"/>
-                        <input type="submit" name="informe" value="Trabajadores/Informes pendientes de Aprobación" class="btn btn-lg btn-primary btn-block"/>
-                        <input type="submit" name="informe" value="Tiempo real/planificado de actividades por periodo" class="btn btn-lg btn-primary btn-block"/>
-                        <input type="submit" name="informe" value="Actividades con tiempo real mayor del esperado" class="btn btn-lg btn-primary btn-block"/>
-                        <input type="submit" name="informe" value="Actividades/Recursos por periodo posterior" class="btn btn-lg btn-primary btn-block"/>
-                        <input type="submit" name="informe" value="Trabajadores/Actividades/Tiempo por periodo posterior" class="btn btn-lg btn-primary btn-block"/>
-                        <% if(p.getEstado().equals("Cerrado")){
-                        %>
-                        <input type="submit" name="informe" value="Informe general" class="btn btn-lg btn-primary btn-block"/>
-                        <%}%>
-                    </form>
-                </div>
-           </section>
-        </section>
+            <% 
+            ObjectMapper mapper = new ObjectMapper();
+            String json = (String) request.getAttribute("proyecto");
+            String inProject = request.getParameter("in");
+            %>
+            <h1>Elija el informe que desea obtener:</h1>
+            <div class="columna_caja_principal-ancha">
+                <form action="GenerarInforme" method="POST" style="margin-top: 20px;">
+                    <% if(json==null){%>
+                    <p>No hay informes que mostrar</p>
+                    <%}else{
+                    Proyecto p = mapper.readValue(json, Proyecto.class);
+                    if(inProject.equals("true")){
+                    %>
+                    <input type="hidden" name="proyecto" value="<%=p.getId()%>"/>
+                    <input type="submit" name="informe" value="Trabajadores/Actividades por periodo semanal" class="btn btn-lg btn-primary btn-block"/>
+                    <input type="submit" name="informe" value="Trabajadores/Informes pendientes de Envio" class="btn btn-lg btn-primary btn-block"/>
+                    <input type="submit" name="informe" value="Trabajadores/Informes pendientes de Aprobacion" class="btn btn-lg btn-primary btn-block"/>
+                    <input type="submit" name="informe" value="Tiempo real/planificado de actividades por periodo" class="btn btn-lg btn-primary btn-block"/>
+                    <input type="submit" name="informe" value="Actividades con tiempo real mayor del esperado" class="btn btn-lg btn-primary btn-block"/>
+                    <input type="submit" name="informe" value="Actividades/Recursos por periodo posterior" class="btn btn-lg btn-primary btn-block"/>
+                    <input type="submit" name="informe" value="Trabajadores/Actividades/Tiempo por periodo posterior" class="btn btn-lg btn-primary btn-block"/>
+                    <%}if(p.getEstado().equals("Finalizado")){
+                    %>
+                    <input type="submit" name="informe" value="Informe general" class="btn btn-lg btn-primary btn-block"/>
+                    <%}}%>
+                </form>
+            </div>
+       </section>
     </body>
 </html>

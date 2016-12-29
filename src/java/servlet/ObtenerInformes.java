@@ -54,7 +54,6 @@ public class ObtenerInformes extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
         String url = request.getParameter("id");
-        System.out.println("servlet.ObtenerInformes.processRequest()"+url);
         int idP = Integer.parseInt(url);
         String idUser = (String) sesion.getAttribute("idUser");
         int idProject = (Integer) sesion.getAttribute("idProject");
@@ -65,17 +64,19 @@ public class ObtenerInformes extends HttpServlet {
         String rd = "proyectos.jsp";
         
         for(Miembro m: roles){
+            System.out.println("servlet.ObtenerInformes.processRequest()"+ roles);
             if(m.getIdProyecto().getId().equals(idP)){
                 if(m.getTipoRol().equals("JefeProyecto")){
                     String json = mapper.writeValueAsString(proyecto);
                     request.setAttribute("proyecto", json);
-                    rd = "informes.jsp";
+                    rd = "informes.jsp?in=true";
                 }else{
+                    String json = mapper.writeValueAsString(proyecto);
                     request.setAttribute("proyecto", proyecto);
                     rd = "informeDesarrollador.jsp";
                 }
-                
-            }
+            }else
+               rd = "informes.jsp?in=false";
         }
         request.getRequestDispatcher(rd).forward(request, response);
     }

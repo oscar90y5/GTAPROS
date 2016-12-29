@@ -29,9 +29,4 @@ public class InformetareasFacade extends AbstractFacade<Informetareas> implement
     public InformetareasFacade() {
         super(Informetareas.class);
     }
-    
-    @Override
-    public List<Informetareas> findByEstado(String estado){
-        return em.createNamedQuery("Informetareas.findByEstado").setParameter("estado", estado).getResultList();
-    }
 }

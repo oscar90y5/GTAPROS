@@ -65,3 +65,14 @@ form[role=login] > div {
     margin-right: 10px; 
     margin-left: 10px; 
 }
+
+.columna_caja_principal-ancha{ 
+    color: #5d5d5d; 
+    background: #f2f2f2; 
+    padding: 26px; 
+    border-radius: 10px; 
+    -moz-border-radius: 20px; 
+    -webkit-border-radius: 20px; 
+    margin-right: 10px; 
+    margin-left: 10px; 
+}

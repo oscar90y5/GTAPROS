@@ -3,17 +3,21 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/MiembroFacade.java</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/servlet/AsignarAProyecto.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/servlet/CargarPlan.java</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/jefeProyecto.jsp</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/servlet/MisProyectos.java</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/MiembroFacadeLocal.java</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/dominio/Miembro.java</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/proyectos.jsp</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/InformetareasFacadeLocal.java</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/usuarios.jsp</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/dominio/Informetareas.java</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/InformetareasFacade.java</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/vacaciones.jsp</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/servlet/ObtenerInformes.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/informes.jsp</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/AbstractFacade.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/dominio/Informetareas.java</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/servlet/JefeProyecto.java</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/servlet/GenerarInforme.java</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/cargarPlan.jsp</file>
         </group>
     </open-files>

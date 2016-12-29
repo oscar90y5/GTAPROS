@@ -24,8 +24,6 @@ public interface InformetareasFacadeLocal {
 
     Informetareas find(Object id);
 
-    List<Informetareas> findByEstado(String estado);
-    
     List<Informetareas> findAll();
 
     List<Informetareas> findRange(int[] range);
