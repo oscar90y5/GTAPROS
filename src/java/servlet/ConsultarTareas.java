@@ -5,22 +5,26 @@
  */
 package servlet;
 
-import dominio.Proyecto;
+import dominio.Informetareas;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import persistencia.InformetareasFacadeLocal;
 
 /**
  *
- * @author oscar
+ * @author miki
  */
-@WebServlet(name = "Desarrollador", urlPatterns = {"/Desarrollador"})
-public class Desarrollador extends HttpServlet {
+@WebServlet(name = "ConsultarTareas", urlPatterns = {"/ConsultarTareas"})
+public class ConsultarTareas extends HttpServlet {
+
+    @EJB
+    private InformetareasFacadeLocal informetareasFacade;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,31 +38,11 @@ public class Desarrollador extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession sesion = request.getSession();
-        int idProject = (Integer) sesion.getAttribute("idProject");
-        String dni = (String) sesion.getAttribute("idUser");
-        //Proyecto proyect = proyectoFacade.find(idProject);
-        System.out.println("Desarrollador: dni " + dni + " idProject " + idProject);
-        String accion = request.getParameter("accion");
-        String rd = "Desarrollador.jsp";
-        if (accion != null) {
-            if (accion.equals("Introducir tarea")) {
-                //  out.print("Introducir datos de tareas un desarrollo....");
-                rd = "introducirTarea.jsp";
-            }
-            if (accion.equals("Modificar tareas activas")) {
-                // out.print("Modificar datos de tareas en desarrollo....");
-            }
-            if (accion.equals("Consultar datos de tareas")) {
-                rd = "consultarTareas.jsp";
-                //  out.print("Consultar datos de tareas en desarrollo....");
-            }
-            if (accion.equals("Obtener informes")) {
-                // out.print("Obtener informes en desarrollo....");
-            }
-
-        }
-        request.getRequestDispatcher(rd).forward(request, response);
+        System.out.println("hola");
+        
+        Informetareas inf;
+        
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
