@@ -5,6 +5,7 @@
  */
 package servlet;
 
+import dominio.Proyecto;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -32,26 +34,30 @@ public class Desarrollador extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-
-            
-            String accion = request.getParameter("accion");
-            if(accion!=null){
-                if(accion.equals("Introducir tarea")){
-                    out.print("Introducir datos de tareas un desarrollo....");
-                }
-                if(accion.equals("Modificar tareas activas")){
-                    out.print("Modificar datos de tareas en desarrollo....");
-                }
-                if(accion.equals("Consultar datos de tareas")){
-                    out.print("Consultar datos de tareas en desarrollo....");
-                }
-                if(accion.equals("Obtener informes")){
-                    out.print("Obtener informes en desarrollo....");
-                }
-                
+        HttpSession sesion = request.getSession();
+        int idProject = (Integer) sesion.getAttribute("idProject");
+        String dni = (String) sesion.getAttribute("idUser");
+        //Proyecto proyect = proyectoFacade.find(idProject);
+        System.out.println("Desarrollador: dni " + dni + " idProject " + idProject);
+        String accion = request.getParameter("accion");
+        String rd = "Desarrollador.jsp";
+        if (accion != null) {
+            if (accion.equals("Introducir tarea")) {
+                //  out.print("Introducir datos de tareas un desarrollo....");
+                rd = "introducirTarea.jsp";
             }
+            if (accion.equals("Modificar tareas activas")) {
+                // out.print("Modificar datos de tareas en desarrollo....");
+            }
+            if (accion.equals("Consultar datos de tareas")) {
+                //  out.print("Consultar datos de tareas en desarrollo....");
+            }
+            if (accion.equals("Obtener informes")) {
+                // out.print("Obtener informes en desarrollo....");
+            }
+
         }
+        request.getRequestDispatcher(rd).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
