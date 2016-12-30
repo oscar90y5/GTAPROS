@@ -22,6 +22,10 @@
                  <input type="text" class="form-control" id="dniTrabajador" placeholder="Introduzca el dni del trabajador" name="dniTrabajador">
              </div>
              <div class="">
+                 <label for="nombreProyecto">Clave del trabajador</label>
+                 <input type="text" class="form-control" id="claveTrabajador" placeholder="Introduzca la clave del trabajador" name="claveTrabajador">
+             </div>
+             <div class="">
                  <label for="nombreProyecto">Categoría trabajador</label>
                  <input type="text" class="form-control" id="categoriaTrabajador" placeholder="Introduzca la categoría del trabajador en la empresa" name="categoriaTrabajador">
              </div>

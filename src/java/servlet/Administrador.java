@@ -40,7 +40,9 @@ public class Administrador extends HttpServlet {
             if (accion != null) {
                   if (accion.equals("Dar de Alta Trabajador")) response.sendRedirect("AltaTrabajador.jsp");     
                   if (accion.equals("Dar de Alta Proyecto")) response.sendRedirect("AltaProyecto.jsp");
-                  if (accion.equals("Asignar Responsable")) response.sendRedirect("AsignarResponsable.jsp");
+                  if (accion.equals("Asignar Responsable")){
+                      response.sendRedirect("AsignarResponsable.jsp");
+                  }
              }
           }
     }
