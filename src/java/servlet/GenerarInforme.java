@@ -6,6 +6,7 @@
 package servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dominio.Actividad;
 import dominio.Informetareas;
 import dominio.Miembro;
 import dominio.Proyecto;
@@ -19,6 +20,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import persistencia.ActividadFacadeLocal;
 import persistencia.InformetareasFacadeLocal;
 import persistencia.MiembroFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
@@ -31,13 +33,13 @@ import persistencia.ProyectoFacadeLocal;
 public class GenerarInforme extends HttpServlet {
 
     @EJB
+    private ActividadFacadeLocal actividadFacade;
+
+    @EJB
     private ProyectoFacadeLocal proyectoFacade;
 
     @EJB
     private MiembroFacadeLocal miembroFacade;
-
-    @EJB
-    private InformetareasFacadeLocal informetareasFacade;
 
     
     public static final ObjectMapper mapper = new ObjectMapper();
@@ -60,7 +62,8 @@ public class GenerarInforme extends HttpServlet {
         System.out.println("servlet.GenerarInforme.processRequest()"+informe);
         System.out.println("servlet.GenerarInforme.processRequest()"+idP);
         Proyecto p = proyectoFacade.find(idP);
-        List<Tarea> trabInfor = new ArrayList<>();
+        List<Tarea> datosTarea = new ArrayList<>();
+        List<Actividad> datosActividad = new ArrayList<>();
         String rd = "informes.jsp";
         
         if(informe.equals("Trabajadores/Actividades por periodo semanal")){
@@ -73,10 +76,10 @@ public class GenerarInforme extends HttpServlet {
                 for(Tarea t: tareas){
                     Informetareas inf = t.getIdInforme();
                     if(inf.getEstado().equals("PendienteEnvio"))
-                        trabInfor.add(t);
+                        datosTarea.add(t);
                 }
             }
-            rd = "informe.jsp?estado=pendienteEnvio";
+            rd = "informe.jsp?infor=pendienteEnvio";
         }
         if(informe.equals("Trabajadores/Informes pendientes de Aprobacion")){
             List<Miembro> trabajadores = miembroFacade.findByIdProyecto(p);
@@ -85,16 +88,26 @@ public class GenerarInforme extends HttpServlet {
                 for(Tarea t: tareas){
                     Informetareas inf = t.getIdInforme();
                     if(inf.getEstado().equals("PendienteAprobacion"))
-                        trabInfor.add(t);
+                        datosTarea.add(t);
                 }
             }
-            rd = "informe.jsp?estado=pendienteAprob";
+            rd = "informe.jsp?infor=pendienteAprob";
         }
         if(informe.equals("Tiempo real/planificado de actividades por periodo")){
             //Primero mostrar calendario (similar vacaciones.jsp), luego generar informe
         }
         if(informe.equals("Actividades con tiempo real mayor del esperado")){
-            //Generar informe
+            List<Actividad> actividades = actividadFacade.findByIdProject(p);
+            for(Actividad a : actividades){
+                int tiempoEstimado = a.getDuracion();
+                List<Tarea> tareas = a.getTareaList();
+                int tiempoReal = 0;
+                for(Tarea t: tareas)
+                    tiempoReal += t.getEsfuerzoReal();
+                if(tiempoReal > tiempoEstimado)
+                    datosActividad.add(a);
+            }
+            rd = "informe.jsp?infor=realmayor";
         }
         if(informe.equals("Actividades/Recursos por periodo posterior")){
             //Primero pedir días despues de fecha actual, luego genera informe
@@ -106,8 +119,12 @@ public class GenerarInforme extends HttpServlet {
             //Generar informe
         }
         
-        if(!trabInfor.isEmpty()){
-            String json = mapper.writeValueAsString(trabInfor);
+        if(!datosTarea.isEmpty()){
+            String json = mapper.writeValueAsString(datosTarea);
+            request.setAttribute("datos", json);
+        }
+        if(!datosActividad.isEmpty()){
+            String json = mapper.writeValueAsString(datosActividad);
             request.setAttribute("datos", json);
         }
         

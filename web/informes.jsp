@@ -23,7 +23,7 @@
             String inProject = request.getParameter("in");
             %>
             <h1>Elija el informe que desea obtener:</h1>
-            <div class="columna_caja_principal-ancha">
+            <div class="columna_caja_principal">
                 <form action="GenerarInforme" method="POST" style="margin-top: 20px;">
                     <% if(json==null){%>
                     <p>No hay informes que mostrar</p>

@@ -23,6 +23,8 @@ public interface ActividadFacadeLocal {
     void remove(Actividad actividad);
 
     Actividad find(Object id);
+    
+    List<Actividad> findByIdProject(Object idProyecto);
 
     List<Actividad> findAll();
 
