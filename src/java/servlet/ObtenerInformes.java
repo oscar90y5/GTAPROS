@@ -66,7 +66,7 @@ public class ObtenerInformes extends HttpServlet {
         for(Miembro m: roles){
             System.out.println("servlet.ObtenerInformes.processRequest()"+ roles);
             if(m.getIdProyecto().getId().equals(idP)){
-                if(m.getTipoRol().equals("JefeProyecto")){
+                if(m.getIdRol().getNombreRol().equals("JefeProyecto")){
                     String json = mapper.writeValueAsString(proyecto);
                     request.setAttribute("proyecto", json);
                     rd = "informes.jsp?in=true";

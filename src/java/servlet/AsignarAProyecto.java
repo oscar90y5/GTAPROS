@@ -7,6 +7,7 @@ package servlet;
 
 import dominio.Miembro;
 import dominio.Proyecto;
+import dominio.Rol;
 import dominio.Usuario;
 import java.io.IOException;
 import javax.ejb.EJB;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import persistencia.MiembroFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
+import persistencia.RolFacadeLocal;
 import persistencia.UsuarioFacadeLocal;
 
 /**
@@ -26,6 +28,9 @@ import persistencia.UsuarioFacadeLocal;
  */
 @WebServlet(name = "AsignarAProyecto", urlPatterns = {"/AsignarAProyecto"})
 public class AsignarAProyecto extends HttpServlet {
+
+    @EJB
+    private RolFacadeLocal rolFacade;
 
     @EJB
     private ProyectoFacadeLocal proyectoFacade;
@@ -53,7 +58,7 @@ public class AsignarAProyecto extends HttpServlet {
         String [] dnis = request.getParameterValues("dni");
         String [] categorias = request.getParameterValues("tipoCategoria");
         System.out.println("servlet.AsignarAProyecto.processRequest()*************************"+ categorias);
-         System.out.println("servlet.AsignarAProyecto.processRequest()"+ categorias.length);
+        System.out.println("servlet.AsignarAProyecto.processRequest()"+ categorias.length);
         String[] participacion = request.getParameterValues("participacion");
         HttpSession sesion = request.getSession();
         Integer idProject = (Integer) sesion.getAttribute("idProject");
@@ -63,9 +68,10 @@ public class AsignarAProyecto extends HttpServlet {
             m.setDni(u);
             Proyecto p = proyectoFacade.find(idProject);
             m.setIdProyecto(p);
-            m.setTipoRol(categorias[i]);
+            int idRol = rolFacade.count()+1;
+            m.setIdRol(new Rol(idRol, categorias[i]));
             m.setParticipacion(Integer.parseInt(participacion[i]));
-            int id = miembroFacade.findAll().size() +1;
+            int id = miembroFacade.count()+1;
             m.setIdMiembro(id);
             miembroFacade.create(m);
         }

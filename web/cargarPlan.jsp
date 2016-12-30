@@ -1,9 +1,3 @@
-<%-- 
-    Document   : cargarPlan
-    Created on : 28-dic-2016, 9:30:22
-    Author     : Rebeca
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

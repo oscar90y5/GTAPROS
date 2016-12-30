@@ -58,7 +58,7 @@ public class Miembro implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     private Proyecto idProyecto;
     @JoinColumn(name = "idRol", referencedColumnName = "idRol")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Rol idRol;
     @JoinColumn(name = "dni", referencedColumnName = "dni")
     @ManyToOne(fetch = FetchType.EAGER)

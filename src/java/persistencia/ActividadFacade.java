@@ -6,6 +6,7 @@
 package persistencia;
 
 import dominio.Actividad;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,6 +28,11 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
 
     public ActividadFacade() {
         super(Actividad.class);
+    }
+    
+    @Override
+    public List<Actividad> findByIdProject(Object idProyecto){
+        return em.createNamedQuery("Actividad.findByIdProyecto").setParameter("idProyecto", idProyecto).getResultList();
     }
     
 }

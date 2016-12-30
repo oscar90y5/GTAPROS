@@ -33,6 +33,4 @@ public interface MiembroFacadeLocal {
     List<Miembro> findRange(int[] range);
 
     int count();
-
-    List<Miembro> findByDni(Object dni);
 }

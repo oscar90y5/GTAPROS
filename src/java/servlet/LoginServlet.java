@@ -71,8 +71,11 @@ public class LoginServlet extends HttpServlet {
                             rd = "misProyectos.jsp";
                         }
                     }     
-                }
-            }
+                }else
+                    rd = "index.jsp?error=clave";
+            }else
+                rd= "index.jsp?error=dni"; 
+            
             request.getRequestDispatcher(rd).forward(request, response);
     }
 
