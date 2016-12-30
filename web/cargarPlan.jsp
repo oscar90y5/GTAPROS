@@ -17,6 +17,18 @@
         <script type="text/javascript" src="bootstrap/js/calendar-setup.js"></script>
     </head>
     <body>
+        <%
+            Integer exito;
+            if (request.getAttribute("exito") != null) {
+                exito = (Integer)request.getAttribute("exito");
+                if (exito == 1) {
+        %>
+        <div class="well well-sm"><i>Se ha cargado el proyecto correctamente.</i></div>
+                <%
+                        }
+                    }
+
+                %>
         <div class="container">
             <div class="caja_principal">
                 <h2> Cargar plan de proyecto: </h2>

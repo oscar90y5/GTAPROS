@@ -66,22 +66,23 @@ public class CargarPlan extends HttpServlet {
         HttpSession sesion = request.getSession();
         String accion = (String) request.getParameter("accion");
         int idProject = (Integer) sesion.getAttribute("idProject");
-        String fecha = (String) request.getParameter("fecha");
-        //Obtencion Fecha de inicio
-        String[] partes = fecha.split("/");
-        Date myDate = null;
-        try {
-            String dateString = partes[2] + "-" + partes[1] + "-" + partes[0];
-            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            myDate = formatter.parse(dateString);
-        } catch (ParseException ex) {
-            Logger.getLogger(CargarPlan.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
         System.out.println(accion + " " + idProject);
         Proyecto proyect = proyectoFacade.find(idProject);
         //Para despachar
         String rd = "cargarPlan.jsp";
         if (accion.equals("Cargar")) {
+            //Obtencion Fecha de inicio
+            String fecha = (String) request.getParameter("fecha");
+            String[] partes = fecha.split("/");
+            Date myDate = null;
+            try {
+                String dateString = partes[2] + "-" + partes[1] + "-" + partes[0];
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                myDate = formatter.parse(dateString);
+            } catch (ParseException ex) {
+                Logger.getLogger(CargarPlan.class.getName()).log(Level.SEVERE, null, ex);
+            }
             //Recogida del archivo
             Part filePart = request.getPart("file");
             InputStream fileContent = filePart.getInputStream();
@@ -137,6 +138,7 @@ public class CargarPlan extends HttpServlet {
                 System.out.println("Actividad agregada" + actual.toString());
                 actividadFacade.edit(actual);
             }
+            request.setAttribute("exito", 1);
         }
         if (accion.equals("Cancelar")) {
             rd = "jefeProyecto.jsp";
