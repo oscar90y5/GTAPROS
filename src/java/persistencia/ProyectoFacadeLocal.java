@@ -11,7 +11,7 @@ import javax.ejb.Local;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Local
 public interface ProyectoFacadeLocal {

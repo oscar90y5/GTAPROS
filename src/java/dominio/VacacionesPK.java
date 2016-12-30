@@ -1,4 +1,3 @@
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -18,7 +17,7 @@ import javax.validation.constraints.Size;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Embeddable
 public class VacacionesPK implements Serializable {

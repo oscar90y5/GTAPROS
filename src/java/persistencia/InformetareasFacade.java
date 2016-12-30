@@ -5,17 +5,18 @@
  */
 package persistencia;
 
-import dominio.InformeTareas;
+import dominio.Informetareas;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Stateless
-public class InformeTareasFacade extends AbstractFacade<InformeTareas> implements InformeTareasFacadeLocal {
+public class InformetareasFacade extends AbstractFacade<Informetareas> implements InformetareasFacadeLocal {
 
     @PersistenceContext(unitName = "GTAPROSPU")
     private EntityManager em;
@@ -25,8 +26,7 @@ public class InformeTareasFacade extends AbstractFacade<InformeTareas> implement
         return em;
     }
 
-    public InformeTareasFacade() {
-        super(InformeTareas.class);
+    public InformetareasFacade() {
+        super(Informetareas.class);
     }
-    
 }

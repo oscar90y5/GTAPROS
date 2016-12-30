@@ -11,7 +11,7 @@
         <section class="container">
             <section class="login-form">
             <h1>Bienvenido</h1>
-            <h2> Eliga qué desea hacer: </h2>
+            <h2> Eliga quï¿½ desea hacer: </h2>
             <form action="Administrador" method="POST" style="margin-top: 20px;">
              <input type="submit" name="altaTrabajador" value="altaTrabajador" class="btn btn-lg btn-primary btn-block"/>
              <input type="submit" name="altaProyecto" value="altaProyecto" class="btn btn-lg btn-primary btn-block"/>

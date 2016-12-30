@@ -12,7 +12,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Stateless
 public class TareaFacade extends AbstractFacade<Tarea> implements TareaFacadeLocal {

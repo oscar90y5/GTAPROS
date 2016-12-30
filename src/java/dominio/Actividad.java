@@ -5,13 +5,15 @@
  */
 package dominio;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -30,19 +32,22 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Entity
-@Table(name = "Actividad")
+@Table(name = "actividad")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Actividad.findAll", query = "SELECT a FROM Actividad a")
     , @NamedQuery(name = "Actividad.findById", query = "SELECT a FROM Actividad a WHERE a.id = :id")
+         , @NamedQuery(name = "Actividad.findByIdProyecto", query = "SELECT a FROM Actividad a WHERE a.idProyecto = :idProyecto")
+    , @NamedQuery(name = "Actividad.findByNombre", query = "SELECT a FROM Actividad a WHERE a.nombre = :nombre")
     , @NamedQuery(name = "Actividad.findByFechaInicio", query = "SELECT a FROM Actividad a WHERE a.fechaInicio = :fechaInicio")
     , @NamedQuery(name = "Actividad.findByFechaFin", query = "SELECT a FROM Actividad a WHERE a.fechaFin = :fechaFin")
     , @NamedQuery(name = "Actividad.findByDuracion", query = "SELECT a FROM Actividad a WHERE a.duracion = :duracion")
     , @NamedQuery(name = "Actividad.findByEstado", query = "SELECT a FROM Actividad a WHERE a.estado = :estado")
     , @NamedQuery(name = "Actividad.findByDescripcion", query = "SELECT a FROM Actividad a WHERE a.descripcion = :descripcion")})
+@JsonIgnoreProperties(value = {"miembroList", "actividadList", "actividadList1"})
 public class Actividad implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,6 +56,9 @@ public class Actividad implements Serializable {
     @NotNull
     @Column(name = "id")
     private Integer id;
+    @Size(max = 30)
+    @Column(name = "nombre")
+    private String nombre;
     @Column(name = "fechaInicio")
     @Temporal(TemporalType.DATE)
     private Date fechaInicio;
@@ -65,23 +73,26 @@ public class Actividad implements Serializable {
     @Size(max = 300)
     @Column(name = "descripcion")
     private String descripcion;
-    @JoinTable(name = "AsignacionActividad", joinColumns = {
+    @JoinTable(name = "asignacionactividad", joinColumns = {
         @JoinColumn(name = "idActividad", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "dni", referencedColumnName = "dni")})
-    @ManyToMany
-    private Collection<Miembro> miembroCollection;
-    @JoinTable(name = "Predecesora", joinColumns = {
+        @JoinColumn(name = "idMiembro", referencedColumnName = "idMiembro")})
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Miembro> miembroList;
+    @JoinTable(name = "predecesora", joinColumns = {
         @JoinColumn(name = "idPredecedora", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idSucesora", referencedColumnName = "id")})
-    @ManyToMany
-    private Collection<Actividad> actividadCollection;
-    @ManyToMany(mappedBy = "actividadCollection")
-    private Collection<Actividad> actividadCollection1;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Actividad> actividadList;
+    @ManyToMany(mappedBy = "actividadList", fetch = FetchType.EAGER)
+    private List<Actividad> actividadList1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actividad", fetch = FetchType.EAGER)
+    private List<Tarea> tareaList;
+    @JoinColumn(name = "idRol", referencedColumnName = "idRol")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Rol idRol;
     @JoinColumn(name = "idProyecto", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Proyecto idProyecto;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actividad")
-    private Collection<Tarea> tareaCollection;
 
     public Actividad() {
     }
@@ -90,12 +101,28 @@ public class Actividad implements Serializable {
         this.id = id;
     }
 
+    public Actividad(Integer id, String nombre, Integer duracion, String descripcion, Proyecto idProyecto) {
+        this.id = id;
+        this.nombre = nombre;
+        this.duracion = duracion;
+        this.descripcion = descripcion;
+        this.idProyecto = idProyecto;
+    }
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public Date getFechaInicio() {
@@ -139,30 +166,47 @@ public class Actividad implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Miembro> getMiembroCollection() {
-        return miembroCollection;
+    public List<Miembro> getMiembroList() {
+        return miembroList;
     }
 
-    public void setMiembroCollection(Collection<Miembro> miembroCollection) {
-        this.miembroCollection = miembroCollection;
-    }
-
-    @XmlTransient
-    public Collection<Actividad> getActividadCollection() {
-        return actividadCollection;
-    }
-
-    public void setActividadCollection(Collection<Actividad> actividadCollection) {
-        this.actividadCollection = actividadCollection;
+    public void setMiembroList(List<Miembro> miembroList) {
+        this.miembroList = miembroList;
     }
 
     @XmlTransient
-    public Collection<Actividad> getActividadCollection1() {
-        return actividadCollection1;
+    public List<Actividad> getActividadList() {
+        return actividadList;
     }
 
-    public void setActividadCollection1(Collection<Actividad> actividadCollection1) {
-        this.actividadCollection1 = actividadCollection1;
+    public void setActividadList(List<Actividad> actividadList) {
+        this.actividadList = actividadList;
+    }
+
+    @XmlTransient
+    public List<Actividad> getActividadList1() {
+        return actividadList1;
+    }
+
+    public void setActividadList1(List<Actividad> actividadList1) {
+        this.actividadList1 = actividadList1;
+    }
+
+    @XmlTransient
+    public List<Tarea> getTareaList() {
+        return tareaList;
+    }
+
+    public void setTareaList(List<Tarea> tareaList) {
+        this.tareaList = tareaList;
+    }
+
+    public Rol getIdRol() {
+        return idRol;
+    }
+
+    public void setIdRol(Rol idRol) {
+        this.idRol = idRol;
     }
 
     public Proyecto getIdProyecto() {
@@ -171,15 +215,6 @@ public class Actividad implements Serializable {
 
     public void setIdProyecto(Proyecto idProyecto) {
         this.idProyecto = idProyecto;
-    }
-
-    @XmlTransient
-    public Collection<Tarea> getTareaCollection() {
-        return tareaCollection;
-    }
-
-    public void setTareaCollection(Collection<Tarea> tareaCollection) {
-        this.tareaCollection = tareaCollection;
     }
 
     @Override
@@ -204,7 +239,9 @@ public class Actividad implements Serializable {
 
     @Override
     public String toString() {
-        return "dominio.Actividad[ id=" + id + " ]";
+        return "dominio.Actividad[ id=" + id + " nombre " + nombre
+                + " predecesoras-size:" + actividadList.size()
+                + "]";
     }
-    
+
 }

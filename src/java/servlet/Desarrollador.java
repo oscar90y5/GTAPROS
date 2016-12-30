@@ -12,14 +12,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author claramorrondo
+ * @author oscar
  */
-@WebServlet(name = "Proyectos", urlPatterns = {"/Proyectos"})
-public class Proyectos extends HttpServlet {
+@WebServlet(name = "Desarrollador", urlPatterns = {"/Desarrollador"})
+public class Desarrollador extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,13 +32,26 @@ public class Proyectos extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession sesion = request.getSession();
-        String usuario = (String) sesion.getAttribute("user");
-        
-        
-        
+        try (PrintWriter out = response.getWriter()) {
 
-       
+            
+            String accion = request.getParameter("accion");
+            if(accion!=null){
+                if(accion.equals("Introducir tarea")){
+                    out.print("Introducir datos de tareas un desarrollo....");
+                }
+                if(accion.equals("Modificar tareas activas")){
+                    out.print("Modificar datos de tareas en desarrollo....");
+                }
+                if(accion.equals("Consultar datos de tareas")){
+                    out.print("Consultar datos de tareas en desarrollo....");
+                }
+                if(accion.equals("Obtener informes")){
+                    out.print("Obtener informes en desarrollo....");
+                }
+                
+            }
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

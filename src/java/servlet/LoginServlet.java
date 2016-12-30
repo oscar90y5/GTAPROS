@@ -5,23 +5,29 @@
  */
 package servlet;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import dominio.Miembro;
 import dominio.Usuario;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import persistencia.MiembroFacadeLocal;
+import persistencia.RolFacadeLocal;
 import persistencia.UsuarioFacadeLocal;
 
-/**
- *
- * @author miki
- */
 public class LoginServlet extends HttpServlet {
+
+    @EJB
+    private RolFacadeLocal rolFacade;
+    public static final ObjectMapper mapper = new ObjectMapper();
+    
+    @EJB
+    private MiembroFacadeLocal miembroFacade;
 
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
@@ -38,44 +44,39 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
           response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
-
-            String email=request.getParameter("email");
+            HttpSession sesion = request.getSession();
+            String id= request.getParameter("id");
             String password=request.getParameter("password");
-
-            ArrayList<Usuario> usuarios = (ArrayList<Usuario>) usuarioFacade.findAll();
-            for(Usuario user: usuarios){
-                if(email.equals(user.getDni()) && password.equals(user.getClave())){
-                    switch (user.getTipoCategoria()) {
-                        case 0:
-                            {
-                                RequestDispatcher rd=request.getRequestDispatcher("jefeProyecto.jsp");
-                                rd.forward(request,response);
-                                break;
-                            }
-                        case 1:
-                            {
-                                RequestDispatcher rd=request.getRequestDispatcher("desarrollador.jsp");
-                                rd.forward(request,response);
-                                break;
-                            }
-                        case 2:
-                            {
-                                RequestDispatcher rd=request.getRequestDispatcher("administrador.jsp");
-                                rd.forward(request,response);
-                                break;
-                            }
-                        default:
-                            break;
-                    }
-                }else{
-                    out.print("<p style=\"color:red\">Sorry username or password error</p>");
-                    RequestDispatcher rd=request.getRequestDispatcher("index.jsp");
-                    rd.include(request,response);
-                }
-                    
-            }
-            out.close();
+            String rd = "index.jsp";
+            
+            Usuario user = usuarioFacade.find(id);
+ 
+            if(user!=null) {
+                if(password.equals(user.getClave())){
+                    sesion.setAttribute("idUser", id);
+                    if(user.getEsAdmin())
+                       rd = "administrador.jsp";
+                    else{
+                        List<Miembro> miembros = miembroFacade.findByDni(user);
+                        if(miembros.size()==1){
+                            int idProject =  miembros.get(0).getIdProyecto().getId();
+                            sesion.setAttribute("idProject", idProject);
+                            if(miembros.get(0).getIdRol().getNombreRol().equals("JefeProyecto")) 
+                                rd = "jefeProyecto.jsp";
+                            else
+                                rd = "desarrollador.jsp";
+                        }else{
+                            String json = mapper.writeValueAsString(miembros);
+                            request.setAttribute("misProjects", json);
+                            rd = "misProyectos.jsp";
+                        }
+                    }     
+                }else
+                    rd = "index.jsp?error=clave";
+            }else
+                rd= "index.jsp?error=dni"; 
+            
+            request.getRequestDispatcher(rd).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
