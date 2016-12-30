@@ -18,15 +18,17 @@
         <%@include file="WEB-INF/jspf/includes.jspf" %>
     </head>
      <body>
-        <section class="container">
+        <div class="container">
         <% 
+        HttpSession sesion = request.getSession();
         ObjectMapper mapper = new ObjectMapper();
-        String jsonU = (String) request.getAttribute("usuarios");
-        String jsonP = (String) request.getAttribute("participacion");
+        String jsonU = (String) sesion.getAttribute("usuarios");
+        String jsonP = (String) sesion.getAttribute("participacion");
         %>
         <form method="post" action="AsignarAProyecto">
+        <div class="caja-principal">
         <table class="table columna_caja_principal" >
-            <tr><h1>Usuarios disponibles:</h1></tr>
+            <tr><h2>Usuarios disponibles:</h2></tr>
             <tr>
                 <td><h4>Asignar</h4></td>
                 <td><h4>Participacion</h4></td>
@@ -34,7 +36,12 @@
                 <td><h4>Nombre</h4></td>
                 <td><h4>TipoCategoria</h4></td>
             </tr>
-            <% if(jsonU==null){%>
+            <% try{
+                String error = request.getParameter("error");
+                if(error.equals("dni")){%>
+                <tr><p style="color:red">No has seleccionado ningun trabajador</p></tr>
+            <%}}catch(NullPointerException e) { }
+            if(jsonU==null){%>
             <tr>No existen usuarios disponibles</tr>
             <%}else{
                     List<Usuario> users = mapper.readValue(jsonU, new TypeReference<List<Usuario>>(){});
@@ -76,9 +83,10 @@
             </tr>
             <%}}%>
         </table>
+        </div>
         <button type="submit" class="btn btn-primary" name="accion" value="Asignar">Aceptar</button>
         <button type="submit" class="btn btn-danger" name="accion" value="Cancelar">Cancelar</button>
         </form>
-        </section>
+        </div>
     </body>
 </html>
