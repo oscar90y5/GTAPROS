@@ -238,8 +238,8 @@ public class Actividad implements Serializable {
 
     @Override
     public String toString() {
-        return "dominio.Actividad[ id=" + id + " nombre " + nombre 
-//                + " predecesoras:" + actividadList.toString() 
+        return "dominio.Actividad[ id=" + id + " nombre " + nombre
+                + " predecesoras-size:" + actividadList.size()
                 + "]";
     }
 

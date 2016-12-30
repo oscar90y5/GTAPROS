@@ -12,11 +12,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.sql.Date;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -79,7 +79,7 @@ public class CargarPlan extends HttpServlet {
             BufferedReader br = new BufferedReader(new InputStreamReader(fileContent));
             //Tratamiento de actividades
             String line, nombre;
-            String[] array;
+            String[] array, listaPres;
             Actividad actual;
             Rol r;
             Integer duracion;
@@ -102,30 +102,51 @@ public class CargarPlan extends HttpServlet {
                     actual.setIdRol(r);
                 }
                 mapaActs.put(nombre, actual);
-
-                mapaPres.put(nombre, array[array.length - 2].split(","));
+                System.out.println("predecesoras -" + array[3].split(",")[0] + "-");
+                listaPres = array[array.length - 2].split(",");
+                if (listaPres.length == 1 && listaPres[0].equals("")) {
+                    listaPres = null;
+                }
+                mapaPres.put(nombre, listaPres);
                 actividadFacade.create(actual);
             }
             //Predecesoras y fecha de inicio
             String[] partes = fecha.split("/");
-            int dia, mes, anyo;
-            dia = Integer.parseInt(partes[0]);
-            mes = Integer.parseInt(partes[1]);
-            anyo = Integer.parseInt(partes[2]);
-            GregorianCalendar c = new GregorianCalendar(anyo, mes, dia);
+//            int dia, mes, anyo;
+//            dia = Integer.parseInt(partes[0]);
+//            mes = Integer.parseInt(partes[1]);
+//            anyo = Integer.parseInt(partes[2]);
+//            GregorianCalendar c = new GregorianCalendar(anyo, mes, dia);
+            java.util.Date myDate = null;
+            try {
+
+                String dateString = partes[2] + "-" + partes[1] + "-" + partes[0];
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                System.out.println("dateString " + dateString);
+                myDate = formatter.parse(dateString);
+                System.out.println("myDate " + myDate.toString());
+            } catch (ParseException ex) {
+                Logger.getLogger(CargarPlan.class.getName()).log(Level.SEVERE, null, ex);
+            }
             List<Actividad> pred, suce;
             for (String s : mapaActs.keySet()) {
                 pred = new ArrayList<>();
                 suce = new ArrayList<>();
                 actual = mapaActs.get(s);
-                for (String p : mapaPres.get(actual.getNombre())) {
-                    suce.add(actual);
-                    pred.add(mapaActs.get(p));
+                if (mapaPres.get(actual.getNombre()) != null) {
+                    for (String p : mapaPres.get(actual.getNombre())) {
+                        suce.add(actual);
+                        pred.add(mapaActs.get(p));
+                    }
                 }
                 actual.setActividadList(pred);
                 actual.setActividadList1(suce);
-                if (pred.isEmpty()) {
-                    actual.setFechaInicio(c.getTime());
+                System.out.println("act " + actual.getId() + "pred " + actual.getActividadList().size());
+                System.out.println(actual.getActividadList().isEmpty());
+                System.out.println(actual.getActividadList().isEmpty() ? "null" : actual.getActividadList());
+
+                if (actual.getActividadList().isEmpty()) {
+                    actual.setFechaInicio(myDate);
                 }
                 //Modificacion
                 System.out.println("Actividad " + actual.toString());
