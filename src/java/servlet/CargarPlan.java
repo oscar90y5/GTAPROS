@@ -139,7 +139,7 @@ public class CargarPlan extends HttpServlet {
                 System.out.println("Actividad agregada" + actual.toString());
                 actividadFacade.edit(actual);
             }
-            request.setAttribute("exito", 1);
+            rd = "exito.jsp";
         }
         if (accion.equals("Cancelar")) {
             rd = "jefeProyecto.jsp";

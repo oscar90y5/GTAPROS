@@ -36,10 +36,10 @@ public class JefeProyecto extends HttpServlet {
 
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
-    
+
     @EJB
     private ProyectoFacadeLocal proyectoFacade;
-    
+
     public static final ObjectMapper mapper = new ObjectMapper();
     public static ArrayList<Integer> participacion = new ArrayList<>();
 
@@ -62,62 +62,67 @@ public class JefeProyecto extends HttpServlet {
         List<Proyecto> proyects = null;
         List<Usuario> users = null;
         Proyecto proyect = proyectoFacade.find(idProject);
-        List<Actividad> activities =  proyect.getActividadList();
+        List<Actividad> activities = proyect.getActividadList();
         String rd = "jefeProyecto.jsp";
 
         if (accion != null) {
-            if (accion.equals("Cargar Plan de proyecto"))
-                 rd = "cargarPlan.jsp";  
+            if (accion.equals("Cargar Plan de proyecto")) {
+                rd = "cargarPlan.jsp";
+            }
 
-            if (accion.equals("Asignar personas a proyecto")){
+            if (accion.equals("Asignar personas a proyecto")) {
                 users = usuariosDisponibles(dni);
                 rd = "usuarios.jsp";
             }
-            if (accion.equals("Asignar personas a actividad")){
-                for(Actividad a: activities){
-                    if(!a.getEstado().equals("Abierto"))
+            if (accion.equals("Asignar personas a actividad")) {
+                for (Actividad a : activities) {
+                    if (!a.getEstado().equals("Abierto")) {
                         activities.remove(a);
+                    }
                 }
                 rd = "actividades.jsp";
             }
-            if (accion.equals("Fijar fin de actividad")){
-                for(Actividad a: activities){
-                    if(!a.getEstado().equals("PendienteDeCierre"))
+            if (accion.equals("Fijar fin de actividad")) {
+                for (Actividad a : activities) {
+                    if (!a.getEstado().equals("PendienteDeCierre")) {
                         activities.remove(a);
+                    }
                 }
                 rd = "actividades.jsp";
             }
-            if (accion.equals("Obtener informes")){
+            if (accion.equals("Obtener informes")) {
                 proyects = proyectoFacade.findAll();
-                rd= "proyectos.jsp?accion=informes";
+                rd = "proyectos.jsp?accion=informes";
             }
-            if (accion.equals("Consultar datos de actividad"))
-               rd = "actividades.jsp";
+            if (accion.equals("Consultar datos de actividad")) {
+                rd = "actividades.jsp";
+            }
 
-            if (accion.equals("Fijar vacaciones")) 
+            if (accion.equals("Fijar vacaciones")) {
                 rd = "vacaciones.jsp";
+            }
         }
 
-        if(proyects!=null){
+        if (proyects != null) {
             String json = mapper.writeValueAsString(proyects);
             request.setAttribute("proyectos", json);
         }
-        if(users!=null){
+        if (users != null) {
             String jsonU = null;
             String jsonP = null;
-            if(!users.isEmpty()){
+            if (!users.isEmpty()) {
                 jsonU = mapper.writeValueAsString(users);
                 jsonP = mapper.writeValueAsString(participacion);
             }
-            request.setAttribute("usuarios", jsonU); 
+            request.setAttribute("usuarios", jsonU);
             request.setAttribute("participacion", jsonP);
         }
-        if(!activities.isEmpty()){
+        if (!activities.isEmpty()) {
             String json = mapper.writeValueAsString(activities);
             request.setAttribute("actividades", json);
         }
-        
-       request.getRequestDispatcher(rd).forward(request, response);
+
+        request.getRequestDispatcher(rd).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -163,17 +168,21 @@ public class JefeProyecto extends HttpServlet {
         //Busco todos los empleados menos el administrador
         List<Usuario> users = usuarioFacade.finByAdmin(Boolean.FALSE);
         List<Usuario> aux = new ArrayList<>();
-        users.stream().filter((u) -> (!u.getDni().equals(dni))).forEachOrdered((u) -> {
-            int porcent = 0;
-            List<Miembro> members = miembroFacade.findByDni(u);
-            //Compruebo su participacion total en todos los proyectos de los que son miembros
-            for(Miembro m: members)
-                porcent += m.getParticipacion();
-            if (porcent<100) {
-                aux.add(u);
-                participacion.add(porcent);
+
+        for (Usuario u : users) {
+            if (!u.getDni().equals(dni)) {
+                int porcent = 0;
+                List<Miembro> members = miembroFacade.findByDni(u);
+                //Compruebo su participacion total en todos los proyectos de los que son miembros
+                for (Miembro m : members) {
+                    porcent += m.getParticipacion();
+                }
+                if (porcent < 100) {
+                    aux.add(u);
+                    participacion.add(porcent);
+                }
             }
-        });
+        }
         return aux;
     }
 
