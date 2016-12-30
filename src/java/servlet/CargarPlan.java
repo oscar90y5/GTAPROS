@@ -7,20 +7,20 @@ package servlet;
 
 import dominio.Actividad;
 import dominio.Proyecto;
+import dominio.Rol;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -32,6 +32,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import persistencia.ActividadFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
+import persistencia.RolFacadeLocal;
 
 /**
  *
@@ -40,6 +41,9 @@ import persistencia.ProyectoFacadeLocal;
 @WebServlet(name = "CargarPlan", urlPatterns = {"/CargarPlan"})
 @MultipartConfig
 public class CargarPlan extends HttpServlet {
+
+    @EJB
+    private RolFacadeLocal rolFacade;
 
     @EJB
     private ActividadFacadeLocal actividadFacade;
@@ -58,49 +62,84 @@ public class CargarPlan extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        System.out.println("LLEGA 1");
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
         String accion = (String) request.getParameter("accion");
         int idProject = (Integer) sesion.getAttribute("idProject");
+
         System.out.println(accion + " " + idProject);
         Proyecto proyect = proyectoFacade.find(idProject);
-        System.out.println("proyecto"+proyect.getCargado());
+        //Para despachar
         String rd = "cargarPlan.jsp";
 
         if (accion.equals("Cargar")) {
+            //Obtencion Fecha de inicio
+            String fecha = (String) request.getParameter("fecha");
+            String[] partes = fecha.split("/");
+            Date myDate = null;
+            try {
+                String dateString = partes[2] + "-" + partes[1] + "-" + partes[0];
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                myDate = formatter.parse(dateString);
+            } catch (ParseException ex) {
+                Logger.getLogger(CargarPlan.class.getName()).log(Level.SEVERE, null, ex);
+            }
             //Recogida del archivo
             Part filePart = request.getPart("file");
             InputStream fileContent = filePart.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(fileContent));
-            System.out.println("LLEGA 4");
             //Tratamiento de actividades
-            String line;
-            String[] array;
-            Actividad a;
-            String[] predecesoras;
-            String nombre;
+            String line, nombre;
+            String[] array, listaPres = null;
+            Actividad actual;
+            Rol r;
+            Integer duracion;
             List<Actividad> pres;
-           HashMap<String, Actividad> mapaActs = new HashMap<>();
-           HashMap<String, String[]> mapaPres = new HashMap<>();
+            //Para tratamiento de predecesoras
+            HashMap<String, Actividad> mapaActs = new HashMap<>();
+            HashMap<String, String[]> mapaPres = new HashMap<>();
+            int nextId = actividadFacade.count() + 1; //getNextId
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
                 array = line.split(";");
+                duracion = Integer.parseInt(array[array.length - 1]);
                 nombre = array[0];
-                predecesoras = array[array.length - 2].split(",");
                 pres = new ArrayList<>();
-                a = new Actividad(null, nombre,Integer.parseInt(array[array.length - 1]), array[1], proyect);
-               mapaActs.put(nombre, a);
-               mapaPres.put(nombre, predecesoras);
+                actual = new Actividad(nextId, nombre, duracion, array[1], proyect);
+                nextId = nextId + 1;
+                actual.setEstado("Abierto");
+                if (duracion != 0) {
+                    r = rolFacade.findByNombreRolAndIdProyecto(array[2], proyect);
+                    actual.setIdRol(r);
+                }
+                mapaActs.put(nombre, actual);
+                if (!array[array.length - 2].equals("")) {
+                    listaPres = array[array.length - 2].split(",");
+                }
+                mapaPres.put(nombre, listaPres);
+                actividadFacade.create(actual);
             }
-            //Movida de predecesoras
-            
-            
-            
-            
-            
-            System.out.println("Termina");
+            //Tratamiento predecesoras
+            List<Actividad> pred, suce;
+            for (String s : mapaActs.keySet()) {
+                pred = new ArrayList<>();
+                suce = new ArrayList<>();
+                actual = mapaActs.get(s);
+                if (mapaPres.get(actual.getNombre()) != null) {
+                    for (String p : mapaPres.get(actual.getNombre())) {
+                        suce.add(actual);
+                        pred.add(mapaActs.get(p));
+                    }
+                }
+                actual.setActividadList(pred);
+                actual.setActividadList1(suce);
+                if (actual.getActividadList().isEmpty()) {
+                    actual.setFechaInicio(myDate);
+                }
+                //Modificacion
+                System.out.println("Actividad agregada" + actual.toString());
+                actividadFacade.edit(actual);
+            }
+            request.setAttribute("exito", 1);
         }
         if (accion.equals("Cancelar")) {
             rd = "jefeProyecto.jsp";
