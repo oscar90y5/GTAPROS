@@ -12,12 +12,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -68,9 +67,19 @@ public class CargarPlan extends HttpServlet {
         String accion = (String) request.getParameter("accion");
         int idProject = (Integer) sesion.getAttribute("idProject");
         String fecha = (String) request.getParameter("fecha");
+        //Obtencion Fecha de inicio
+        String[] partes = fecha.split("/");
+        Date myDate = null;
+        try {
+            String dateString = partes[2] + "-" + partes[1] + "-" + partes[0];
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            myDate = formatter.parse(dateString);
+        } catch (ParseException ex) {
+            Logger.getLogger(CargarPlan.class.getName()).log(Level.SEVERE, null, ex);
+        }
         System.out.println(accion + " " + idProject);
         Proyecto proyect = proyectoFacade.find(idProject);
-        System.out.println("proyecto" + proyect.getCargado());
+        //Para despachar
         String rd = "cargarPlan.jsp";
         if (accion.equals("Cargar")) {
             //Recogida del archivo
@@ -79,7 +88,7 @@ public class CargarPlan extends HttpServlet {
             BufferedReader br = new BufferedReader(new InputStreamReader(fileContent));
             //Tratamiento de actividades
             String line, nombre;
-            String[] array, listaPres;
+            String[] array, listaPres = null;
             Actividad actual;
             Rol r;
             Integer duracion;
@@ -87,9 +96,8 @@ public class CargarPlan extends HttpServlet {
             //Para tratamiento de predecesoras
             HashMap<String, Actividad> mapaActs = new HashMap<>();
             HashMap<String, String[]> mapaPres = new HashMap<>();
-            int nextId = actividadFacade.findAll().size() + 1; //getNextId
+            int nextId = actividadFacade.count() + 1; //getNextId
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
                 array = line.split(";");
                 duracion = Integer.parseInt(array[array.length - 1]);
                 nombre = array[0];
@@ -102,32 +110,13 @@ public class CargarPlan extends HttpServlet {
                     actual.setIdRol(r);
                 }
                 mapaActs.put(nombre, actual);
-                System.out.println("predecesoras -" + array[3].split(",")[0] + "-");
-                listaPres = array[array.length - 2].split(",");
-                if (listaPres.length == 1 && listaPres[0].equals("")) {
-                    listaPres = null;
+                if (!array[array.length - 2].equals("")) {
+                    listaPres = array[array.length - 2].split(",");
                 }
                 mapaPres.put(nombre, listaPres);
                 actividadFacade.create(actual);
             }
-            //Predecesoras y fecha de inicio
-            String[] partes = fecha.split("/");
-//            int dia, mes, anyo;
-//            dia = Integer.parseInt(partes[0]);
-//            mes = Integer.parseInt(partes[1]);
-//            anyo = Integer.parseInt(partes[2]);
-//            GregorianCalendar c = new GregorianCalendar(anyo, mes, dia);
-            java.util.Date myDate = null;
-            try {
-
-                String dateString = partes[2] + "-" + partes[1] + "-" + partes[0];
-                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                System.out.println("dateString " + dateString);
-                myDate = formatter.parse(dateString);
-                System.out.println("myDate " + myDate.toString());
-            } catch (ParseException ex) {
-                Logger.getLogger(CargarPlan.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            //Tratamiento predecesoras
             List<Actividad> pred, suce;
             for (String s : mapaActs.keySet()) {
                 pred = new ArrayList<>();
@@ -141,18 +130,13 @@ public class CargarPlan extends HttpServlet {
                 }
                 actual.setActividadList(pred);
                 actual.setActividadList1(suce);
-                System.out.println("act " + actual.getId() + "pred " + actual.getActividadList().size());
-                System.out.println(actual.getActividadList().isEmpty());
-                System.out.println(actual.getActividadList().isEmpty() ? "null" : actual.getActividadList());
-
                 if (actual.getActividadList().isEmpty()) {
                     actual.setFechaInicio(myDate);
                 }
                 //Modificacion
-                System.out.println("Actividad " + actual.toString());
+                System.out.println("Actividad agregada" + actual.toString());
                 actividadFacade.edit(actual);
             }
-            System.out.println("Fin");
         }
         if (accion.equals("Cancelar")) {
             rd = "jefeProyecto.jsp";
