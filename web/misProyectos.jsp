@@ -24,7 +24,7 @@
                 List<Miembro> misProyects = mapper.readValue(json, mapper.getTypeFactory().constructCollectionType(List.class, Miembro.class));
                 for(Miembro m: misProyects){
                 %>
-                <input type="submit" name="accion" value="<%=m.getTipoRol()%>, Proyecto:<%=m.getIdProyecto().getId()%>" class="btn btn-lg btn-primary btn-block" />
+                <input type="submit" name="accion" value="<%=m.getIdRol().getNombreRol()%>, Proyecto:<%=m.getIdProyecto().getId()%>" class="btn btn-lg btn-primary btn-block" />
                 <%}%>
             </form>
            </section>
