@@ -62,6 +62,7 @@ public class AsignarAProyecto extends HttpServlet {
         String[] participacion = request.getParameterValues("participacion");
         HttpSession sesion = request.getSession();
         Integer idProject = (Integer) sesion.getAttribute("idProject");
+        System.out.println("dnis "+dnis);
         for(int i=0; i< dnis.length; i++){
             Miembro m = new Miembro();
             Usuario u = usuarioFacade.find(dnis[i]);
