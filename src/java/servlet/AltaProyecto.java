@@ -5,8 +5,10 @@
  */
 package servlet;
 
+import dominio.Miembro;
 import dominio.Proyecto;
 import dominio.Rol;
+import dominio.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -18,8 +20,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import persistencia.MiembroFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
 import persistencia.RolFacadeLocal;
+import persistencia.UsuarioFacadeLocal;
 
 /**
  *
@@ -27,6 +31,12 @@ import persistencia.RolFacadeLocal;
  */
 @WebServlet(name = "AltaProyecto", urlPatterns = {"/AltaProyecto"})
 public class AltaProyecto extends HttpServlet {
+
+    @EJB
+    private MiembroFacadeLocal miembroFacade;
+
+    @EJB
+    private UsuarioFacadeLocal usuarioFacade;
 
     @EJB
     private RolFacadeLocal rolFacade;
@@ -47,55 +57,76 @@ public class AltaProyecto extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-             System.out.println("ENTRA");
            HttpSession sesion = request.getSession();
+            
+       if(!request.getParameter("altaProyectoBtn").equals("cancelar")){ 
+           
             String nombreProyecto = request.getParameter("nombreProyecto");
-           int cantidad = Integer.parseInt(request.getParameter("cantidad"));
-            System.out.println("Counter"+cantidad);
+            int cantidad = Integer.parseInt(request.getParameter("cantidad"));
             String[] nombreRol;
             Integer [] ids;
             ids = new Integer[cantidad];
             nombreRol = new String[cantidad];
             for(int i =0;i<cantidad;i++){
-                System.out.println("  "+ request.getParameter("roles"+i));
-
                 ids[i] = Integer.parseInt(request.getParameter("roles"+i));
                 nombreRol[i] = request.getParameter("nombre"+i);
-                System.out.println("IDS"+ ids[i]);
-                 System.out.println("nombres"+nombreRol[i]);
             }
-           // String [] nombreRoles = (String[]) request.getAttribute("rolesNombre");
+           
+            int id = (proyectoFacade.count()+1);
             List<Rol> listaRol = new ArrayList<>();
+            
+            Proyecto p = new Proyecto(id,nombreProyecto);
+            proyectoFacade.create(p);
+            for(int j = 0; j<ids.length;j++){
+                    Rol r = new Rol(ids[j],nombreRol[j]);
+                    r.setIdProyecto(p);
+                    rolFacade.create(r);
+                    listaRol.add(r);
+            }
+
+            p.setRolList(listaRol);            
             if(request.getParameter("altaProyectoBtn").equals("asignarJefe")){ 
-                 System.out.println("ENTRA ASIGNAR");
-                //for(int i =0; i<roles.length;i++){
-                  //Rol r = new Rol(roles[i], nombreRoles[i]);
-                  //rolFacade.create(r);
-                  //listaRol.add(r);
-                //}
-                int id = proyectoFacade.count();
-                System.out.println("ID proyecto:" + id);
-                System.out.println("Nombre del proyecto"+ nombreProyecto);
-                Proyecto p = new Proyecto(id,nombreProyecto);
-                proyectoFacade.create(p);
-                response.sendRedirect("AsignarResponsable.jsp"); 
+                ArrayList<String> usuariosDisponibles = new ArrayList<>();
+                //Recogemos todos los usuarios y miembros almacenados en la BD
+                List<Usuario> usuarios =usuarioFacade.findAll();
+                List<Miembro> miembros = miembroFacade.findAll();
+                
+                //Recorremos todos los usuarios
+                for(int i =0;i<usuarios.size();i++){
+                   //Si tiene categoria 1 es porque puede ser jefe de proyecto
+                   if(usuarios.get(i).getTipoCategoria()==1){
+                    String dniUsuario = usuarios.get(i).getDni();
+                    //Si no está en la tabla de miembros es porque está disponible
+                    if(!miembros.contains(usuarios.get(i))){
+                        usuariosDisponibles.add(usuarios.get(i).getNombreCompleto()); 
+                    }
+                    //Si está en la tabla de mimebros, ver que no sea ya jefe de otro proyecto
+                    else{
+                        if(miembroFacade.findByDni(dniUsuario).get(0).getIdRol().getTipoCategoria()!=1){
+                          usuariosDisponibles.add(usuarios.get(i).getNombreCompleto()); 
+                        }
+                    }
+                   }    
+                }
+                sesion.setAttribute("usuariosDisponibles", usuariosDisponibles);
+                sesion.setAttribute("nombreProyecto", nombreProyecto);
+                response.sendRedirect("AsignarResponsableSesion.jsp"); 
             }
             else{
                 if(request.getParameter("altaProyectoBtn").equals("asignarJefeLater")){
-                System.out.println("ENTRA ASIGNAR LUEGO");
-                
-                int id = proyectoFacade.count();
-                Proyecto p = new Proyecto(id,nombreProyecto);
-                proyectoFacade.create(p);
-                response.sendRedirect("administrador.jsp"); 
+                    response.sendRedirect("administrador.jsp"); 
                 }
-               
+            }
             }
 
         }
 
         
     }
+    
+    
+
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
