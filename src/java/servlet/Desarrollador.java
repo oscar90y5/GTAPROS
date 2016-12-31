@@ -73,7 +73,6 @@ public class Desarrollador extends HttpServlet {
                 System.out.println(actividades.size());
                 request.setAttribute("actividades", actividades);
                 rd = "actividades.jsp";
-                //  out.print("Consultar datos de tareas en desarrollo....");
             }
             if (accion.equals("Obtener informes")) {
                 // out.print("Obtener informes en desarrollo....");
