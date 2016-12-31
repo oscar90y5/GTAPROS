@@ -86,35 +86,26 @@ public class InformeSemana extends HttpServlet {
                 System.out.println("servlet.InformeSemana.processRequest()"+fecha1);
                 System.out.println("servlet.InformeSemana.processRequest()"+fecha2);
                 for(Actividad a: actividades){
-                    Actividad aux = new Actividad();
-                    aux.setId(a.getId());
-                    aux.setNombre(a.getNombre());
-                    aux.setMiembroList(a.getMiembroList());
                     Date fechaIniA = null;
                     Date fechaFinA = null;
                     try{
                         fechaIniA = a.getFechaInicio();
                         fechaFinA = a.getFechaFin();
-                        aux.setFechaInicio(fechaIniA);
-                        aux.setFechaFin(fechaFinA);
                     }catch(NullPointerException e){ }
                     //Si fechaIniA==null actividad no ha empezado, imposible que entre en periodo
                     if(fechaIniA!=null && fechaFinA==null){
                         if(fechaIniA.before(fechaInicio) || a.getFechaInicio().equals(fechaInicio))
-                            actPeriodo.add(aux);
+                            actPeriodo.add(a);
                     }if(fechaIniA!=null && fechaFinA!=null){
                         if((fechaIniA.before(fechaInicio) || fechaIniA.equals(fechaInicio))
                             && (fechaFinal.before(fechaFinA) || fechaFinal.equals(fechaFinA)))
-                            actPeriodo.add(aux);
+                            actPeriodo.add(a);
                     }
                 }
-                String json = null;
-                if(!actPeriodo.isEmpty())
-                    json = mapper.writeValueAsString(actPeriodo);
                 
                 request.setAttribute("fecha1", fecha1);
                 request.setAttribute("fecha2", fecha2);
-                request.setAttribute("datos", json);
+                request.setAttribute("datos", actPeriodo);
                 sesion.removeAttribute("idP");
                 rd = "informeSemana.jsp";
             }

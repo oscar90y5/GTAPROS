@@ -40,9 +40,9 @@
                         try{
                             String fecha1 = (String) request.getAttribute("fecha1");
                             String fecha2 = (String) request.getAttribute("fecha2");
-                            String json = (String) request.getAttribute("datos");
-                            System.out.println("className.methodName()"+json);
-                            if(json.equals("porBuscar")){
+                            try{
+                            String datos = (String) request.getAttribute("datos");   
+                            if(datos.equals("porBuscar")){
                         %> 
                                 <input type="text" id="fecha1" name="fecha1" class="form-control"/>
                                 <button id="fechaIni">Seleccione fecha inicio</button>
@@ -68,11 +68,12 @@
                                    });
                                 </script>
                                 </div>
-                            <%}else{ if(json==null){
+                            <%}}catch(ClassCastException e){
+                                List<Actividad> datos = (List<Actividad>) request.getAttribute("datos");
+                                if(datos==null){
                             %>
                             <p>No existen trabajadores asignados a actividades en este periodo</p>
                             <%}else{
-                                List<Actividad> datos = mapper.readValue(json, new TypeReference<List<Actividad>>(){});
                             %>
                             <table class="table columna_caja_principal" >
                                 <tr><p>Periodo: <%=fecha1%> - <%=fecha2%></p></tr>
@@ -89,10 +90,10 @@
                                         System.out.println("className.methodName()"+m);
                                 %>
                                 <tr>
-                                    <td><%=m.getDni()%></td>
+                                    <td><%=m.getDni().getDni()%></td>
                                     <td><%=a.getId()%></td>
                                     <td><%=a.getNombre()%></td>
-                                    <td><%=a.getFechaInicio()%>-<%=a.getFechaFin()%></td>
+                                    <td><%=a.getFechaInicioPrettyString()%> - <%=a.getFechaFinPrettyString()%></td>
                                 </tr>
                                 <%}}}%>
                             </table>
