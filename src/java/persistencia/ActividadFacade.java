@@ -29,10 +29,15 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
     public ActividadFacade() {
         super(Actividad.class);
     }
-    
+
     @Override
-    public List<Actividad> findByIdProject(Object idProyecto){
+    public List<Actividad> findByIdProject(Object idProyecto) {
         return em.createNamedQuery("Actividad.findByIdProyecto").setParameter("idProyecto", idProyecto).getResultList();
     }
-    
+
+    @Override
+    public List<Actividad> findByIdProyectoAndDni(Object idProyecto, Object dni) {
+        return em.createNamedQuery("Actividad.findByIdProyectoAndDni").setParameter("idProyecto", idProyecto).setParameter("dni", dni).getResultList();
+    }
+
 }
