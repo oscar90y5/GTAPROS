@@ -34,11 +34,11 @@ public class MisProyectos extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
         String accion = request.getParameter("accion");
+        System.out.println("accion "+accion);
         String rd;
-        int size = accion.length();
-        int proyect = accion.charAt(size-1);
+        Integer proyect = Integer.parseInt(""+accion.charAt(accion.length()-1));
+        System.out.println("misproyectos: "+accion.charAt(accion.length()-1));
         sesion.setAttribute("idProject", proyect);
-        
         if(accion.contains("JefeProyecto"))
             rd = "jefeProyecto.jsp";
         else
