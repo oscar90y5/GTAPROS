@@ -32,4 +32,5 @@ public interface ActividadFacadeLocal {
 
     int count();
     
+    List<Actividad> findByIdProyectoAndDni(Object idProyecto, Object dni);
 }
