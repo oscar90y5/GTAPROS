@@ -22,8 +22,9 @@
             String json = (String) request.getAttribute("proyecto");
             String inProject = request.getParameter("in");
             %>
-            <h1>Elija el informe que desea obtener:</h1>
-            <div class="columna_caja_principal">
+            <div class="caja_principal">
+                <h2>Elija el informe que desea obtener:</h2>
+                <div class="caja_small">
                 <form action="GenerarInforme" method="POST" style="margin-top: 20px;">
                     <% if(json==null){%>
                     <p>No hay informes que mostrar</p>
@@ -44,6 +45,7 @@
                     <input type="submit" name="informe" value="Informe general" class="btn btn-lg btn-primary btn-block"/>
                     <%}}%>
                 </form>
+                </div>
             </div>
        </section>
     </body>

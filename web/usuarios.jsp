@@ -25,68 +25,69 @@
         String jsonU = (String) sesion.getAttribute("usuarios");
         String jsonP = (String) sesion.getAttribute("participacion");
         %>
-        <form method="post" action="AsignarAProyecto">
-        <div class="caja-principal">
-        <table class="table columna_caja_principal" >
-            <tr><h2>Usuarios disponibles:</h2></tr>
-            <tr>
-                <td><h4>Asignar</h4></td>
-                <td><h4>Participacion</h4></td>
-                <td><h4>Dni</h4></td>
-                <td><h4>Nombre</h4></td>
-                <td><h4>TipoCategoria</h4></td>
-            </tr>
-            <% try{
-                String error = request.getParameter("error");
-                if(error.equals("dni")){%>
-                <tr><p style="color:red">No has seleccionado ningun trabajador</p></tr>
-            <%}}catch(NullPointerException e) { }
-            if(jsonU==null){%>
-            <tr>No existen usuarios disponibles</tr>
-            <%}else{
-                    List<Usuario> users = mapper.readValue(jsonU, new TypeReference<List<Usuario>>(){});
-                    List<Integer> porcents = mapper.readValue(jsonP, new TypeReference<List<Integer>>(){});
-                    for(int i=0; i<users.size();i++){
-                        Usuario u = users.get(i);
-            %>
-            <tr>
-                <td><input type="checkbox" name="dni" value="<%= u.getDni()%>"></td>
-                <td><input type="number" name="participacion" min="1" max=<%=100 - porcents.get(i)%> </td>
-                <td><%=u.getDni()%></td>
-                <td><%=u.getNombreCompleto()%></td>
-                <td><select name="tipoCategoria">
-                        <% switch(u.getTipoCategoria()){
-                            //El caso 1 y 2 son igual porque no podemos asignar JefeProyecto
-                            case 1: case 2:%>
-                            <option selected disabled>Elija categoria</option>
-                            <option value="Analista">Analista</option> 
-                            <option value="Disenador">Diseñador</option> 
-                            <option value="AnalistaProgramador">Analista-programador</option>
-                            <option value="RespEquipoPruebas">Responsable equipo de pruebas</option> 
-                            <option value="Programador">Programador</option> 
-                            <option value="Probador">Probador</option> 
-                            <%break;
-                            case 3:%>
-                            <option selected disabled>Elija categoria</option>
-                            <option value="Disenador">Diseñador</option> 
-                            <option value="AnalistaProgramador">Analista-programador</option>
-                            <option value="RespEquipoPruebas">Responsable equipo de pruebas</option> 
-                            <option value="Programador">Programador</option> 
-                            <option value="Probador">Probador</option> 
-                            <%break;
-                            case 4:%>
-                            <option selected disabled>Elija categoria</option>
-                            <option value="Programador">Programador</option> 
-                            <option value="Probador">Probador</option> 
-                        <%}%> 
-                     </select></td>
-            </tr>
-            <%}}%>
-        </table>
+        <div class="caja_principal">
+            <h2>Usuarios disponibles:</h2>
+            <form method="post" action="AsignarAProyecto">
+            <table class="table columna_caja_principal">
+                <tr>
+                    <td><h4>Asignar</h4></td>
+                    <td><h4>Participacion</h4></td>
+                    <td><h4>Dni</h4></td>
+                    <td><h4>Nombre</h4></td>
+                    <td><h4>TipoCategoria</h4></td>
+                </tr>
+                <%
+                try{
+                    String error = request.getParameter("error");
+                    if(error.equals("dni")){%>
+                    <tr><p style="color:red">No has seleccionado ningun trabajador</p></tr>
+                <%}}catch(NullPointerException e) { }
+                if(jsonU==null){%>
+                <tr>No existen usuarios disponibles</tr>
+                <%}else{
+                        List<Usuario> users = mapper.readValue(jsonU, new TypeReference<List<Usuario>>(){});
+                        List<Integer> porcents = mapper.readValue(jsonP, new TypeReference<List<Integer>>(){});
+                        for(int i=0; i<users.size();i++){
+                            Usuario u = users.get(i);
+                %>
+                <tr>
+                    <td><input type="checkbox" name="dni" value="<%= u.getDni()%>"></td>
+                    <td><input type="number" name="participacion" min="1" max=<%=100 - porcents.get(i)%> </td>
+                    <td><%=u.getDni()%></td>
+                    <td><%=u.getNombreCompleto()%></td>
+                    <td><select name="tipoCategoria">
+                            <% switch(u.getTipoCategoria()){
+                                //El caso 1 y 2 son igual porque no podemos asignar JefeProyecto
+                                case 1: case 2:%>
+                                <option selected disabled>Elija categoria</option>
+                                <option value="Analista">Analista</option> 
+                                <option value="Disenador">Diseñador</option> 
+                                <option value="AnalistaProgramador">Analista-programador</option>
+                                <option value="RespEquipoPruebas">Responsable equipo de pruebas</option> 
+                                <option value="Programador">Programador</option> 
+                                <option value="Probador">Probador</option> 
+                                <%break;
+                                case 3:%>
+                                <option selected disabled>Elija categoria</option>
+                                <option value="Disenador">Diseñador</option> 
+                                <option value="AnalistaProgramador">Analista-programador</option>
+                                <option value="RespEquipoPruebas">Responsable equipo de pruebas</option> 
+                                <option value="Programador">Programador</option> 
+                                <option value="Probador">Probador</option> 
+                                <%break;
+                                case 4:%>
+                                <option selected disabled>Elija categoria</option>
+                                <option value="Programador">Programador</option> 
+                                <option value="Probador">Probador</option> 
+                            <%}%> 
+                         </select></td>
+                </tr>
+                <%}}%>
+            </table>
+                <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Aceptar</button>
+                <button type="submit" class="btn btn-danger" name="accion" value="Cancelar">Cancelar</button>
+            </form>
         </div>
-        <button type="submit" class="btn btn-primary" name="accion" value="Asignar">Aceptar</button>
-        <button type="submit" class="btn btn-danger" name="accion" value="Cancelar">Cancelar</button>
-        </form>
         </div>
     </body>
 </html>

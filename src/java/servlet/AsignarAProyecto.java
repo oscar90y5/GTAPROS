@@ -54,34 +54,38 @@ public class AsignarAProyecto extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-       // Se obtienen los usuario
+        HttpSession sesion = request.getSession();
+        String accion = request.getParameter("accion");
         String [] dnis = request.getParameterValues("dni");
+        String [] categorias = request.getParameterValues("tipoCategoria");
+        String[] participacion = request.getParameterValues("participacion");
+        Integer idProject = (Integer) sesion.getAttribute("idProject");
         String rd = "exito.jsp";
         
-        if(dnis==null)
-            rd = "usuarios.jsp?error=dni";
-        else{
-            String [] categorias = request.getParameterValues("tipoCategoria");
-            String[] participacion = request.getParameterValues("participacion");
-            HttpSession sesion = request.getSession();
-            Integer idProject = (Integer) sesion.getAttribute("idProject");
-            for(int i=0; i< dnis.length; i++){
-                Miembro m = new Miembro();
-                Usuario u = usuarioFacade.find(dnis[i]);
-                m.setDni(u);
-                Proyecto p = proyectoFacade.find(idProject);
-                m.setIdProyecto(p);
-                int idRol = rolFacade.count()+1;
-                m.setIdRol(new Rol(idRol, categorias[i]));
-                m.setParticipacion(Integer.parseInt(participacion[i]));
-                int id = miembroFacade.count()+1;
-                m.setIdMiembro(id);
-                miembroFacade.create(m);
-                
-                //Limpio sesion
-                sesion.removeAttribute("usuarios");
-                sesion.removeAttribute("participacion");
-            }
+        if(accion.equals("Cancelar"))
+            rd = "jefeProyecto.jsp";
+        if(accion.equals("Aceptar")){
+            if(dnis==null)
+                rd = "usuarios.jsp?error=dni";
+            else{
+                for(int i=0; i< dnis.length; i++){
+                    Miembro m = new Miembro();
+                    Usuario u = usuarioFacade.find(dnis[i]);
+                    m.setDni(u);
+                    Proyecto p = proyectoFacade.find(idProject);
+                    m.setIdProyecto(p);
+                    int idRol = rolFacade.count()+1;
+                    m.setIdRol(new Rol(idRol, categorias[i]));
+                    m.setParticipacion(Integer.parseInt(participacion[i]));
+                    int id = miembroFacade.count()+1;
+                    m.setIdMiembro(id);
+                    miembroFacade.create(m);
+
+                    //Limpio sesion
+                    sesion.removeAttribute("usuarios");
+                    sesion.removeAttribute("participacion");
+                }
+        }
         }
         request.getRequestDispatcher(rd).forward(request, response);
 

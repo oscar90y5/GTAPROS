@@ -20,6 +20,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import persistencia.ActividadFacadeLocal;
 import persistencia.InformetareasFacadeLocal;
 import persistencia.MiembroFacadeLocal;
@@ -40,7 +41,6 @@ public class GenerarInforme extends HttpServlet {
 
     @EJB
     private MiembroFacadeLocal miembroFacade;
-
     
     public static final ObjectMapper mapper = new ObjectMapper();
     
@@ -56,18 +56,19 @@ public class GenerarInforme extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        HttpSession sesion = request.getSession();
         String informe = request.getParameter("informe");
         String stringP = request.getParameter("proyecto");
         int idP = Integer.parseInt(stringP);
-        System.out.println("servlet.GenerarInforme.processRequest()"+informe);
-        System.out.println("servlet.GenerarInforme.processRequest()"+idP);
         Proyecto p = proyectoFacade.find(idP);
         List<Tarea> datosTarea = new ArrayList<>();
         List<Actividad> datosActividad = new ArrayList<>();
         String rd = "informes.jsp";
         
         if(informe.equals("Trabajadores/Actividades por periodo semanal")){
-            //Primero selecciona semana, luego genera informe
+            sesion.setAttribute("idP", stringP);
+            request.setAttribute("datos", "porBuscar");
+            rd = "informeSemana.jsp";
         }
         if(informe.equals("Trabajadores/Informes pendientes de Envio")){
             List<Miembro> trabajadores = miembroFacade.findByIdProyecto(p);
