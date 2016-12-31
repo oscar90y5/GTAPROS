@@ -21,6 +21,7 @@
                         <input type="submit" name="accion" value="Obtener informes" class="btn btn-lg btn-primary btn-block"/>
                         <input type="submit" name="accion" value="Consultar datos de actividad" class="btn btn-lg btn-primary btn-block"/>
                         <input type="submit" name="accion" value="Fijar vacaciones" class="btn btn-lg btn-primary btn-block"/>
+                        <input type="submit" name="accion" value="Cerrar Sesion" class="btn btn-lg btn-warning btn-block"/>
                     </form>
                 </div>
            </section>

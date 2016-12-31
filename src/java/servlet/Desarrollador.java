@@ -77,6 +77,8 @@ public class Desarrollador extends HttpServlet {
             if (accion.equals("Obtener informes")) {
                 // out.print("Obtener informes en desarrollo....");
             }
+            if (accion.equals("Fijar vacaciones")) rd = "vacaciones.jsp";
+            if(accion.equals("Cerrar Sesion")) rd = "index.jsp";
 
         }
         request.getRequestDispatcher(rd).forward(request, response);
