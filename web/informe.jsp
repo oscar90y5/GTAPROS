@@ -20,17 +20,16 @@
         String json = (String) request.getAttribute("datos");
         String estado = request.getParameter("infor");
         %>
+        <div class="caja_principal">
         <form action="jefeProyecto.jsp" method="POST">
-            <tr><%if(estado.equals("pendienteEnvio")){%>
-                <h1>Relacion Trabajadores/Actividades pendientes de envio:</h1>
+            <%if(estado.equals("pendienteEnvio")){%>
+                <h2>Relacion Trabajadores/Actividades pendientes de envio:</h2>
                 <%}if(estado.equals("pendienteAprob")){%>
-                <h1>Relacion Trabajadores/Actividades pendientes de aprobacion</h1>
+                <h2>Relacion Trabajadores/Actividades pendientes de aprobacion</h2>
                 <%}if(estado.equals("realmayor")){%>
-                <h1>Actividades con mayor tiempo real que estimado</h1>
+                <h2>Actividades con mayor tiempo real que estimado</h2>
                 <%}%>
-            </tr>
             <% if(json==null){%>
-            <div class="columna_caja_principal">
                     <%if(estado.equals("pendienteEnvio")){%>
                     <p>No existen informes pendientes de envio</p>
                     <%}if(estado.equals("pendienteAprob")){%>
@@ -76,7 +75,8 @@
                     </tr>
                     <%}}}%>
                 <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Aceptar</button>
-        </table>
+            </table>     
         </form>
+        </div>
     </body>
 </html>

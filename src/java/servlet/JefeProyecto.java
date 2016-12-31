@@ -114,10 +114,10 @@ public class JefeProyecto extends HttpServlet {
                 jsonU = mapper.writeValueAsString(users);
                 jsonP = mapper.writeValueAsString(participacion);
             }
-            request.setAttribute("usuarios", jsonU);
-            request.setAttribute("participacion", jsonP);
+            sesion.setAttribute("usuarios", jsonU);
+            sesion.setAttribute("participacion", jsonP);
         }
-        if (!activities.isEmpty()) {
+        if (!activities.isEmpty() && rd.equals("actividades.jsp")) {
             String json = mapper.writeValueAsString(activities);
             request.setAttribute("actividades", json);
         }

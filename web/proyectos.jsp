@@ -9,13 +9,14 @@
         <%@include file="WEB-INF/jspf/includes.jspf" %>
     </head>
     <body>
-        <section class="container">
+        <div class="container">
         <% 
         ObjectMapper mapper = new ObjectMapper();
         String json = (String) request.getAttribute("proyectos");
         %>
+        <div class="caja_principal">
         <table class="table columna_caja_principal" >
-            <tr><h1>Proyectos disponibles:</h1></tr>
+            <tr><h2>Proyectos disponibles:</h2></tr>
             <tr>
                 <td><h4>Id</h4></td>
                 <td><h4>Nombre</h4></td>
@@ -35,5 +36,7 @@
             </tr>
             <%}}%>
         </table>
+        </div>
+        </div>
     </body>
 </html>
