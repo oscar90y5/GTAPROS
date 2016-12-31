@@ -98,9 +98,8 @@ public class JefeProyecto extends HttpServlet {
                 rd = "actividades.jsp";
             }
 
-            if (accion.equals("Fijar vacaciones")) {
-                rd = "vacaciones.jsp";
-            }
+            if (accion.equals("Fijar vacaciones")) rd = "vacaciones.jsp";
+            if (accion.equals("Cerrar Sesion")) rd = "index.jsp";
         }
 
         if (proyects != null) {
