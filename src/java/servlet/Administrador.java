@@ -5,6 +5,7 @@
  */
 package servlet;
 
+import dominio.Miembro;
 import dominio.Proyecto;
 import dominio.Rol;
 import dominio.Usuario;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import persistencia.MiembroFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
 import persistencia.RolFacadeLocal;
 import persistencia.UsuarioFacadeLocal;
@@ -29,6 +31,9 @@ import persistencia.UsuarioFacadeLocal;
  */
 @WebServlet(name = "Administrador", urlPatterns = {"/Administrador"})
 public class Administrador extends HttpServlet {
+
+    @EJB
+    private MiembroFacadeLocal miembroFacade;
 
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
@@ -51,32 +56,53 @@ public class Administrador extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            HttpSession sesion = request.getSession();
-            String user = (String) sesion.getAttribute("user");
-            String accion = request.getParameter("accion");
-            if (accion != null) {
-                  if (accion.equals("Dar de Alta Trabajador")) response.sendRedirect("AltaTrabajador.jsp");     
-                  if (accion.equals("Dar de Alta Proyecto")) response.sendRedirect("AltaProyecto.jsp");
+        HttpSession sesion = request.getSession();
+        String user = (String) sesion.getAttribute("user");
+        String accion = request.getParameter("accion");
+        String rd = "administrador.jsp";
+        if (accion != null) {
+              if (accion.equals("Dar de Alta Trabajador")) rd = "altaTrabajador.jsp";     
+              if (accion.equals("Dar de Alta Proyecto")) rd = "altaProyecto.jsp";
 
-                  if (accion.equals("Asignar Responsable")){
-                      List<Proyecto> proyectosSinResponsable = proyectoFacade.findAll();
-                      for(int i =0;i<proyectosSinResponsable.size();i++){
-                          int idProyecto = proyectosSinResponsable.get(i).getId();
-                          String nombreProyecto = proyectosSinResponsable.get(i).getNombre();
-                          //BUSCAMOS LOS USUARIOS DISPONIBLES 
-                          List<Usuario> usuariosDisponibles = usuarioFacade.findAll();
-                          ArrayList<String> nombreUsuariosDisponibles = new ArrayList<>();
-                          for(int j =0;j<usuariosDisponibles.size();j++){
-                              if(usuariosDisponibles.get(j).getTipoCategoria()==1) nombreUsuariosDisponibles.add(usuariosDisponibles.get(j).getNombreCompleto());   
-                          }
-                      }
-                      response.sendRedirect("AsignarResponsable.jsp");
+              if (accion.equals("Asignar Responsable")){
+                  //Buscamos proyectos sin miembro con rol jefe de proyecto
+                  List<Proyecto> proyectos = proyectoFacade.findAll();
+                  List<Proyecto> proyectosSinResponsable = proyectoFacade.findAll();
+                  for(Proyecto p: proyectos){
+                    List<Miembro> miembros = miembroFacade.findByIdProyecto(p);
+                    for(Miembro m: miembros)
+                        if(m.getIdRol().getNombreRol().equals("JefeProyecto"))
+                            proyectosSinResponsable.remove(p);
                   }
-                  if (accion.equals("Fijar vacaciones")) response.sendRedirect("vacaciones.jsp");
-                  if(accion.equals("Cerrar Sesion")) response.sendRedirect("index.jsp");
-            }
-          }
+                    //Buscamos usuarios disponibles para ese rol 
+                    List<Usuario> usuariosDisponibles = new ArrayList<>();
+                    //Recogemos todos los usuarios con categoria 1 y miembros almacenados en la BD
+                   List<Usuario> usuarios = usuarioFacade.findByTipoCategoria(1);
+                   for(Usuario u: usuarios){
+                        List<Miembro> miembros = miembroFacade.findByDni(u);
+                        //Si no está en la tabla de miembros es porque está disponible
+                       if(!u.getEsAdmin() && (miembros==null || miembros.isEmpty()))
+                            usuariosDisponibles.add(u); 
+                        /*Si está en la tabla de mimebros, ver que sea miembro
+                        * de 1 solo proyecto (maximo posible es 2) y si es miembro de 1 que no 
+                        * sea ya jefe
+                        */
+                       else{
+                            if(miembros.size()==1){ 
+                               if(!miembros.get(0).getIdRol().getNombreRol().equals("JefeProyecto"))
+                                   usuariosDisponibles.add(u); 
+                            }
+                       }
+                  }
+                   
+                request.setAttribute("proyectosSinResponsable", proyectosSinResponsable);
+                request.setAttribute("usuariosDisponibles", usuariosDisponibles);
+                rd= "asignarResponsable.jsp";
+              }
+              if (accion.equals("Fijar vacaciones")) rd = "vacaciones.jsp";
+              if(accion.equals("Cerrar Sesion")) rd = "index.jsp";
+        }
+        request.getRequestDispatcher(rd).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

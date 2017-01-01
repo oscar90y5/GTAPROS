@@ -7,9 +7,9 @@ package servlet;
 
 import dominio.Miembro;
 import dominio.Proyecto;
+import dominio.Rol;
 import dominio.Usuario;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import persistencia.MiembroFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
+import persistencia.RolFacadeLocal;
 import persistencia.UsuarioFacadeLocal;
 
 /**
@@ -27,6 +28,9 @@ import persistencia.UsuarioFacadeLocal;
  */
 @WebServlet(name = "AsignarResponsable", urlPatterns = {"/AsignarResponsable"})
 public class AsignarResponsable extends HttpServlet {
+
+    @EJB
+    private RolFacadeLocal rolFacade;
 
     @EJB
     private MiembroFacadeLocal miembroFacade;
@@ -49,24 +53,34 @@ public class AsignarResponsable extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-           HttpSession sesion = request.getSession();
-           if(request.getParameter("altaTrabajadorBtn").equals("addTrabajador")){
-               int idProyecto = Integer.valueOf(sesion.getAttribute("idNuevoProyecto").toString());
-               String nombreJefe = request.getParameter("usuariosDisponibles");
-               Usuario u = usuarioFacade.findByNombreCompleto(nombreJefe);
-               Proyecto p = proyectoFacade.findById(idProyecto);
-               Miembro m = new Miembro();
-               m.setDni(u);
-               m.setIdProyecto(p);
-              
-               miembroFacade.create(m);
-               
-              
-           }
-            response.sendRedirect("exito.jsp");
+        HttpSession sesion = request.getSession();
+        String accion = (String) request.getParameter("asignarJefe");
+        String rd = "asignarResponsableSesion.jsp";
+        
+        if(accion.equals("cancelar")) rd = "administrador.jsp";
+        if(accion.equals("asignarJefe")){
+            int idProyecto;
+            try{
+                idProyecto = (Integer) sesion.getAttribute("idNuevoProyecto");
+            }catch(NullPointerException e){ 
+                String stringp = (String) request.getParameter("proyectos");
+                String[] partes = stringp.split("-");
+                idProyecto = Integer.valueOf(partes[0]);
+            }
+            
+            String nombreJefe = (String) request.getParameter("usuariosDisponibles");
+            Usuario u = usuarioFacade.findByNombreCompleto(nombreJefe);
+            Proyecto p = proyectoFacade.find(idProyecto);
+            Miembro m = new Miembro();
+            m.setIdMiembro(miembroFacade.count()+1);
+            m.setDni(u);
+            m.setIdProyecto(p);
+            m.setIdRol(rolFacade.findByNombreRolAndIdProyecto("JefeProyecto", p));
+            miembroFacade.create(m);
+            rd = "exito.jsp";
 
         }
+         response.sendRedirect(rd);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
