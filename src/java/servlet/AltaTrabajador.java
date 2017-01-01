@@ -46,13 +46,19 @@ public class AltaTrabajador extends HttpServlet {
                 nombre = request.getParameter("nombreTrabajador");
                 dni = request.getParameter("dniTrabajador");
                 clave = request.getParameter("claveTrabajador");
-                tipoCategoria = Integer.valueOf(request.getParameter("categoriaTrabajador"));
+                String tipoCategoriaNombre = request.getParameter("categoriaTrabajador");
+                String[] parts = tipoCategoriaNombre.split("\\-");
+                tipoCategoria = Integer.valueOf(parts[0]);
                 Usuario u = new Usuario(dni, clave, tipoCategoria);
                 u.setNombreCompleto(nombre);
+                u.setEsAdmin(false);
+                u.setVacacionesFijadas(0);
                 usuarioFacade.create(u);
+                response.sendRedirect("exito.jsp"); 
             } else {
+                response.sendRedirect("administrador.jsp");
             }
-            response.sendRedirect("Administrador.jsp"); 
+            
         }
     }
 

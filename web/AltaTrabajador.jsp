@@ -10,7 +10,7 @@
     <body>
         <section class="container">
             <section class="login-form">
-            <h2> Dar de alta nuevo Trabajador: </h2>
+            <h2> Dar de alta nuevo Trabajador</h2>
             <form role="form" action="AltaTrabajador" name="AltaTrabajador" value="AltraTrabajador" method="post">
          <div class=>
              <div class="">
@@ -23,16 +23,24 @@
              </div>
              <div class="">
                  <label for="nombreProyecto">Clave del trabajador</label>
-                 <input type="text" class="form-control" id="claveTrabajador" placeholder="Introduzca la clave del trabajador" name="claveTrabajador">
+                 <input type="password" class="form-control" id="claveTrabajador" placeholder="Introduzca la clave del trabajador" name="claveTrabajador">
              </div>
              <div class="">
                  <label for="nombreProyecto">Categoría trabajador</label>
-                 <input type="text" class="form-control" id="categoriaTrabajador" placeholder="Introduzca la categoría del trabajador en la empresa" name="categoriaTrabajador">
+                 <select class="" id="categoriaTrabajador" name="categoriaTrabajador">
+                     <option>1-JefeProyecto</option>
+                     <option>2-Analista</option>
+                     <option>3-Diseñador</option>
+                     <option>3-AnalistaProgramador</option>
+                     <option>3-ResponsablePruebas</option>
+                     <option>4-Programador</option>
+                     <option>4-Probrador</option>
+                 </select>
              </div>
          </div><!-- /.box-body -->
          <div class="box-footer">
-             <button type="submit" class="btn btn-primary" name="altaTrabajador" value="crearProyecto">Añadir Trabajador</button>
-             <a href=><span class="btn btn-default">Cancelar</span></a>
+             <button type="submit" class="btn btn-primary" name="altaTrabajadorBtn" value="addTrabajador">Añadir Trabajador</button>
+             <button type="submit" class="btn btn-primary" name="altaTrabajadorBtn" value="cancelAddTrabajador">Cancelar</button>
          </div>
         </form>
            </section>

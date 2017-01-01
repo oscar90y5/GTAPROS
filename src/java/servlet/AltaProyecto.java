@@ -72,14 +72,16 @@ public class AltaProyecto extends HttpServlet {
                 nombreRol[i] = request.getParameter("nombre"+i);
             }
            
-            int id = (proyectoFacade.count()+1);
+            int idNuevoProyecto = (proyectoFacade.count()+1);
             List<Rol> listaRol = new ArrayList<>();
             
-            Proyecto p = new Proyecto(id,nombreProyecto);
+            Proyecto p = new Proyecto(idNuevoProyecto,nombreProyecto);
             proyectoFacade.create(p);
             for(int j = 0; j<ids.length;j++){
-                    Rol r = new Rol(ids[j],nombreRol[j]);
+                    Rol r = new Rol();
                     r.setIdProyecto(p);
+                    r.setNombreRol(nombreRol[j]);
+                    r.setTipoCategoria(ids[j]);
                     rolFacade.create(r);
                     listaRol.add(r);
             }
@@ -95,6 +97,7 @@ public class AltaProyecto extends HttpServlet {
                 for(int i =0;i<usuarios.size();i++){
                    //Si tiene categoria 1 es porque puede ser jefe de proyecto
                    if(usuarios.get(i).getTipoCategoria()==1){
+                   
                     String dniUsuario = usuarios.get(i).getDni();
                     //Si no está en la tabla de miembros es porque está disponible
                     if(!miembros.contains(usuarios.get(i))){
@@ -110,11 +113,12 @@ public class AltaProyecto extends HttpServlet {
                 }
                 sesion.setAttribute("usuariosDisponibles", usuariosDisponibles);
                 sesion.setAttribute("nombreProyecto", nombreProyecto);
+                sesion.setAttribute("idNuevoProyecto",idNuevoProyecto);
                 response.sendRedirect("AsignarResponsableSesion.jsp"); 
             }
             else{
                 if(request.getParameter("altaProyectoBtn").equals("asignarJefeLater")){
-                    response.sendRedirect("administrador.jsp"); 
+                    response.sendRedirect("exito.jsp"); 
                 }
             }
             }

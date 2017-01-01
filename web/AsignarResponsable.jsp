@@ -13,36 +13,16 @@
         <section class="container">
             <section class="login-form">
             <h2> Asignar Responsable: </h2>
-            <form role="form" action="AsignarResponsable" name="AsignarResponsable" value="AsignarResponsable" method="post">
+            <form role="form" action="AsignarResponsableLater" name="AsignarResponsable" value="AsignarResponsable" method="post">
          <div class=>
              <div class="">
                  <label for="nombreProyecto">Seleccione el proyecto al que desea asignar responsable:</label>
-                          <% 
-                    List<Proyecto>  proyectos = (List<Proyecto>) request.getAttribute("proyectos");
-                    out.println("<table>");
-                    for(int i =0;i<proyectos.size();i++) {
-                        out.println("<tr>");
-                        out.print("<td WIDTH=260>"+proyectos.get(i)+"</td>");
-                        out.println("</tr>");
-                    }
-                    out.println("</table>");
-
-                    %>
+                   
                    <input type="text" class="form-control" id="nombreProyecto" placeholder="Nombre proyecto" name="nombreProyecto">
              </div>
                       <div class="">
                  <label for="nombreProyecto">Seleccione el usuario que desea que sea jefe de proyecto:</label>
-                          <% 
-                    List<Proyecto>  usuarios = (List<Proyecto>) request.getAttribute("usuarios");
-                    out.println("<table>");
-                    for(int i =0;i<usuarios.size();i++) {
-                        out.println("<tr>");
-                        out.print("<td WIDTH=260>"+usuarios.get(i)+"</td>");
-                        out.println("</tr>");
-                    }
-                    out.println("</table>");
-
-                    %>
+                     
                    <input type="text" class="form-control" id="jefeProyecto" placeholder="Nombre del Jefe del Proyecto" name="jefeProyecto">
              </div>
          </div><!-- /.box-body -->

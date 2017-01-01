@@ -5,6 +5,7 @@
  */
 package servlet;
 
+import dominio.Miembro;
 import dominio.Proyecto;
 import dominio.Usuario;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import persistencia.MiembroFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
 import persistencia.UsuarioFacadeLocal;
 
@@ -25,6 +27,9 @@ import persistencia.UsuarioFacadeLocal;
  */
 @WebServlet(name = "AsignarResponsable", urlPatterns = {"/AsignarResponsable"})
 public class AsignarResponsable extends HttpServlet {
+
+    @EJB
+    private MiembroFacadeLocal miembroFacade;
 
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
@@ -47,13 +52,19 @@ public class AsignarResponsable extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
            HttpSession sesion = request.getSession();
            if(request.getParameter("altaTrabajadorBtn").equals("addTrabajador")){
-                String nombreProyecto = request.getParameter("nombreProyecto");
-                String jefeProyecto = request.getParameter("jefeProyecto");
-                Proyecto proyecto = proyectoFacade.find(nombreProyecto);
-                Usuario jefe = usuarioFacade.find(jefeProyecto);
+               int idProyecto = Integer.valueOf(sesion.getAttribute("idNuevoProyecto").toString());
+               String nombreJefe = request.getParameter("usuariosDisponibles");
+               Usuario u = usuarioFacade.findByNombreCompleto(nombreJefe);
+               Proyecto p = proyectoFacade.findById(idProyecto);
+               Miembro m = new Miembro();
+               m.setDni(u);
+               m.setIdProyecto(p);
+              
+               miembroFacade.create(m);
                
+              
            }
-            response.sendRedirect("Administrador.jsp");
+            response.sendRedirect("exito.jsp");
 
         }
     }
