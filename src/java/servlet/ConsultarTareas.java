@@ -5,39 +5,26 @@
  */
 package servlet;
 
-import dominio.Proyecto;
-import dominio.Rol;
-import dominio.Usuario;
+import dominio.Informetareas;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import persistencia.ProyectoFacadeLocal;
-import persistencia.RolFacadeLocal;
-import persistencia.UsuarioFacadeLocal;
+import persistencia.InformetareasFacadeLocal;
 
 /**
  *
- * @author claramorrondo
+ * @author miki
  */
-@WebServlet(name = "Administrador", urlPatterns = {"/Administrador"})
-public class Administrador extends HttpServlet {
+@WebServlet(name = "ConsultarTareas", urlPatterns = {"/ConsultarTareas"})
+public class ConsultarTareas extends HttpServlet {
 
     @EJB
-    private UsuarioFacadeLocal usuarioFacade;
-
-    @EJB
-    private RolFacadeLocal rolFacade;
-
-    @EJB
-    private ProyectoFacadeLocal proyectoFacade;
+    private InformetareasFacadeLocal informetareasFacade;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -51,32 +38,11 @@ public class Administrador extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            HttpSession sesion = request.getSession();
-            String user = (String) sesion.getAttribute("user");
-            String accion = request.getParameter("accion");
-            if (accion != null) {
-                  if (accion.equals("Dar de Alta Trabajador")) response.sendRedirect("AltaTrabajador.jsp");     
-                  if (accion.equals("Dar de Alta Proyecto")) response.sendRedirect("AltaProyecto.jsp");
-
-                  if (accion.equals("Asignar Responsable")){
-                      List<Proyecto> proyectosSinResponsable = proyectoFacade.findAll();
-                      for(int i =0;i<proyectosSinResponsable.size();i++){
-                          int idProyecto = proyectosSinResponsable.get(i).getId();
-                          String nombreProyecto = proyectosSinResponsable.get(i).getNombre();
-                          //BUSCAMOS LOS USUARIOS DISPONIBLES 
-                          List<Usuario> usuariosDisponibles = usuarioFacade.findAll();
-                          ArrayList<String> nombreUsuariosDisponibles = new ArrayList<>();
-                          for(int j =0;j<usuariosDisponibles.size();j++){
-                              if(usuariosDisponibles.get(j).getTipoCategoria()==1) nombreUsuariosDisponibles.add(usuariosDisponibles.get(j).getNombreCompleto());   
-                          }
-                      }
-                      response.sendRedirect("AsignarResponsable.jsp");
-                  }
-                  if (accion.equals("Fijar vacaciones")) response.sendRedirect("vacaciones.jsp");
-                  if(accion.equals("Cerrar Sesion")) response.sendRedirect("index.jsp");
-            }
-          }
+        System.out.println("hola");
+        
+        Informetareas inf;
+        
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

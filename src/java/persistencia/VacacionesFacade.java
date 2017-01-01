@@ -6,6 +6,7 @@
 package persistencia;
 
 import dominio.Vacaciones;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,6 +28,11 @@ public class VacacionesFacade extends AbstractFacade<Vacaciones> implements Vaca
 
     public VacacionesFacade() {
         super(Vacaciones.class);
+    }
+    
+    @Override
+    public List<Vacaciones> findByUser(Object dni){
+        return em.createNamedQuery("Vacaciones.findByDni").setParameter("dni", dni).getResultList();
     }
     
 }

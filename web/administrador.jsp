@@ -17,6 +17,8 @@
                         <input type="submit" name="accion" value="Dar de Alta Trabajador" class="btn btn-lg btn-primary btn-block"/>
                         <input type="submit" name="accion" value="Dar de Alta Proyecto" class="btn btn-lg btn-primary btn-block"/>
                         <input type="submit" name="accion" value="Asignar Responsable" class="btn btn-lg btn-primary btn-block"/>
+                        <input type="submit" name="accion" value="Fijar vacaciones" class="btn btn-lg btn-primary btn-block"/>
+                        <input type="submit" name="accion" value="Cerrar Sesion" class="btn btn-lg btn-warning btn-block"/>
                     </form>
                 </div>
            </section>
