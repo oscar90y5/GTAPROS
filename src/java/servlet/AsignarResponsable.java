@@ -5,13 +5,11 @@
  */
 package servlet;
 
+import dominio.Miembro;
 import dominio.Proyecto;
-import dominio.Rol;
 import dominio.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,22 +17,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import persistencia.MiembroFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
-import persistencia.RolFacadeLocal;
 import persistencia.UsuarioFacadeLocal;
 
 /**
  *
  * @author claramorrondo
  */
-@WebServlet(name = "Administrador", urlPatterns = {"/Administrador"})
-public class Administrador extends HttpServlet {
+@WebServlet(name = "AsignarResponsable", urlPatterns = {"/AsignarResponsable"})
+public class AsignarResponsable extends HttpServlet {
+
+    @EJB
+    private MiembroFacadeLocal miembroFacade;
 
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
-
-    @EJB
-    private RolFacadeLocal rolFacade;
 
     @EJB
     private ProyectoFacadeLocal proyectoFacade;
@@ -52,31 +50,23 @@ public class Administrador extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            HttpSession sesion = request.getSession();
-            String user = (String) sesion.getAttribute("user");
-            String accion = request.getParameter("accion");
-            if (accion != null) {
-                  if (accion.equals("Dar de Alta Trabajador")) response.sendRedirect("AltaTrabajador.jsp");     
-                  if (accion.equals("Dar de Alta Proyecto")) response.sendRedirect("AltaProyecto.jsp");
+           HttpSession sesion = request.getSession();
+           if(request.getParameter("altaTrabajadorBtn").equals("addTrabajador")){
+               int idProyecto = Integer.valueOf(sesion.getAttribute("idNuevoProyecto").toString());
+               String nombreJefe = request.getParameter("usuariosDisponibles");
+               Usuario u = usuarioFacade.findByNombreCompleto(nombreJefe);
+               Proyecto p = proyectoFacade.findById(idProyecto);
+               Miembro m = new Miembro();
+               m.setDni(u);
+               m.setIdProyecto(p);
+              
+               miembroFacade.create(m);
+               
+              
+           }
+            response.sendRedirect("exito.jsp");
 
-                  if (accion.equals("Asignar Responsable")){
-                      List<Proyecto> proyectosSinResponsable = proyectoFacade.findAll();
-                      for(int i =0;i<proyectosSinResponsable.size();i++){
-                          int idProyecto = proyectosSinResponsable.get(i).getId();
-                          String nombreProyecto = proyectosSinResponsable.get(i).getNombre();
-                          //BUSCAMOS LOS USUARIOS DISPONIBLES 
-                          List<Usuario> usuariosDisponibles = usuarioFacade.findAll();
-                          ArrayList<String> nombreUsuariosDisponibles = new ArrayList<>();
-                          for(int j =0;j<usuariosDisponibles.size();j++){
-                              if(usuariosDisponibles.get(j).getTipoCategoria()==1) nombreUsuariosDisponibles.add(usuariosDisponibles.get(j).getNombreCompleto());   
-                          }
-                      }
-                      response.sendRedirect("AsignarResponsable.jsp");
-                  }
-                  if (accion.equals("Fijar vacaciones")) response.sendRedirect("vacaciones.jsp");
-                  if(accion.equals("Cerrar Sesion")) response.sendRedirect("index.jsp");
-            }
-          }
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

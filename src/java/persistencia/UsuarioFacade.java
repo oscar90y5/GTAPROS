@@ -34,4 +34,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         return em.createNamedQuery("Usuario.findByEsAdmin").setParameter("esAdmin", admin).getResultList();
     }
     
+     public Usuario findByNombreCompleto(String nombreCompleto){
+        return (Usuario) em.createNamedQuery("Usuario.findByNombreCompleto").setParameter("nombreCompleto", nombreCompleto).getSingleResult();
+    }
+    
 }
