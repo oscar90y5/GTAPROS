@@ -44,7 +44,6 @@ public class Miembro implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "idMiembro")
     private Integer idMiembro;
@@ -58,7 +57,7 @@ public class Miembro implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     private Proyecto idProyecto;
     @JoinColumn(name = "idRol", referencedColumnName = "idRol")
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Rol idRol;
     @JoinColumn(name = "dni", referencedColumnName = "dni")
     @ManyToOne(fetch = FetchType.EAGER)

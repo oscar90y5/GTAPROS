@@ -75,7 +75,8 @@ public class AsignarAProyecto extends HttpServlet {
                     Proyecto p = proyectoFacade.find(idProject);
                     m.setIdProyecto(p);
                     int idRol = rolFacade.count()+1;
-                    m.setIdRol(new Rol(idRol, categorias[i]));
+                    Rol r = rolFacade.findByNombreRolAndIdProyecto(categorias[i], idProject);
+                    m.setIdRol(r);
                     m.setParticipacion(Integer.parseInt(participacion[i]));
                     int id = miembroFacade.count()+1;
                     m.setIdMiembro(id);

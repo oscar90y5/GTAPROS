@@ -31,6 +31,8 @@ public interface UsuarioFacadeLocal {
     List<Usuario> findRange(int[] range);
     
     List<Usuario> finByAdmin(Boolean admin);
+    
+    List<Usuario> findByTipoCategoria(int tipoCategoria);
 
     int count();
     

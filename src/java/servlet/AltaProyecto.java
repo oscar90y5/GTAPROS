@@ -56,76 +56,80 @@ public class AltaProyecto extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-           HttpSession sesion = request.getSession();
+        HttpSession sesion = request.getSession();
+        String rd = "administrador.jsp";
             
-       if(!request.getParameter("altaProyectoBtn").equals("cancelar")){ 
-           
+        if(!request.getParameter("altaProyectoBtn").equals("cancelar")){ 
             String nombreProyecto = request.getParameter("nombreProyecto");
             int cantidad = Integer.parseInt(request.getParameter("cantidad"));
-            String[] nombreRol;
-            Integer [] ids;
-            ids = new Integer[cantidad];
-            nombreRol = new String[cantidad];
-            for(int i =0;i<cantidad;i++){
-                ids[i] = Integer.parseInt(request.getParameter("roles"+i));
-                nombreRol[i] = request.getParameter("nombre"+i);
-            }
-           
-            int idNuevoProyecto = (proyectoFacade.count()+1);
+            ArrayList<String> roles = new ArrayList<>();
+            for(int i =0;i<cantidad;i++)
+                roles.add((String) (request.getParameter("roles"+i)));
+
+            int idNuevoProyecto = proyectoFacade.count()+1;
+            System.out.println("servlet.AltaProyecto.processRequest()"+idNuevoProyecto);
             List<Rol> listaRol = new ArrayList<>();
-            
-            Proyecto p = new Proyecto(idNuevoProyecto,nombreProyecto);
+
+            Proyecto p = new Proyecto();
+            p.setId(idNuevoProyecto);
+            p.setNombre(nombreProyecto);
+            p.setEstado("Pendiente");
+            p.setCargado(Boolean.FALSE);
             proyectoFacade.create(p);
-            for(int j = 0; j<ids.length;j++){
-                    Rol r = new Rol();
-                    r.setIdProyecto(p);
-                    r.setNombreRol(nombreRol[j]);
-                    r.setTipoCategoria(ids[j]);
-                    rolFacade.create(r);
-                    listaRol.add(r);
-            }
+             
+            for(String rol: roles){
+                     Rol r = new Rol();
+                     r.setIdRol(rolFacade.count()+1);
+                     r.setIdProyecto(p);
+                     r.setNombreRol(rol);
+                     if(rol.equals("JefeProyecto"))
+                        r.setTipoCategoria(1);
+                     if(rol.equals("Analista"))
+                         r.setTipoCategoria(2);
+                     if(rol.equals("Disenador") || rol.equals("AnalistaProgramador") 
+                             || rol.equals("RespEquipoPruebas"))
+                         r.setTipoCategoria(3);
+                     if(rol.equals("Programador") || rol.equals("Probador"))
+                         r.setTipoCategoria(4);
+                     
+                     rolFacade.create(r);
+                     listaRol.add(r);
+             }
 
-            p.setRolList(listaRol);            
-            if(request.getParameter("altaProyectoBtn").equals("asignarJefe")){ 
-                ArrayList<String> usuariosDisponibles = new ArrayList<>();
-                //Recogemos todos los usuarios y miembros almacenados en la BD
-                List<Usuario> usuarios =usuarioFacade.findAll();
-                List<Miembro> miembros = miembroFacade.findAll();
-                
-                //Recorremos todos los usuarios
-                for(int i =0;i<usuarios.size();i++){
-                   //Si tiene categoria 1 es porque puede ser jefe de proyecto
-                   if(usuarios.get(i).getTipoCategoria()==1){
-                   
-                    String dniUsuario = usuarios.get(i).getDni();
-                    //Si no está en la tabla de miembros es porque está disponible
-                    if(!miembros.contains(usuarios.get(i))){
-                        usuariosDisponibles.add(usuarios.get(i).getNombreCompleto()); 
-                    }
-                    //Si está en la tabla de mimebros, ver que no sea ya jefe de otro proyecto
+             p.setRolList(listaRol);   
+             
+             if(request.getParameter("altaProyectoBtn").equals("asignarJefe")){       
+                List<Usuario> usuariosDisponibles = new ArrayList<>();
+                 //Recogemos todos los usuarios con categoria 1 y miembros almacenados en la BD
+                List<Usuario> usuarios =usuarioFacade.findByTipoCategoria(1);
+           
+                 //Recorremos todos los usuarios
+                for(Usuario u: usuarios){
+                     List<Miembro> miembros = miembroFacade.findByDni(u);
+                     //Si no está en la tabla de miembros es porque está disponible
+                    if(!u.getEsAdmin() && (miembros==null || miembros.isEmpty()))
+                         usuariosDisponibles.add(u); 
+                     /*Si está en la tabla de mimebros, ver que sea miembro
+                     * de 1 solo proyecto (maximo posible es 2) y si es miembro de 1 que no 
+                     * sea ya jefe
+                     */
                     else{
-                        if(miembroFacade.findByDni(dniUsuario).get(0).getIdRol().getTipoCategoria()!=1){
-                          usuariosDisponibles.add(usuarios.get(i).getNombreCompleto()); 
-                        }
+                         if(miembros.size()==1){ 
+                            if(!miembros.get(0).getIdRol().getNombreRol().equals("JefeProyecto"))
+                                usuariosDisponibles.add(u); 
+                         }
                     }
-                   }    
-                }
-                sesion.setAttribute("usuariosDisponibles", usuariosDisponibles);
-                sesion.setAttribute("nombreProyecto", nombreProyecto);
+                }   
+                request.setAttribute("usuariosDisponibles", usuariosDisponibles);
+                request.setAttribute("nombreProyecto", nombreProyecto);
                 sesion.setAttribute("idNuevoProyecto",idNuevoProyecto);
-                response.sendRedirect("AsignarResponsableSesion.jsp"); 
-            }
-            else{
-                if(request.getParameter("altaProyectoBtn").equals("asignarJefeLater")){
-                    response.sendRedirect("exito.jsp"); 
-                }
-            }
-            }
-
+                rd = "asignarResponsable.jsp";
+                
+             }if(request.getParameter("altaProyectoBtn").equals("asignarJefeLater"))
+                     rd = "exito.jsp"; 
         }
-
-        
+       
+        request.getRequestDispatcher(rd).forward(request, response);      
     }
     
     

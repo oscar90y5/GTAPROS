@@ -28,5 +28,5 @@ public class TareaFacade extends AbstractFacade<Tarea> implements TareaFacadeLoc
     public TareaFacade() {
         super(Tarea.class);
     }
-    
+
 }
