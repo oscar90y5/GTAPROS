@@ -6,6 +6,7 @@
 package servlet;
 
 import dominio.Actividad;
+import dominio.Miembro;
 import dominio.Proyecto;
 import dominio.Usuario;
 import java.io.IOException;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import persistencia.ActividadFacadeLocal;
+import persistencia.MiembroFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
 import persistencia.UsuarioFacadeLocal;
 
@@ -28,6 +30,9 @@ import persistencia.UsuarioFacadeLocal;
  */
 @WebServlet(name = "Desarrollador", urlPatterns = {"/Desarrollador"})
 public class Desarrollador extends HttpServlet {
+
+    @EJB
+    private MiembroFacadeLocal miembroFacade;
 
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
@@ -61,8 +66,33 @@ public class Desarrollador extends HttpServlet {
         String rd = "Desarrollador.jsp";
         if (accion != null) {
             if (accion.equals("Introducir tarea")) {
-                //  out.print("Introducir datos de tareas un desarrollo....");
-                rd = "introducirTarea.jsp";
+                    //Obtenemos la lista de actividades activas pertenecientes al proyecto y al usuario
+                    List<Actividad> actividades = actividadFacade.findActiveActivities(proyecto);
+                    List<Miembro> miembros;
+                    Actividad a;
+                    System.out.println("actividades activas");
+                    //si el for es de la forma: (Actividad a : actividades) falla al borrar elementos.
+                    for(int i = 0; i<actividades.size();i++){
+                        a = actividades.get(i);
+                        if(!a.getMiembroList().contains(miembroFacade.findByIdProyectoAndDni(proyecto, user))){
+                            System.out.println("borramos");
+                            actividades.remove(a);
+                            i--;
+                            System.out.println("borrado");
+
+                        }
+                    }
+                    System.out.println("actividades: "+actividades.size());
+
+                    if(actividades.size()==1){
+                        //redirigimos a introducir tareas con el id de la actividad
+                        response.sendRedirect("introducirTareas.jsp?id="+actividades.get(0).getId());
+                    } else {
+                        request.setAttribute("actividades", actividades);
+                        rd = "actividades.jsp";
+                    }                    
+                    System.out.println("salimos");
+
             }
             if (accion.equals("Modificar tareas activas")) {
                 // out.print("Modificar datos de tareas en desarrollo....");
