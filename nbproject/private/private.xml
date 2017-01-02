@@ -3,16 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/bootstrap/js/calendar.js</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/bootstrap/js/calendar-setup.js</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/jefeProyecto.jsp</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/proyectos.jsp</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/vacaciones.jsp</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/servlet/LoginServlet.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/WEB-INF/jspf/includes.jspf</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/servlet/ProyectosServlet.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/web/index.jsp</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/dominio/Proyecto.java</file>
+            <file>file:/home/oscar/Documentos/Asignaturas/PGP/GTAPROS/src/java/servlet/Desarrollador.java</file>
+            <file>file:/home/oscar/Documentos/Asignaturas/PGP/GTAPROS/web/desarrollador.jsp</file>
+            <file>file:/home/oscar/Documentos/Asignaturas/PGP/GTAPROS/src/conf/persistence.xml</file>
         </group>
     </open-files>
 </project-private>

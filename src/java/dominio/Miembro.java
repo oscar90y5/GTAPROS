@@ -5,6 +5,7 @@
  */
 package dominio;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
@@ -37,6 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Miembro.findByIdMiembro", query = "SELECT m FROM Miembro m WHERE m.idMiembro = :idMiembro")
     , @NamedQuery(name = "Miembro.findByTipoRol", query = "SELECT m FROM Miembro m WHERE m.tipoRol = :tipoRol")
     , @NamedQuery(name = "Miembro.findByParticipacion", query = "SELECT m FROM Miembro m WHERE m.participacion = :participacion")})
+@JsonIgnoreProperties(value={"actividadList"})
 public class Miembro implements Serializable {
 
     private static final long serialVersionUID = 1L;
