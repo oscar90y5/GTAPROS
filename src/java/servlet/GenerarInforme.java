@@ -119,7 +119,9 @@ public class GenerarInforme extends HttpServlet {
             rd = "informePeriodo.jsp?infor=recursos";
         }
         if(informe.equals("Trabajadores/Actividades/Tiempo por periodo posterior")){
-            //Primero pedir días despues de fecha actual, luego genera informe
+            sesion.setAttribute("idP", stringP);
+            request.setAttribute("datos", "porBuscar");
+            rd = "informePeriodo.jsp?infor=trabajadores";
         }
         if(informe.equals("Informe general")){
             //Generar informe

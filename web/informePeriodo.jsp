@@ -32,9 +32,10 @@
                     if(estado.equals("realplanificado")){
                 %>
                 <h2>Relacion Tiempo Real/Planificado de Actividades por periodo: </h2>
-                <%}if(estado== null || estado.equals("recursos")){
-                    estado = "recursos"; %>
+                <%}if(estado.equals("recursos")){%>
                 <h2>Relacion Actividades/Recursos asignados por periodo: </h2>
+                <%}if(estado.equals("trabajadores")){%>
+                <h2>Relacion Trabajadores/Tiempo empleado en Actividad por periodo: </h2>
                 <%}}catch(NullPointerException e){ }%>
                 <form role="form" action="InformePeriodo?infor=<%=estado%>" name="InformePeriodo?infor=<%=estado%>" method="post">
                     <% 
@@ -51,7 +52,6 @@
                             String fecha2 = (String) request.getAttribute("fecha2");
                             try{
                                 String datos = (String) request.getAttribute("datos");
-                                System.out.println("className.methodName()********"+datos);
                             if(datos.equals("porBuscar")){
                         %>
                                 <input type="text" id="fecha1" name="fecha1" class="form-control" required/>
@@ -130,7 +130,32 @@
                                         <td><%=a.getFechaInicioPrettyString()%> - <%=a.getFechaFinPrettyString()%></td>
                                         <td><%=recursos%></td>
                                     </tr>
-                                    <%}%>
+                                    <%}}if(estado.equals("trabajadores")){%>   
+                                <table class="table columna_caja_principal" >
+                                    <tr><p>Periodo: <%=fecha1%> - <%=fecha2%></p></tr>
+                                    <tr>
+                                        <td><h4>Dni</h4></td>
+                                        <td><h4>Nombre Completo</h4></td>
+                                        <td><h4>Id Actividad</h4></td>
+                                        <td><h4>Nombre Actividad</h4></td>
+                                        <td><h4>Tiempo trabajado</h4></td>
+                                    </tr>
+                                    <%for(Actividad a: datos){
+                                        List<Miembro> miembros = a.getMiembroList();
+                                        for(Miembro m: miembros){
+                                            List<Tarea> tareasPersonales = m.getTareaList();
+                                            int tiempoTrabajado = 0;
+                                            for(Tarea t: tareasPersonales){
+                                                tiempoTrabajado += t.getEsfuerzoReal();
+                                            }%>
+                                    <tr>
+                                        <td><%=m.getDni().getDni()%></td>
+                                        <td><%=m.getDni().getNombreCompleto()%></td>
+                                        <td><%=a.getId()%></td>
+                                        <td><%=a.getNombre()%></td>
+                                        <td><%=tiempoTrabajado%></td>
+                                    </tr>
+                                    <%}}%>
                                 </table>
                         <%}}}}catch(NullPointerException e){ }%>
                         <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Aceptar</button>

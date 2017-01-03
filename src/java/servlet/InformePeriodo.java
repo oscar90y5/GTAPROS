@@ -93,10 +93,9 @@ public class InformePeriodo extends HttpServlet {
                 rd = "informePeriodo.jsp?infor=realplanificado";
                 
             }if(infor.equals("recursos")){
-                System.out.println("servlet.InformePeriodo.processRequest() RECURSOS");
                 if(fechaInicio.before(fechaActual)){
                     request.setAttribute("datos", "porBuscar");
-                    rd = "informePeriodo.jsp?error=dias";
+                    rd = "informePeriodo.jsp?infor=recursos&error=dias";
                 }else{   
                     for(Actividad a: actividades){
                         Date fechaIniA = null;
@@ -122,8 +121,39 @@ public class InformePeriodo extends HttpServlet {
                 request.setAttribute("datos", actPeriodo);
                 sesion.removeAttribute("idP");
                 rd = "informePeriodo.jsp?infor=recursos";
-                }
+                } 
                 
+            }if(infor.equals("trabajadores")){
+                if(fechaInicio.before(fechaActual)){
+                    request.setAttribute("datos", "porBuscar");
+                    rd = "informePeriodo.jsp?infor=trabajadores&error=dias";
+                }else{ 
+                    for(Actividad a: actividades){
+                        Date fechaIniA = null;
+                        Date fechaFinA = null;
+                        try{
+                            fechaIniA = a.getFechaInicio();
+                            fechaFinA = a.getFechaFin();
+                        }catch(NullPointerException e){ }
+                        /*Buscamos actividades que ya tengan una tarea con
+                        * un esfuerzo real dedicado por el trabajador. fechaIniA 
+                        * no puede ser null porque no habria empezado la actividad
+                        * (no habria tareas asignadas)
+                        */
+                        if((fechaIniA!=null) && fechaFinA==null)
+                            actPeriodo.add(a);
+                        if(fechaIniA!=null && fechaFinA!=null){
+                            if((fechaFinal.before(fechaFinA) || fechaFinal.equals(fechaFinA)))
+                                actPeriodo.add(a);
+                        }                
+                    }
+                    
+                request.setAttribute("fecha1", fecha1);
+                request.setAttribute("fecha2", fecha2);
+                request.setAttribute("datos", actPeriodo);
+                sesion.removeAttribute("idP");
+                rd = "informePeriodo.jsp?infor=trabajadores";
+                }
             }
         }
         request.getRequestDispatcher(rd).forward(request, response);
