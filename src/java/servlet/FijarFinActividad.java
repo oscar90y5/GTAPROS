@@ -6,12 +6,14 @@
 package servlet;
 
 import dominio.Actividad;
+import dominio.Proyecto;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -21,13 +23,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import persistencia.ActividadFacadeLocal;
+import persistencia.ProyectoFacadeLocal;
 
 /**
  *
  * @author claramorrondo
  */
 @WebServlet(name = "FijarFinProyecto", urlPatterns = {"/FijarFinProyecto"})
-public class FijarFinProyecto extends HttpServlet {
+public class FijarFinActividad extends HttpServlet {
+
+    @EJB
+    private ProyectoFacadeLocal proyectoFacade;
 
     @EJB
     private ActividadFacadeLocal actividadFacade;
@@ -51,7 +57,28 @@ public class FijarFinProyecto extends HttpServlet {
           a.setFechaFin(fechaFin);
           a.setEstado("Cerrado");
           actividadFacade.edit(a);
+          List <Actividad> sucesoras = a.getActividadList1();
+          //Ponemos como fecha de inicio de todas las sucesoras la fecha fin de la actividad
+          for(Actividad actividad : sucesoras){
+              actividad.setFechaInicio(fechaFin);
+          }
+          int idProyecto = a.getIdProyecto().getId();
+          Proyecto p = proyectoFacade.findById(id);
+          List <Actividad> actividadesProyecto = p.getActividadList();
+          int count = 0;
+          //Recogemos todas las actividades del proyecto y vemos si todas están cerradas
+          for (Actividad ac : actividadesProyecto){
+              if(ac.getEstado().equals("Cerrado")) count++;
+          }
+          //Si todas las actividades están cerradas, cerramos el proyecto
+          if(count == actividadesProyecto.size()){
+              p.setFechaFin(fechaFin);
+              p.setEstado("Cerrado");
+              proyectoFacade.edit(p);
+          }
           response.sendRedirect("exito.jsp"); 
+          
+          
         }
     }
 
