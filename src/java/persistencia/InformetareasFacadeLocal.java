@@ -29,5 +29,6 @@ public interface InformetareasFacadeLocal {
     List<Informetareas> findRange(int[] range);
 
     int count();
-    
+
+    List<Informetareas> findByIdActividad(Object idActividad);
 }

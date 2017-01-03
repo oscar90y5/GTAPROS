@@ -30,4 +30,6 @@ public interface TareaFacadeLocal {
 
     int count();
     
+    List<Tarea> findByIdActividad(Object idActividad);
+    
 }

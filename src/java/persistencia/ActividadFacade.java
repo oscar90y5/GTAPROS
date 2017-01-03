@@ -40,4 +40,9 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         return em.createNamedQuery("Actividad.findByIdProyectoAndDni").setParameter("idProyecto", idProyecto).setParameter("dni", dni).getResultList();
     }
 
+    @Override
+    public Actividad findById(Object id) {
+        return (Actividad) em.createNamedQuery("Actividad.findById").setParameter("id", id).getSingleResult();
+    }
+
 }

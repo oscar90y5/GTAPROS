@@ -11,6 +11,7 @@ import dominio.Proyecto;
 import dominio.Tarea;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import persistencia.ActividadFacadeLocal;
 import persistencia.InformetareasFacadeLocal;
 
 /**
@@ -26,6 +28,9 @@ import persistencia.InformetareasFacadeLocal;
  */
 @WebServlet(name = "ConsultarTareas", urlPatterns = {"/ConsultarTareas"})
 public class ConsultarTareas extends HttpServlet {
+
+    @EJB
+    private ActividadFacadeLocal actividadFacade;
 
     @EJB
     private InformetareasFacadeLocal informetareasFacade;
@@ -42,18 +47,18 @@ public class ConsultarTareas extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-         HttpSession sesion = request.getSession();
+        HttpSession sesion = request.getSession();
         String accion = (String) request.getParameter("accion");
         int idProject = (Integer) sesion.getAttribute("idProject");
         System.out.println(accion + " " + idProject);
         //Proyecto proyect = proyectoFacade.find(idProject);
 
-        String id = request.getParameter("idActividad");
-        System.out.println("idActivitidad " + id);
-
-        Informetareas inf;
-        Tarea t;
-        Actividad a;
+        Integer idActividad = Integer.parseInt(request.getParameter("idActividad"));
+        System.out.println("idActivitidad -" + idActividad + "-");
+        Actividad actividad = actividadFacade.find(idActividad);
+        System.out.println("actividad string " + actividad);
+        List<Informetareas> informes = informetareasFacade.findByIdActividad(actividad);
+        System.out.println("es null? " + informes);
 
     }
 
