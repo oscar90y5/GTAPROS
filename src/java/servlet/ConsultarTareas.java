@@ -39,10 +39,12 @@ public class ConsultarTareas extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         System.out.println("hola");
-        
+
+        String id = request.getParameter("idActividad");
+        System.out.println("idActivitidad " + id);
+
         Informetareas inf;
-        
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
