@@ -11,6 +11,7 @@ import dominio.Proyecto;
 import dominio.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -60,6 +61,7 @@ public class Desarrollador extends HttpServlet {
         Proyecto proyecto = proyectoFacade.find(idProject);
         String dni = (String) sesion.getAttribute("idUser");
         Usuario user = usuarioFacade.find(dni);
+        Miembro miembroActual = miembroFacade.findByIdProyectoAndDni(proyecto, user);
         //Proyecto proyect = proyectoFacade.find(idProject);
         System.out.println("Desarrollador: dni " + dni + " idProject " + idProject);
         String accion = request.getParameter("accion");
@@ -74,7 +76,7 @@ public class Desarrollador extends HttpServlet {
                 //si el for es de la forma: (Actividad a : actividades) falla al borrar elementos.
                 for (int i = 0; i < actividades.size(); i++) {
                     a = actividades.get(i);
-                    if (!a.getMiembroList().contains(miembroFacade.findByIdProyectoAndDni(proyecto, user))) {
+                    if (!a.getMiembroList().contains(miembroActual)) {
                         System.out.println("borramos");
                         actividades.remove(a);
                         i--;
@@ -98,8 +100,12 @@ public class Desarrollador extends HttpServlet {
                 // out.print("Modificar datos de tareas en desarrollo....");
             }
             if (accion.equals("Consultar datos de tareas")) {
-                List<Actividad> actividades = actividadFacade.findByIdProyectoAndDni(proyecto, user);
-                System.out.println(actividades);
+                List<Actividad> actividades = new ArrayList<>();
+                for (Actividad a : miembroActual.getActividadList()) {
+                    if (a.getIdProyecto().getId().equals(idProject)) {
+                        actividades.add(a);
+                    }
+                }
                 System.out.println(actividades.size());
                 request.setAttribute("actividades", actividades);
                 request.setAttribute("destino", "ConsultarTareas");

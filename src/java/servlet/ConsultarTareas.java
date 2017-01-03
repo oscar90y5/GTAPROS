@@ -8,11 +8,8 @@ package servlet;
 import dominio.Actividad;
 import dominio.Informetareas;
 import dominio.Miembro;
-import dominio.Proyecto;
 import dominio.Tarea;
-import dominio.Usuario;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -61,41 +58,27 @@ public class ConsultarTareas extends HttpServlet {
         HttpSession sesion = request.getSession();
         String dni = (String) sesion.getAttribute("idUser");
         int idProject = (Integer) sesion.getAttribute("idProject");
-        System.out.println(" " + idProject);
-
         Integer idActividad = Integer.parseInt(request.getParameter("idActividad"));
-        System.out.println("idActivitidad -" + idActividad + "-");
         Actividad actividad = actividadFacade.find(idActividad);
+        System.out.println("idProyecto -" + idProject + "- idActividad -" + idActividad + "- dni -" + dni + "-");
         System.out.println("actividad string " + actividad);
-//        List<Informetareas> informes = informetareasFacade.findByIdActividad(idActividad);
-        System.out.println("dni -" + dni + "- idProject -" + idProject + "-");
         Miembro miembro = miembroFacade.findByDniAndIdProyecto(dni, idProject);
         System.out.println("miembro " + miembro);
-//        System.out.println("es null? " + informes);
-        List<Tarea> tareas = tareaFacade.findByIdActividadAndMiembro(idActividad, miembro.getIdMiembro());
-        System.out.println("tareas " + tareas.size());
-        List<Informetareas> informes = new ArrayList<>();
-        for (Tarea t : tareas) {
-            if (!informes.contains(t.getIdInforme())) {
-                informes.add(t.getIdInforme());
+
+        List<Tarea> tareas = new ArrayList<Tarea>();
+        for (Tarea t : tareaFacade.findAll()) {
+            //Mostrar tarea
+            if (t.getActividad().getId().equals(idActividad)
+                    && t.getMiembro().getIdMiembro().equals(miembro.getIdMiembro())) {
+                tareas.add(t);
+                System.out.println("tarea " + t.getTareaPK().getTipo() + " = "
+                        + t.getEsfuerzoReal() + " idInforme=" + t.getIdInforme().getId() + " idActividad="
+                        + t.getTareaPK().getIdActividad() + " idMiembro=" + t.getTareaPK().getIdMiembro());
             }
         }
         request.setAttribute("tareas", tareas);
-        System.out.println("Se meten tareas " + tareas);
         String rd = "tareas.jsp";
-        response.sendRedirect(rd);
-
-        for (Informetareas i : informes) {
-            //mostrar informe
-            System.out.println("informe " + i.getId());
-            for (Tarea t : tareas) {
-                if (t.getIdInforme().getId().equals(i.getId())) {
-                    //Mostrar tarea
-                    System.out.println("tarea " + t.getTareaPK().getTipo() + "" + t.getEsfuerzoReal() + " " + t.getIdInforme() + " " + t.getActividad().getId() + " " + t.getMiembro().getIdMiembro());
-                }
-            }
-        }
-
+        request.getRequestDispatcher(rd).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Tarea.findByEsfuerzoReal", query = "SELECT t FROM Tarea t WHERE t.esfuerzoReal = :esfuerzoReal")
     , @NamedQuery(name = "Tarea.findByTipo", query = "SELECT t FROM Tarea t WHERE t.tareaPK.tipo = :tipo")
     , @NamedQuery(name = "Tarea.findByIdMiembro", query = "SELECT t FROM Tarea t WHERE t.tareaPK.idMiembro = :idMiembro")
-    , @NamedQuery(name = "Tarea.findByIdActividadAndMiembro", query = "SELECT t FROM Tarea t WHERE t.tareaPK.idActividad = :idActividad AND t.tareaPK.idMiembro= :idMiembro")})
+    , @NamedQuery(name = "Tarea.findByIdActividadAndMiembro", query = "SELECT t FROM Tarea t WHERE t.actividad.id = :idActividad AND t.miembro.idMiembro = :idMiembro")})
 
 public class Tarea implements Serializable {
 
@@ -124,5 +124,5 @@ public class Tarea implements Serializable {
     public String toString() {
         return "dominio.Tarea[ tareaPK=" + tareaPK + " ]";
     }
-    
+
 }

@@ -78,3 +78,10 @@ form[role=login] > div {
     margin-right: 10px; 
     margin-left: 10px; 
 }
+
+.table-rol {
+    border-radius: 5px;
+    width: 50%;
+    margin: 0px auto;
+    float: none;
+}

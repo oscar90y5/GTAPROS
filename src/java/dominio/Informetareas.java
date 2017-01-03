@@ -6,6 +6,7 @@
 package dominio;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -72,6 +73,14 @@ public class Informetareas implements Serializable {
     public Date getFechaEnvio() {
         return fechaEnvio;
     }
+    
+    public String getFechaEnvioPrettyPrinter() {
+         if (fechaEnvio != null) {
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            return df.format(fechaEnvio);
+        }
+        return " - ";
+    }
 
     public void setFechaEnvio(Date fechaEnvio) {
         this.fechaEnvio = fechaEnvio;
@@ -87,6 +96,14 @@ public class Informetareas implements Serializable {
 
     public Date getSemana() {
         return semana;
+    }
+    
+     public String getSemanaEnvioPrettyPrinter() {
+         if (semana != null) {
+            SimpleDateFormat df = new SimpleDateFormat("'Semana' W '('dd/MM/yyyy')'");
+            return df.format(semana);
+        }
+        return "";
     }
 
     public void setSemana(Date semana) {

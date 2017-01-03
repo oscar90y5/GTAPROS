@@ -21,9 +21,13 @@
             <div class="caja_principal">
                 <%
                     List<Tarea> tareas = (List<Tarea>) request.getAttribute("tareas");
-                    if (tareas == null) {%>
-                No existen tareas en este proyecto.
+                    if (tareas == null || tareas.size() == 0) {%>
+                No existen tareas de la actividad seleccionada.
                 <%} else {
+
+                %>
+                <h3>Tareas de la actividad id = <%=tareas.get(0).getActividad().getId()%></h3>
+                <%
                     List<Informetareas> lista = new ArrayList<Informetareas>();
                     for (Tarea t : tareas) {
                         if (!lista.contains(t.getIdInforme())) {
@@ -33,23 +37,44 @@
 
                     for (Informetareas i : lista) {
                         //Mostrar info informe
+                %>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Tareas del informe  id = <%=i.getId()%>
+                            <div class="right" style="text-align: right"><%=i.getSemanaEnvioPrettyPrinter()%></div></h3>
+                    </div>
+                    <div class="panel-body">                           
+                        <table class="table table-rol">
+                            <tr style="align-content: center" class="text-center">
+                                <td><b>Tipo de tarea personal</b></td>
+                                <td><b>Duracion (Horas Hombre)</b></td>
+                            </tr>
+                            <%
+                                for (Tarea t : tareas) {
+                                    if (i.getId().equals(t.getIdInforme().getId())) {
+                                        //Mostrar tareas                             
 %>
-                <h3><i>Informe id=<%=i.getId()%> Semana: <%=i.getSemana()%></i></h3>
-                Estado: <%=i.getEstado()%>  Fecha de envio: <%=i.getFechaEnvio()%> 
-                <%
-                    for (Tarea t : tareas) {
-                        if (i.getId().equals(t.getIdInforme().getId())) {
-                            //Mostrar tareas                             
-%>
-                <div>
-                    <p><%=t.getTareaPK().getTipo()%></p>
-                    <p><%=t.getEsfuerzoReal()%></p>
+                            <tr>
+                                <td><%=t.getTareaPK().getTipo()%></td>
+                                <td class="text-center"><%=t.getEsfuerzoReal()%></td>
+                            </tr>
+                            <%          }
+                                }
+                            %>
+                        </table>
+                    </div>
+                    <div class="panel-footer">
+                        Estado: <%=i.getEstado()%>   <BR/>
+                        Fecha de envio: <%=i.getFechaEnvioPrettyPrinter()%>
+                    </div>
                 </div>
-                <%          }
-                            }
+                <%
                         }
                     }
                 %>
+                <form role="form" action="VolverMenu" method="POST">
+                    <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Volver</button>
+                </form>
             </div>
         </div>
     </body>
