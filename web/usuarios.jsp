@@ -52,7 +52,7 @@
                 %>
                 <tr>
                     <td><input type="checkbox" name="dni" value="<%= u.getDni()%>"></td>
-                    <td><input type="number" name="participacion" min="1" max=<%=100 - porcents.get(i)%> </td>
+                    <td><input type="number" name="participacion" min="1" max=<%=100 - porcents.get(i)%>/></td>
                     <td><%=u.getDni()%></td>
                     <td><%=u.getNombreCompleto()%></td>
                     <td><select name="tipoCategoria">

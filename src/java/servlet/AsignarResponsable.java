@@ -69,6 +69,8 @@ public class AsignarResponsable extends HttpServlet {
             }
             
             String nombreJefe = (String) request.getParameter("usuariosDisponibles");
+            String stringp = (String) request.getParameter("participacion");
+            int participacion = Integer.valueOf(stringp);
             Usuario u = usuarioFacade.findByNombreCompleto(nombreJefe);
             Proyecto p = proyectoFacade.find(idProyecto);
             Miembro m = new Miembro();
@@ -76,6 +78,7 @@ public class AsignarResponsable extends HttpServlet {
             m.setDni(u);
             m.setIdProyecto(p);
             m.setIdRol(rolFacade.findByNombreRolAndIdProyecto("JefeProyecto", p));
+            m.setParticipacion(participacion);
             miembroFacade.create(m);
             rd = "exito.jsp";
 

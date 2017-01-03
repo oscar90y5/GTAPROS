@@ -53,13 +53,18 @@ public class FijarVacaciones extends HttpServlet {
             throws ServletException, IOException, ParseException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
+        String idUser = (String) sesion.getAttribute("idUser");
+        Usuario user = usuarioFacade.find("idUser");
         String accion = (String) request.getParameter("accion");
         String rd = "exito.jsp";
         
-        if(accion.equals("Cancelar"))
+        if(accion.equals("Cancelar")){
+            //TO DO ALL
+            rd = "desarrollador.jsp";
+            rd = "administrador.jsp";
             rd = "jefeProyecto.jsp";
         
-        if(accion.equals("Aceptar")){
+        }if(accion.equals("Aceptar")){
             String fecha1 = (String) request.getParameter("fecha1");
             String fecha2 = (String) request.getParameter("fecha2");  
             Date fechaInicio = obtenerFecha(fecha1);
@@ -67,8 +72,6 @@ public class FijarVacaciones extends HttpServlet {
             Date fechaActual = new Date();
             long diferencia = fechaFinal.getTime() - fechaInicio.getTime();
             long dias = diferencia / (1000 * 60 * 60 * 24);
-            String idUser = (String) sesion.getAttribute("idUser");
-            Usuario user = usuarioFacade.find("idUser");
             List<Vacaciones> vacaciones = vacacionesFacade.findByUser(idUser);
             int diasFijados =0;
 

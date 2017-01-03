@@ -26,7 +26,6 @@
             <div class="caja_principal">
                 <h2>Relacion Trabajadores/Actividades por periodo semanal: </h2>
                 <% 
-                ObjectMapper mapper = new ObjectMapper();
                 String error = null;
                 try{
                     error = (String) request.getParameter("error");
