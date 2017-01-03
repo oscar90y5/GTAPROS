@@ -5,7 +5,10 @@
  */
 package servlet;
 
+import dominio.Actividad;
 import dominio.Informetareas;
+import dominio.Proyecto;
+import dominio.Tarea;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.ejb.EJB;
@@ -14,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import persistencia.InformetareasFacadeLocal;
 
 /**
@@ -38,12 +42,18 @@ public class ConsultarTareas extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        System.out.println("hola");
+         HttpSession sesion = request.getSession();
+        String accion = (String) request.getParameter("accion");
+        int idProject = (Integer) sesion.getAttribute("idProject");
+        System.out.println(accion + " " + idProject);
+        //Proyecto proyect = proyectoFacade.find(idProject);
 
         String id = request.getParameter("idActividad");
         System.out.println("idActivitidad " + id);
 
         Informetareas inf;
+        Tarea t;
+        Actividad a;
 
     }
 
