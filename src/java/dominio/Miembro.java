@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Miembro.findByIdMiembro", query = "SELECT m FROM Miembro m WHERE m.idMiembro = :idMiembro")
     , @NamedQuery(name = "Miembro.findByParticipacion", query = "SELECT m FROM Miembro m WHERE m.participacion = :participacion")
     , @NamedQuery(name = "Miembro.findByIdProyectoAndDni", query = "SELECT m FROM Miembro m WHERE m.idProyecto = :idProyecto AND m.dni = :dni")})
-@JsonIgnoreProperties(value={"actividadList"})
+@JsonIgnoreProperties(value={"actividadList","tareaList"})
 public class Miembro implements Serializable {
 
     private static final long serialVersionUID = 1L;

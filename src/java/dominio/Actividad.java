@@ -50,7 +50,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Actividad.findByDescripcion", query = "SELECT a FROM Actividad a WHERE a.descripcion = :descripcion")
     , @NamedQuery(name = "Actividad.findByIdProyectoAndDni", query = "SELECT a FROM Actividad a, Miembro m WHERE a.idProyecto = :idProyecto AND a.idProyecto = m.idProyecto AND m.dni = :dni")
     , @NamedQuery(name = "Actividad.findActiveActivities", query = "SELECT a FROM Actividad a WHERE a.idProyecto = :idProyecto AND a.estado = 'Abierto'")})
-@JsonIgnoreProperties(value = {"actividadList", "actividadList1"})
+@JsonIgnoreProperties(value = {"actividadList", "actividadList1","miembroList","tareaList"})
 public class Actividad implements Serializable {
 
     private static final long serialVersionUID = 1L;

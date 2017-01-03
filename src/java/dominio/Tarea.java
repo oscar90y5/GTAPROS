@@ -6,6 +6,7 @@
 package dominio;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -41,7 +42,7 @@ public class Tarea implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Actividad actividad;
     @JoinColumn(name = "idInforme", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Informetareas idInforme;
     @JoinColumn(name = "idMiembro", referencedColumnName = "idMiembro", insertable = false, updatable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)

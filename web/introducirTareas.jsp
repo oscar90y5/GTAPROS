@@ -7,35 +7,44 @@
         <title>GTAPROS</title>
         <%@include file="WEB-INF/jspf/includes.jspf" %>
         <% String actividad = request.getParameter("idActividad");
-        request.setAttribute("idActividad", actividad);%>
+        pageContext.setAttribute("idActividad", actividad, PageContext.APPLICATION_SCOPE);
+        %>
     </head>
     <body>
         <div class="container">
             <div class="caja_principal">
                 <h2> Introducir tareas de actividad <%=actividad %> :</h2>
                 <div class="caja_small">
-                    <form role="form" action="IntroducirTareas" method="post">
+                    <form role="form" action='IntroducirTareas' method="post">
                         <div class="form">
-                            <label for="tratoUsuarios">Trato con usuarios:</label>
-                            <input type="number" min="0" name="tratoUsuarios" placeholder="Tiempo dedicado (h/hombre)" />
-                   
-                            <label for="reuniones">Reuniones internas y externas:</label>
-                            <input type="number" min="0" name="reuniones" placeholder="Tiempo dedicado (h/hombre)" />
-                    
-                            <label for="leerRevisarDocumentacion">Lectura y revision de documentacion:</label>
-                            <input type="number" min="0" name="leerRevisarDocumentacion" placeholder="Tiempo dedicado (h/hombre)" />
-                    
-                            <label for="elaboracionDocumentacion">Elaboracion de documentacion</label>
-                            <input type="number" min="0" name="elaborDocumentacion" placeholder="Tiempo dedicado (h/hombre)" />
-                    
-                            <label for="programar">Desarrollo y verificacion de programas:</label>
-                            <input type="number" min="0" name="programar" placeholder="Tiempo dedicado (h/hombre)" />
-                    
-                            <label for="formar">Formacion de usuarios y otros:</label>
-                            <input type="number" min="0" name="formar" placeholder="Tiempo dedicado (h/hombre)" />
-                            
-                            <label for="semana">Semana:</label>
-                            <input type="week" name="semana" placeholder="Numero de semana" />
+                            <p>
+                                <label for="tratoUsuarios">Trato con usuarios:</label>
+                                <input type="number" min="0" name="tratoUsuarios" placeholder="Tiempo dedicado (h/hombre)" />
+                            </p>
+                            <p>
+                                <label for="reuniones">Reuniones internas y externas:</label>
+                                <input type="number" min="0" name="reuniones" placeholder="Tiempo dedicado (h/hombre)" />
+                            </p>
+                            <p>
+                                <label for="leerRevisarDocumentacion">Lectura y revision de documentacion:</label>
+                                <input type="number" min="0" name="leerRevisarDocumentacion" placeholder="Tiempo dedicado (h/hombre)" />
+                            </p>
+                            <p>
+                                <label for="elaboracionDocumentacion">Elaboracion de documentacion</label>
+                                <input type="number" min="0" name="elaborDocumentacion" placeholder="Tiempo dedicado (h/hombre)" />
+                            </p>
+                            <p>
+                                <label for="programar">Desarrollo y verificacion de programas:</label>
+                                <input type="number" min="0" name="programar" placeholder="Tiempo dedicado (h/hombre)" />
+                            </p>
+                            <p>
+                                <label for="formar">Formacion de usuarios y otros:</label>
+                                <input type="number" min="0" name="formar" placeholder="Tiempo dedicado (h/hombre)" />
+                            </p>
+                            <p>
+                                <label for="semana">Semana:</label>
+                                <input type="week" name="semana" placeholder="Numero de semana" />
+                            </p>
                         </div>
                         </div>
                         <div class="box-footer text-right" style="margin-top: 10px">

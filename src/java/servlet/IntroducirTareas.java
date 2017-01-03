@@ -80,6 +80,8 @@ public class IntroducirTareas extends HttpServlet {
         String rd = "desarrollador.jsp";
         
         if(accion.equals("Cancelar")){
+                        System.out.println("Accion cancelar");
+
                    //Obtenemos la lista de actividades activas pertenecientes al proyecto y al usuario
                     List<Actividad> actividades = actividadFacade.findActiveActivities(proyecto);
                     List<Miembro> miembros;
@@ -103,49 +105,72 @@ public class IntroducirTareas extends HttpServlet {
         }
         
         if(accion.equals("Aceptar")){
+            System.out.println("acion Aceptar");
             //AÑADIR ID AL INFORME
             Informetareas informe = new Informetareas();
+            informe.setSemana(Date.valueOf(request.getParameter("semana")));
+            System.out.println("setSemana");
+
+            informe.setFechaEnvio(Date.from(Instant.now()));
+            System.out.println("set fecha envio");
+
+            informe.setEstado("PendienteAprobacion");
+            System.out.println("set estado");
+            
+
             Integer idMiembro = miembroFacade.findByIdProyectoAndDni(proyecto, user).getIdMiembro();
-            Integer idActividad = Integer.getInteger(request.getParameter("idActividad"));
+            Integer idActividad = Integer.valueOf((String) request.getServletContext().getAttribute("idActividad"));
             Tarea nuevaTarea;
-            
+                        System.out.println("1");
+                        System.out.println("miembro: "+idMiembro);
+                        System.out.println("actividad: "+idActividad);
+
+
             nuevaTarea = new Tarea("TratoConUsuarios",idMiembro, idActividad);
+                        System.out.println("1.1");
+
             nuevaTarea.setIdInforme(informe);
-            nuevaTarea.setEsfuerzoReal(Integer.getInteger(request.getParameter("tratoUsuarios")));
+                        System.out.println("1.2");
+
+            nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("tratoUsuarios")));
+                        System.out.println("1.3");
+
             tareaFacade.create(nuevaTarea);
-            
+                        System.out.println("2");
+
             nuevaTarea = new Tarea("ReunionesInternasExternas",idMiembro,idActividad);
             nuevaTarea.setIdInforme(informe);
-            nuevaTarea.setEsfuerzoReal(Integer.getInteger(request.getParameter("reuniones")));
+            nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("reuniones")));
             tareaFacade.create(nuevaTarea);
-            
+                        System.out.println("3");
+
             nuevaTarea = new Tarea("LecturaRevisionDocumentacion",idMiembro,idActividad);
             nuevaTarea.setIdInforme(informe);
-            nuevaTarea.setEsfuerzoReal(Integer.getInteger(request.getParameter("leerRevisarDocumentacion")));
+            nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("leerRevisarDocumentacion")));
             tareaFacade.create(nuevaTarea);
-            
+                        System.out.println("4");
+
             nuevaTarea = new Tarea("ElaboracionDocumentacion",idMiembro,idActividad);
             nuevaTarea.setIdInforme(informe);
-            nuevaTarea.setEsfuerzoReal(Integer.getInteger(request.getParameter("elaborDocumentacion")));
+            nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("elaborDocumentacion")));
             tareaFacade.create(nuevaTarea);
-            
+                        System.out.println("5");
+
             nuevaTarea = new Tarea("DesarrolloVerificacionProgramas",idMiembro,idActividad);
             nuevaTarea.setIdInforme(informe);
-            nuevaTarea.setEsfuerzoReal(Integer.getInteger(request.getParameter("programar")));
+            nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("programar")));
             tareaFacade.create(nuevaTarea);
-            
+                        System.out.println("6");
+
             nuevaTarea = new Tarea("FormacionUsuariosYOtros",idMiembro,idActividad);
             nuevaTarea.setIdInforme(informe);
-            nuevaTarea.setEsfuerzoReal(Integer.getInteger(request.getParameter("formar")));
+            nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("formar")));
             tareaFacade.create(nuevaTarea);
-            
-            informe.setSemana(Date.valueOf(request.getParameter("semana")));
-            
-            informe.setFechaEnvio(Date.from(Instant.now()));
-            
-            informe.setEstado("PendienteAprobacion");
-                        
+                        System.out.println("7");
+
+
             informetareasFacade.create(informe);
+
             
             request.setAttribute("informe", informe);
             
