@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Informetareas.findByFechaEnvio", query = "SELECT i FROM Informetareas i WHERE i.fechaEnvio = :fechaEnvio")
     , @NamedQuery(name = "Informetareas.findByEstado", query = "SELECT i FROM Informetareas i WHERE i.estado = :estado")
     , @NamedQuery(name = "Informetareas.findBySemana", query = "SELECT i FROM Informetareas i WHERE i.semana = :semana")
-    , @NamedQuery(name = "Informetareas.findByIdActividad", query = "SELECT i FROM Informetareas i, Tarea t WHERE i.id = t.idInforme AND t.tareaPK.idActividad = :idActividad")})
+    , @NamedQuery(name = "Informetareas.findByIdActividad", query = "SELECT i FROM Informetareas i, Tarea t WHERE i.id = t.idInforme AND t.actividad.id = :idActividad")})
 
 public class Informetareas implements Serializable {
 

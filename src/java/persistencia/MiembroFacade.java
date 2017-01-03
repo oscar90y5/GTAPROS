@@ -34,10 +34,16 @@ public class MiembroFacade extends AbstractFacade<Miembro> implements MiembroFac
     public List<Miembro> findByDni(Object dni) {
         return em.createNamedQuery("Miembro.findByDni").setParameter("dni", dni).getResultList();
     }
-    
-     @Override
-    public List<Miembro> findByIdProyecto(Object proyecto){
+
+    @Override
+    public List<Miembro> findByIdProyecto(Object proyecto) {
         return em.createNamedQuery("Miembro.findByIdProyecto").setParameter("idProyecto", proyecto).getResultList();
+    }
+
+    @Override
+    public Miembro findByDniAndIdProyecto(Object dni, Object idProyecto) {
+        return (Miembro) em.createNamedQuery("Miembro.findByDniAndIdProyecto").
+                setParameter("dni", dni).setParameter("idProyecto", idProyecto).getSingleResult();
     }
 
 }

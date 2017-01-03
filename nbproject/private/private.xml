@@ -3,8 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/nbproject/build-impl.xml</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/src/java/dominio/Actividad.java</file>
+            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/src/java/dominio/Miembro.java</file>
+            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/src/java/servlet/ConsultarTareas.java</file>
+            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/MiembroFacade.java</file>
+            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/src/java/dominio/Tarea.java</file>
+            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/MiembroFacadeLocal.java</file>
         </group>
     </open-files>
 </project-private>

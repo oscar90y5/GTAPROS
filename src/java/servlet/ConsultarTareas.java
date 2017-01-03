@@ -7,10 +7,13 @@ package servlet;
 
 import dominio.Actividad;
 import dominio.Informetareas;
+import dominio.Miembro;
 import dominio.Proyecto;
 import dominio.Tarea;
+import dominio.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -21,6 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import persistencia.ActividadFacadeLocal;
 import persistencia.InformetareasFacadeLocal;
+import persistencia.MiembroFacadeLocal;
+import persistencia.TareaFacadeLocal;
 
 /**
  *
@@ -28,6 +33,12 @@ import persistencia.InformetareasFacadeLocal;
  */
 @WebServlet(name = "ConsultarTareas", urlPatterns = {"/ConsultarTareas"})
 public class ConsultarTareas extends HttpServlet {
+
+    @EJB
+    private MiembroFacadeLocal miembroFacade;
+
+    @EJB
+    private TareaFacadeLocal tareaFacade;
 
     @EJB
     private ActividadFacadeLocal actividadFacade;
@@ -48,17 +59,42 @@ public class ConsultarTareas extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
-        String accion = (String) request.getParameter("accion");
+        String dni = (String) sesion.getAttribute("idUser");
         int idProject = (Integer) sesion.getAttribute("idProject");
-        System.out.println(accion + " " + idProject);
-        //Proyecto proyect = proyectoFacade.find(idProject);
+        System.out.println(" " + idProject);
 
         Integer idActividad = Integer.parseInt(request.getParameter("idActividad"));
         System.out.println("idActivitidad -" + idActividad + "-");
         Actividad actividad = actividadFacade.find(idActividad);
         System.out.println("actividad string " + actividad);
-        List<Informetareas> informes = informetareasFacade.findByIdActividad(actividad);
-        System.out.println("es null? " + informes);
+//        List<Informetareas> informes = informetareasFacade.findByIdActividad(idActividad);
+        System.out.println("dni -" + dni + "- idProject -" + idProject + "-");
+        Miembro miembro = miembroFacade.findByDniAndIdProyecto(dni, idProject);
+        System.out.println("miembro " + miembro);
+//        System.out.println("es null? " + informes);
+        List<Tarea> tareas = tareaFacade.findByIdActividadAndMiembro(idActividad, miembro.getIdMiembro());
+        System.out.println("tareas " + tareas.size());
+        List<Informetareas> informes = new ArrayList<>();
+        for (Tarea t : tareas) {
+            if (!informes.contains(t.getIdInforme())) {
+                informes.add(t.getIdInforme());
+            }
+        }
+        request.setAttribute("tareas", tareas);
+        System.out.println("Se meten tareas " + tareas);
+        String rd = "tareas.jsp";
+        response.sendRedirect(rd);
+
+        for (Informetareas i : informes) {
+            //mostrar informe
+            System.out.println("informe " + i.getId());
+            for (Tarea t : tareas) {
+                if (t.getIdInforme().getId().equals(i.getId())) {
+                    //Mostrar tarea
+                    System.out.println("tarea " + t.getTareaPK().getTipo() + "" + t.getEsfuerzoReal() + " " + t.getIdInforme() + " " + t.getActividad().getId() + " " + t.getMiembro().getIdMiembro());
+                }
+            }
+        }
 
     }
 
