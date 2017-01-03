@@ -66,33 +66,32 @@ public class Desarrollador extends HttpServlet {
         String rd = "Desarrollador.jsp";
         if (accion != null) {
             if (accion.equals("Introducir tarea")) {
-                    //Obtenemos la lista de actividades activas pertenecientes al proyecto y al usuario
-                    List<Actividad> actividades = actividadFacade.findActiveActivities(proyecto);
-                    List<Miembro> miembros;
-                    Actividad a;
-                    System.out.println("actividades activas");
-                    //si el for es de la forma: (Actividad a : actividades) falla al borrar elementos.
-                    for(int i = 0; i<actividades.size();i++){
-                        a = actividades.get(i);
-                        if(!a.getMiembroList().contains(miembroFacade.findByIdProyectoAndDni(proyecto, user))){
-                            System.out.println("borramos");
-                            actividades.remove(a);
-                            i--;
-                            System.out.println("borrado");
-
-                        }
+                //Obtenemos la lista de actividades activas pertenecientes al proyecto y al usuario
+                List<Actividad> actividades = actividadFacade.findActiveActivities(proyecto);
+                List<Miembro> miembros;
+                Actividad a;
+                System.out.println("actividades activas");
+                //si el for es de la forma: (Actividad a : actividades) falla al borrar elementos.
+                for (int i = 0; i < actividades.size(); i++) {
+                    a = actividades.get(i);
+                    if (!a.getMiembroList().contains(miembroFacade.findByIdProyectoAndDni(proyecto, user))) {
+                        System.out.println("borramos");
+                        actividades.remove(a);
+                        i--;
+                        System.out.println("borrado");
                     }
-                    System.out.println("actividades: "+actividades.size());
+                }
+                System.out.println("actividades: " + actividades.size());
 
-                    if(actividades.size()==1){
-                        //redirigimos a introducir tareas con el id de la actividad
-                        response.sendRedirect("introducirTareas.jsp?idActividad="+actividades.get(0).getId());
-                    } else {
-                        request.setAttribute("actividades", actividades);
-                        request.setAttribute("destino", "introducirTareas.jsp");
-                        rd = "actividades.jsp";
-                    }                    
-                    System.out.println("salimos");
+                if (actividades.size() == 1) {
+                    //redirigimos a introducir tareas con el id de la actividad
+                    response.sendRedirect("introducirTareas.jsp?idActividad=" + actividades.get(0).getId());
+                } else {
+                    request.setAttribute("actividades", actividades);
+                    request.setAttribute("destino", "introducirTareas.jsp");
+                    rd = "actividades.jsp";
+                }
+                System.out.println("salimos");
 
             }
             if (accion.equals("Modificar tareas activas")) {
@@ -103,14 +102,18 @@ public class Desarrollador extends HttpServlet {
                 System.out.println(actividades);
                 System.out.println(actividades.size());
                 request.setAttribute("actividades", actividades);
-                request.setAttribute("destino", "consultarTareas.jsp");
+                request.setAttribute("destino", "ConsultarTareas");
                 rd = "actividades.jsp";
             }
             if (accion.equals("Obtener informes")) {
                 // out.print("Obtener informes en desarrollo....");
             }
-            if (accion.equals("Fijar vacaciones")) rd = "vacaciones.jsp";
-            if(accion.equals("Cerrar Sesion")) rd = "index.jsp";
+            if (accion.equals("Fijar vacaciones")) {
+                rd = "vacaciones.jsp";
+            }
+            if (accion.equals("Cerrar Sesion")) {
+                rd = "index.jsp";
+            }
 
         }
         request.getRequestDispatcher(rd).forward(request, response);

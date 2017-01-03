@@ -36,8 +36,6 @@
                     <%} else {
                         String destino = (String) request.getAttribute("destino");
                         for (Actividad a : actividades) {
-                            
-                    
                     %>
                     <tr style="cursor:pointer" 
                         onclick="document.location.href = '<%= destino%>?idActividad=<%=a.getId()%>'"
