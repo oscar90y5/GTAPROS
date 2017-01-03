@@ -24,6 +24,8 @@ public interface ActividadFacadeLocal {
 
     Actividad find(Object id);
     
+    Actividad findById(int id);
+    
     List<Actividad> findByIdProject(Object idProyecto);
 
     List<Actividad> findAll();
