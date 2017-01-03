@@ -3,8 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/nbproject/build-impl.xml</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/src/java/dominio/Actividad.java</file>
+            <file>file:/home/oscar/Documentos/Asignaturas/PGP/GTAPROS/src/java/servlet/FijarVacaciones.java</file>
+            <file>file:/home/oscar/Documentos/Asignaturas/PGP/GTAPROS/src/java/servlet/Desarrollador.java</file>
+            <file>file:/home/oscar/Documentos/Asignaturas/PGP/GTAPROS/web/actividades.jsp</file>
+            <file>file:/home/oscar/Documentos/Asignaturas/PGP/GTAPROS/src/java/servlet/IntroducirTareas.java</file>
         </group>
     </open-files>
 </project-private>

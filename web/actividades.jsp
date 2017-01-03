@@ -34,9 +34,13 @@
                         if (actividades == null) {%>
                     <tr>No existen actividades en este proyecto.</tr>
                     <%} else {
+                        String destino = (String) request.getAttribute("destino");
                         for (Actividad a : actividades) {
+                            
+                    
                     %>
-                    <tr style="cursor:pointer" onclick="document.location.href = 'ConsultarTareas?idActividad=<%=a.getId()%>'"
+                    <tr style="cursor:pointer" 
+                        onclick="document.location.href = '<%= destino%>?idActividad=<%=a.getId()%>'"
                         onmouseover="this.style.color = '#2B58CC';" onmouseout="this.style.color = '#4E4E4E';">
                         <td><%=a.getId()%></td>
                         <td><%=a.getNombre()%></td>

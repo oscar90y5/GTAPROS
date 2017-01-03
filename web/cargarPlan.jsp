@@ -37,10 +37,8 @@
                             <small id="fileHelp" class="form-text text-muted">El archivo debe ser un fichero de texto plano.</small>
 
                         </div>
-                        <div class="box-footer text-right" style="margin-top: 10px">
-                            <button type="submit" class="btn btn-primary" name="accion" value="Cargar">Aceptar</button>
-                            <button type="submit" class="btn btn-danger" name="accion" value="Cancelar">Cancelar</button>
-                        </div>
+                        <button type="submit" class="btn btn-primary" name="accion" value="Cargar">Aceptar</button>
+                        <button type="submit" class="btn btn-danger" name="accion" value="Cancelar">Cancelar</button>
                     </form>
                 </div>
             </div>
