@@ -7,23 +7,19 @@ package dominio;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -37,11 +33,14 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Informetareas.findById", query = "SELECT i FROM Informetareas i WHERE i.id = :id")
     , @NamedQuery(name = "Informetareas.findByFechaEnvio", query = "SELECT i FROM Informetareas i WHERE i.fechaEnvio = :fechaEnvio")
     , @NamedQuery(name = "Informetareas.findByEstado", query = "SELECT i FROM Informetareas i WHERE i.estado = :estado")
-    , @NamedQuery(name = "Informetareas.findBySemana", query = "SELECT i FROM Informetareas i WHERE i.semana = :semana")})
+    , @NamedQuery(name = "Informetareas.findBySemana", query = "SELECT i FROM Informetareas i WHERE i.semana = :semana")
+    , @NamedQuery(name = "Informetareas.findByIdActividad", query = "SELECT i FROM Informetareas i, Tarea t WHERE i.id = t.idInforme AND t.actividad.id = :idActividad")})
+
 public class Informetareas implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
@@ -54,8 +53,6 @@ public class Informetareas implements Serializable {
     @Column(name = "semana")
     @Temporal(TemporalType.DATE)
     private Date semana;
-    @OneToMany(mappedBy = "idInforme", fetch = FetchType.EAGER)
-    private List<Tarea> tareaList;
 
     public Informetareas() {
     }
@@ -96,15 +93,6 @@ public class Informetareas implements Serializable {
         this.semana = semana;
     }
 
-    @XmlTransient
-    public List<Tarea> getTareaList() {
-        return tareaList;
-    }
-
-    public void setTareaList(List<Tarea> tareaList) {
-        this.tareaList = tareaList;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -129,5 +117,5 @@ public class Informetareas implements Serializable {
     public String toString() {
         return "dominio.Informetareas[ id=" + id + " ]";
     }
-    
+
 }

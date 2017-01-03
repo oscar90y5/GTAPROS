@@ -6,6 +6,7 @@
 package persistencia;
 
 import dominio.Tarea;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,6 +28,11 @@ public class TareaFacade extends AbstractFacade<Tarea> implements TareaFacadeLoc
 
     public TareaFacade() {
         super(Tarea.class);
+    }
+
+    @Override
+    public List<Tarea> findByIdActividadAndMiembro(Object idActividad, Object idMiembro) {
+        return em.createNamedQuery("Tarea.findByIdActividadAndMiembro").setParameter("idActividad", idActividad).setParameter("idMiembro", idMiembro).getResultList();
     }
 
 }
