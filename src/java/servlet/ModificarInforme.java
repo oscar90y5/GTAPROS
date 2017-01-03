@@ -6,12 +6,9 @@
 package servlet;
 
 import dominio.Actividad;
-import dominio.Informetareas;
 import dominio.Miembro;
-import dominio.Tarea;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.PrintWriter;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,28 +17,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import persistencia.ActividadFacadeLocal;
-import persistencia.InformetareasFacadeLocal;
 import persistencia.MiembroFacadeLocal;
-import persistencia.TareaFacadeLocal;
 
 /**
  *
  * @author miki
  */
-@WebServlet(name = "ConsultarTareas", urlPatterns = {"/ConsultarTareas"})
-public class ConsultarTareas extends HttpServlet {
+@WebServlet(name = "ModificarInforme", urlPatterns = {"/ModificarInforme"})
+public class ModificarInforme extends HttpServlet {
 
     @EJB
     private MiembroFacadeLocal miembroFacade;
 
     @EJB
-    private TareaFacadeLocal tareaFacade;
-
-    @EJB
     private ActividadFacadeLocal actividadFacade;
-
-    @EJB
-    private InformetareasFacadeLocal informetareasFacade;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -55,40 +44,31 @@ public class ConsultarTareas extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        System.out.println("ModificarInforme");
         HttpSession sesion = request.getSession();
         String dni = (String) sesion.getAttribute("idUser");
         int idProject = (Integer) sesion.getAttribute("idProject");
-        Integer idActividad = Integer.parseInt(request.getParameter("idActividad"));
+        Integer idActividad = (Integer)sesion.getAttribute("idActividad");
+        sesion.removeAttribute("idActividad");
         Actividad actividad = actividadFacade.find(idActividad);
         System.out.println("idProyecto -" + idProject + "- idActividad -" + idActividad + "- dni -" + dni + "-");
         System.out.println("actividad string " + actividad);
         Miembro miembro = miembroFacade.findByDniAndIdProyecto(dni, idProject);
         System.out.println("miembro " + miembro);
 
-        System.out.println("ei");
-        for (Tarea t : actividad.getTareaList()) {
-            //Mostrar tarea
-            if (t.getMiembro().getIdMiembro().equals(miembro.getIdMiembro())) {
-                System.out.println("tarea " + t.getTareaPK().getTipo() + " = "
-                        + t.getEsfuerzoReal() + " idInforme=" + t.getIdInforme().getId() + " idActividad="
-                        + t.getTareaPK().getIdActividad() + " idMiembro=" + t.getTareaPK().getIdMiembro());
-            }
+        String combo = request.getParameter("informeCombo");
+        System.out.println(combo);
+        String rd = "";
+        if (combo == null || combo.equals("")) {
+            rd = "ModificarTarea?idActividad=" + idActividad;
+        } else {
+            int pos = combo.indexOf('-');
+            int idInforme = Integer.parseInt(combo.substring(4, pos).trim());
+            System.out.println(idInforme);
+            rd = "modificarInforme.jsp";
         }
-        System.out.println("ei");
-        List<Tarea> tareas = new ArrayList<Tarea>();
-        for (Tarea t : tareaFacade.findAll()) {
-            //Mostrar tarea
-            if (t.getActividad().getId().equals(idActividad)
-                    && t.getMiembro().getIdMiembro().equals(miembro.getIdMiembro())) {
-                tareas.add(t);
-                System.out.println("tarea " + t.getTareaPK().getTipo() + " = "
-                        + t.getEsfuerzoReal() + " idInforme=" + t.getIdInforme().getId() + " idActividad="
-                        + t.getTareaPK().getIdActividad() + " idMiembro=" + t.getTareaPK().getIdMiembro());
-            }
-        }
-        request.setAttribute("tareas", tareas);
-        String rd = "tareas.jsp";
         request.getRequestDispatcher(rd).forward(request, response);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

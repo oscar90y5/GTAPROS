@@ -98,6 +98,15 @@ public class Desarrollador extends HttpServlet {
             }
             if (accion.equals("Modificar tareas activas")) {
                 // out.print("Modificar datos de tareas en desarrollo....");
+                List<Actividad> actividades = new ArrayList<>();
+                for (Actividad a : miembroActual.getActividadList()) {
+                    if(!a.getEstado().equalsIgnoreCase("Cerrado")){
+                        actividades.add(a);
+                    }
+                }
+                request.setAttribute("actividades", actividades);
+                request.setAttribute("destino", "ModificarTarea");
+                rd = "actividades.jsp";
             }
             if (accion.equals("Consultar datos de tareas")) {
                 List<Actividad> actividades = new ArrayList<>();
