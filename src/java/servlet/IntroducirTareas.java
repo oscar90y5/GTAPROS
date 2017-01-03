@@ -6,11 +6,15 @@
 package servlet;
 
 import dominio.Actividad;
+import dominio.Informetareas;
 import dominio.Miembro;
 import dominio.Proyecto;
+import dominio.Tarea;
 import dominio.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
+import java.time.Instant;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -20,25 +24,33 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import persistencia.ActividadFacadeLocal;
+import persistencia.InformetareasFacadeLocal;
 import persistencia.MiembroFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
+import persistencia.TareaFacadeLocal;
 import persistencia.UsuarioFacadeLocal;
 
 /**
  *
  * @author oscar
  */
-@WebServlet(name = "Desarrollador", urlPatterns = {"/Desarrollador"})
-public class Desarrollador extends HttpServlet {
+@WebServlet(name = "IntroducirTareas", urlPatterns = {"/IntroducirTareas"})
+public class IntroducirTareas extends HttpServlet {
 
     @EJB
-    private MiembroFacadeLocal miembroFacade;
+    private TareaFacadeLocal tareaFacade;
+
+    @EJB
+    private InformetareasFacadeLocal informetareasFacade;
 
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
 
     @EJB
     private ProyectoFacadeLocal proyectoFacade;
+
+    @EJB
+    private MiembroFacadeLocal miembroFacade;
 
     @EJB
     private ActividadFacadeLocal actividadFacade;
@@ -55,35 +67,32 @@ public class Desarrollador extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        
         HttpSession sesion = request.getSession();
+        
         int idProject = (Integer) sesion.getAttribute("idProject");
         Proyecto proyecto = proyectoFacade.find(idProject);
+        
         String dni = (String) sesion.getAttribute("idUser");
         Usuario user = usuarioFacade.find(dni);
-        //Proyecto proyect = proyectoFacade.find(idProject);
-        System.out.println("Desarrollador: dni " + dni + " idProject " + idProject);
-        String accion = request.getParameter("accion");
-        String rd = "Desarrollador.jsp";
-        if (accion != null) {
-            if (accion.equals("Introducir tarea")) {
-                    //Obtenemos la lista de actividades activas pertenecientes al proyecto y al usuario
+        
+        String accion = (String) request.getParameter("accion");
+        String rd = "desarrollador.jsp";
+        
+        if(accion.equals("Cancelar")){
+
+                   //Obtenemos la lista de actividades activas pertenecientes al proyecto y al usuario
                     List<Actividad> actividades = actividadFacade.findActiveActivities(proyecto);
                     List<Miembro> miembros;
                     Actividad a;
-                    System.out.println("actividades activas");
                     //si el for es de la forma: (Actividad a : actividades) falla al borrar elementos.
                     for(int i = 0; i<actividades.size();i++){
                         a = actividades.get(i);
                         if(!a.getMiembroList().contains(miembroFacade.findByIdProyectoAndDni(proyecto, user))){
-                            System.out.println("borramos");
                             actividades.remove(a);
                             i--;
-                            System.out.println("borrado");
-
                         }
                     }
-                    System.out.println("actividades: "+actividades.size());
-
                     if(actividades.size()==1){
                         //redirigimos a introducir tareas con el id de la actividad
                         response.sendRedirect("introducirTareas.jsp?idActividad="+actividades.get(0).getId());
@@ -91,28 +100,57 @@ public class Desarrollador extends HttpServlet {
                         request.setAttribute("actividades", actividades);
                         request.setAttribute("destino", "introducirTareas.jsp");
                         rd = "actividades.jsp";
-                    }                    
-                    System.out.println("salimos");
-
-            }
-            if (accion.equals("Modificar tareas activas")) {
-                // out.print("Modificar datos de tareas en desarrollo....");
-            }
-            if (accion.equals("Consultar datos de tareas")) {
-                List<Actividad> actividades = actividadFacade.findByIdProyectoAndDni(proyecto, user);
-                System.out.println(actividades);
-                System.out.println(actividades.size());
-                request.setAttribute("actividades", actividades);
-                request.setAttribute("destino", "consultarTareas.jsp");
-                rd = "actividades.jsp";
-            }
-            if (accion.equals("Obtener informes")) {
-                // out.print("Obtener informes en desarrollo....");
-            }
-            if (accion.equals("Fijar vacaciones")) rd = "vacaciones.jsp";
-            if(accion.equals("Cerrar Sesion")) rd = "index.jsp";
-
+                    }                             
         }
+        
+        if(accion.equals("Aceptar")){
+            //AÑADIR ID AL INFORME
+            Informetareas informe = new Informetareas();
+            informe.setSemana(Date.valueOf(request.getParameter("semana")));
+            informe.setFechaEnvio(Date.from(Instant.now()));
+            informe.setEstado("PendienteAprobacion");
+            informetareasFacade.create(informe);
+
+            Integer idMiembro = miembroFacade.findByIdProyectoAndDni(proyecto, user).getIdMiembro();
+           
+            Integer idActividad = Integer.valueOf((String) request.getServletContext().getAttribute("idActividad"));
+            
+            Tarea nuevaTarea;
+
+            nuevaTarea = new Tarea("TratoConUsuarios",idMiembro, idActividad);
+            nuevaTarea.setIdInforme(informe);
+            nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("tratoUsuarios")));
+            tareaFacade.create(nuevaTarea);
+            
+            nuevaTarea = new Tarea("ReunionesInternasExternas",idMiembro,idActividad);
+            nuevaTarea.setIdInforme(informe);
+            nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("reuniones")));
+            tareaFacade.create(nuevaTarea);
+
+            nuevaTarea = new Tarea("LecturaRevisionDocumentacion",idMiembro,idActividad);
+            nuevaTarea.setIdInforme(informe);
+            nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("leerRevisarDocumentacion")));
+            tareaFacade.create(nuevaTarea);
+
+            nuevaTarea = new Tarea("ElaboracionDocumentacion",idMiembro,idActividad);
+            nuevaTarea.setIdInforme(informe);
+            nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("elaborDocumentacion")));
+            tareaFacade.create(nuevaTarea);
+
+            nuevaTarea = new Tarea("DesarrolloVerificacionProgramas",idMiembro,idActividad);
+            nuevaTarea.setIdInforme(informe);
+            nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("programar")));
+            tareaFacade.create(nuevaTarea);
+
+            nuevaTarea = new Tarea("FormacionUsuariosYOtros",idMiembro,idActividad);
+            nuevaTarea.setIdInforme(informe);
+            nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("formar")));
+            tareaFacade.create(nuevaTarea);
+
+            
+            request.setAttribute("informe", informe);
+        }
+        
         request.getRequestDispatcher(rd).forward(request, response);
     }
 

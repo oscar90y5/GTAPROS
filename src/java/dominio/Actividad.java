@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author miki
  */
 @Entity
-@Table(name = "actividad")
+@Table(name = "Actividad")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Actividad.findAll", query = "SELECT a FROM Actividad a")
@@ -48,8 +48,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Actividad.findByDuracion", query = "SELECT a FROM Actividad a WHERE a.duracion = :duracion")
     , @NamedQuery(name = "Actividad.findByEstado", query = "SELECT a FROM Actividad a WHERE a.estado = :estado")
     , @NamedQuery(name = "Actividad.findByDescripcion", query = "SELECT a FROM Actividad a WHERE a.descripcion = :descripcion")
-    , @NamedQuery(name = "Actividad.findByIdProyectoAndDni", query = "SELECT a FROM Actividad a, Miembro m WHERE a.idProyecto = :idProyecto AND a.idProyecto = m.idProyecto AND m.dni = :dni")})
-@JsonIgnoreProperties(value = {"actividadList", "actividadList1"})
+    , @NamedQuery(name = "Actividad.findByIdProyectoAndDni", query = "SELECT a FROM Actividad a, Miembro m WHERE a.idProyecto = :idProyecto AND a.idProyecto = m.idProyecto AND m.dni = :dni")
+    , @NamedQuery(name = "Actividad.findActiveActivities", query = "SELECT a FROM Actividad a WHERE a.idProyecto = :idProyecto AND a.estado = 'Abierto'")})
+@JsonIgnoreProperties(value = {"actividadList", "actividadList1","miembroList","tareaList"})
 public class Actividad implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -75,12 +76,12 @@ public class Actividad implements Serializable {
     @Size(max = 300)
     @Column(name = "descripcion")
     private String descripcion;
-    @JoinTable(name = "asignacionactividad", joinColumns = {
+    @JoinTable(name = "AsignacionActividad", joinColumns = {
         @JoinColumn(name = "idActividad", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idMiembro", referencedColumnName = "idMiembro")})
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Miembro> miembroList;
-    @JoinTable(name = "predecesora", joinColumns = {
+    @JoinTable(name = "Predecesora", joinColumns = {
         @JoinColumn(name = "idPredecedora", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idSucesora", referencedColumnName = "id")})
     @ManyToMany(fetch = FetchType.EAGER)
@@ -234,7 +235,7 @@ public class Actividad implements Serializable {
     public void setIdProyecto(Proyecto idProyecto) {
         this.idProyecto = idProyecto;
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 0;

@@ -31,6 +31,8 @@ public interface MiembroFacadeLocal {
     List<Miembro> findAll();
 
     List<Miembro> findRange(int[] range);
+    
+    Miembro findByIdProyectoAndDni(Object proyecto, Object dni);
 
     int count();
 }
