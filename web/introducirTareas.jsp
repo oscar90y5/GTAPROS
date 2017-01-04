@@ -46,7 +46,6 @@
                                 <input type="week" name="semana" placeholder="Numero de semana" />
                             </p>
                         </div>
-                        </div>
                         <div class="box-footer text-right" style="margin-top: 10px">
                             <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Aceptar</button>
                             <button type="submit" class="btn btn-danger" name="accion" value="Cancelar">Cancelar</button>

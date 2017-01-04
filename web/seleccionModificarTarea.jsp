@@ -23,6 +23,9 @@
                     List<Tarea> tareas = (List<Tarea>) request.getAttribute("tareas");
                     if (tareas == null || tareas.size() == 0) {%>
                 No existen tareas de la actividad seleccionada.
+                <form role="form" action="VolverMenu" method="POST">
+                    <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Volver</button>
+                </form>
                 <%} else {
 
                 %>
@@ -36,27 +39,35 @@
                     }
                 %>
                 <div class="caja_small">
-                    <form role="form" action="ModificarInforme" enctype="multipart/form-data" method="post">
+                    <%
+                        String error = null;
+                        if ((error = (String) request.getAttribute("error")) != null) {
+                             %><p style="color:red"><%=error%></p><%
+                        }
+                    %>
+                    <form role="form" action="CargarInformeModificar" method="post">
                         <label for="informeCombo">Selecciona un informe:</label>
                         <select class="form-control" 
                                 id="informeCombo" 
                                 name="informeCombo">
                             <option selected></option>
-                            <%
-                                for (Informetareas i : lista) {
+                            <%                                for (Informetareas i : lista) {
                             %>
                             <option>id = <%=i.getId()%> - <%=i.getSemanaEnvioPrettyPrinter()%></option>
                             <% } %>
                         </select>
-                        <input type="hidden" value="2" name="oculto" id="oculto"/>
-                        <BR>
-                        <button type="submit" class="btn btn-primary" name="accion" value="Cargar">Aceptar</button>
-                        <button type="submit" class="btn btn-danger" name="accion" value="Cancelar">Cancelar</button>
+                        <div class="box-footer text-right" style="margin-top: 10px">
+                            <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Aceptar</button>
+                            <button type="submit" class="btn btn-danger" name="accion" value="Cancelar">Cancelar</button>
+                        </div>
                     </form>
                 </div>
                 <%
                     }
                 %>
+                <form role="form" action="VolverMenu" method="POST">
+                    <button type="submit" class="btn btn-primary" name="accion" value="Volver">Volver</button>
+                </form>
             </div>
         </div>
     </body>

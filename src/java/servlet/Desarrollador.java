@@ -8,6 +8,7 @@ package servlet;
 import dominio.Actividad;
 import dominio.Miembro;
 import dominio.Proyecto;
+import dominio.Tarea;
 import dominio.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -97,13 +98,15 @@ public class Desarrollador extends HttpServlet {
 
             }
             if (accion.equals("Modificar tareas activas")) {
-                // out.print("Modificar datos de tareas en desarrollo....");
                 List<Actividad> actividades = new ArrayList<>();
                 for (Actividad a : miembroActual.getActividadList()) {
-                    if(!a.getEstado().equalsIgnoreCase("Cerrado")){
-                        actividades.add(a);
+                    if (a.getEstado().equalsIgnoreCase("Abierto")) {
+                        if (hayInformesRechazadosOPendientesEnvio(a)) {
+                            actividades.add(a);
+                        }
                     }
                 }
+                System.out.println("actividades " + actividades.size());
                 request.setAttribute("actividades", actividades);
                 request.setAttribute("destino", "ModificarTarea");
                 rd = "actividades.jsp";
@@ -172,5 +175,16 @@ public class Desarrollador extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private boolean hayInformesRechazadosOPendientesEnvio(Actividad a) {
+        boolean devolver = false;
+        for (Tarea t : a.getTareaList()) {
+            if (t.getIdInforme().getEstado().equalsIgnoreCase("PendienteEnvio")
+                    || t.getIdInforme().getEstado().equalsIgnoreCase("Rechazado")) {
+                devolver = true;
+            }
+        }
+        return devolver;
+    }
 
 }
