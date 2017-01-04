@@ -61,7 +61,7 @@ public class JefeProyecto extends HttpServlet {
         String accion = request.getParameter("accion");
         List<Proyecto> proyects = null;
         List<Usuario> users = null;
-        Proyecto proyect = proyectoFacade.find(idProject);
+        Proyecto proyect = proyectoFacade.findById(idProject);
         List<Actividad> activities = proyect.getActividadList();
         String rd = "jefeProyecto.jsp";
 
@@ -83,12 +83,17 @@ public class JefeProyecto extends HttpServlet {
                 rd = "actividades.jsp";
             }
             if (accion.equals("Fijar fin de actividad")) {
+               List<Actividad> actividades = new ArrayList<>();
                 for (Actividad a : activities) {
-                    if (!a.getEstado().equals("PendienteDeCierre")) {
-                        activities.remove(a);
+                    if (a.getEstado().equals("PendienteDeCierre")) {
+                        actividades.add(a);
                     }
                 }
-                rd = "actividades.jsp";
+                activities = actividades;
+                request.setAttribute("actividades", activities);
+                String destino = "FijarFinProyecto";
+                request.setAttribute("destino", destino);
+                request.getRequestDispatcher("actividades.jsp").forward(request, response);
             }
             if (accion.equals("Obtener informes")) {
                 proyects = proyectoFacade.findAll();
@@ -118,6 +123,7 @@ public class JefeProyecto extends HttpServlet {
         }
         if (!activities.isEmpty() && rd.equals("actividades.jsp")) {
             String json = mapper.writeValueAsString(activities);
+            
             request.setAttribute("actividades", json);
         }
 

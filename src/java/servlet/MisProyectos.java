@@ -35,13 +35,15 @@ public class MisProyectos extends HttpServlet {
         HttpSession sesion = request.getSession();
         String accion = request.getParameter("accion");
         String rd;
-        Integer proyect = Integer.parseInt(""+accion.charAt(accion.length()-1));
+        Integer proyect = Integer.parseInt("" + accion.charAt(accion.length() - 1));
         sesion.setAttribute("idProject", proyect);
-        if(accion.contains("JefeProyecto"))
+        if (accion.contains("JefeProyecto")) {
             rd = "jefeProyecto.jsp";
-        else
+            sesion.setAttribute("vista", "jefeProyecto.jsp");
+        } else {
             rd = "desarrollador.jsp";
-        
+            sesion.setAttribute("vista", "desarrollador.jsp");
+        }
         response.sendRedirect(rd);
     }
 

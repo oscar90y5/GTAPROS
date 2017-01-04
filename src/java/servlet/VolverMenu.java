@@ -5,32 +5,23 @@
  */
 package servlet;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import dominio.Actividad;
 import dominio.Miembro;
-import dominio.Usuario;
 import java.io.IOException;
-import java.util.List;
-import javax.ejb.EJB;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import persistencia.MiembroFacadeLocal;
-import persistencia.RolFacadeLocal;
-import persistencia.UsuarioFacadeLocal;
 
-public class LoginServlet extends HttpServlet {
-
-    @EJB
-    private RolFacadeLocal rolFacade;
-    public static final ObjectMapper mapper = new ObjectMapper();
-
-    @EJB
-    private MiembroFacadeLocal miembroFacade;
-
-    @EJB
-    private UsuarioFacadeLocal usuarioFacade;
+/**
+ *
+ * @author miki
+ */
+@WebServlet(name = "VolverMenu", urlPatterns = {"/VolverMenu"})
+public class VolverMenu extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,45 +34,11 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html");
         HttpSession sesion = request.getSession();
-        String id = request.getParameter("id");
-        String password = request.getParameter("password");
-        String rd = "index.jsp";
-
-        Usuario user = usuarioFacade.find(id);
-
-        if (user != null) {
-            if (password.equals(user.getClave())) {
-                sesion.setAttribute("idUser", id);
-                if (user.getEsAdmin()) {
-                    rd = "administrador.jsp";
-                    sesion.setAttribute("vista", "administrador.jsp");
-                } else {
-                    List<Miembro> miembros = miembroFacade.findByDni(user);
-                    if (miembros.size() == 1) {
-                        int idProject = miembros.get(0).getIdProyecto().getId();
-                        sesion.setAttribute("idProject", idProject);
-                        if (miembros.get(0).getIdRol().getNombreRol().equals("JefeProyecto")) {
-                            rd = "jefeProyecto.jsp";
-                            sesion.setAttribute("vista", "jefeProyecto.jsp");
-                        } else {
-                            rd = "desarrollador.jsp";
-                            sesion.setAttribute("vista", "desarrollador.jsp");
-                        }
-                    } else {
-                        String json = mapper.writeValueAsString(miembros);
-                        request.setAttribute("misProjects", json);
-                        rd = "misProyectos.jsp";
-                    }
-                }
-            } else {
-                rd = "index.jsp?error=clave";
-            }
-        } else {
-            rd = "index.jsp?error=dni";
+        String rd = (String) sesion.getAttribute("vista");
+        if (rd == null || rd.equals("")) {
+            rd = "index.jsp";
         }
-
         request.getRequestDispatcher(rd).forward(request, response);
     }
 

@@ -3,10 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/oscar/Documentos/Asignaturas/PGP/GTAPROS/src/java/servlet/FijarVacaciones.java</file>
-            <file>file:/home/oscar/Documentos/Asignaturas/PGP/GTAPROS/src/java/servlet/Desarrollador.java</file>
-            <file>file:/home/oscar/Documentos/Asignaturas/PGP/GTAPROS/web/actividades.jsp</file>
-            <file>file:/home/oscar/Documentos/Asignaturas/PGP/GTAPROS/src/java/servlet/IntroducirTareas.java</file>
+            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/web/tareas.jsp</file>
+            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/src/java/servlet/ModificarInforme.java</file>
+            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/src/java/dominio/Tarea.java</file>
+            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/web/introducirTareas.jsp</file>
+            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/src/java/servlet/ModificarTarea.java</file>
+            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/web/modificarInforme.jsp</file>
+            <file>file:/C:/Users/miki/Documents/NetBeansProjects/GTAPROS/web/seleccionModificarTarea.jsp</file>
         </group>
     </open-files>
 </project-private>
