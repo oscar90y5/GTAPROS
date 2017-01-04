@@ -118,7 +118,7 @@ public class Desarrollador extends HttpServlet {
                         actividades.add(a);
                     }
                 }
-                System.out.println(actividades.size());
+                System.out.println("actividades size "+actividades.size());
                 request.setAttribute("actividades", actividades);
                 request.setAttribute("destino", "ConsultarTareas");
                 rd = "actividades.jsp";

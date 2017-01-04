@@ -26,7 +26,7 @@
                 <%} else {
 
                 %>
-                <h3>Tareas de la actividad id = <%=tareas.get(0).getActividad().getId()%></h3>
+                <h3>Tareas de la actividad id = <%=tareas.get(0).getIdActividad().getId()%></h3>
                 <%
                     List<Informetareas> lista = new ArrayList<Informetareas>();
                     for (Tarea t : tareas) {

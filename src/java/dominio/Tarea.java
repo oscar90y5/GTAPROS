@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Tarea.findAll", query = "SELECT t FROM Tarea t")
     , @NamedQuery(name = "Tarea.findByEsfuerzoReal", query = "SELECT t FROM Tarea t WHERE t.esfuerzoReal = :esfuerzoReal")
     , @NamedQuery(name = "Tarea.findByTipo", query = "SELECT t FROM Tarea t WHERE t.tareaPK.tipo = :tipo")
-    , @NamedQuery(name = "Tarea.findByIdInforme", query = "SELECT t FROM Tarea t WHERE t.tareaPK.idInforme = :idInforme")
+    , @NamedQuery(name = "Tarea.findByIdInforme", query = "SELECT t FROM Tarea t WHERE t.informetareas.id = :idInforme")
     , @NamedQuery(name = "Tarea.findByIdMiembro", query = "SELECT t FROM Tarea t WHERE t.idMiembro.idMiembro = :idMiembro")
     , @NamedQuery(name = "Tarea.findByIdActividadAndMiembro", query = "SELECT t FROM Tarea t WHERE t.idActividad.id = :idActividad AND t.idMiembro.idMiembro = :idMiembro")})
 public class Tarea implements Serializable {
