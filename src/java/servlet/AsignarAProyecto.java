@@ -75,7 +75,7 @@ public class AsignarAProyecto extends HttpServlet {
         if (accion.equals("Aceptar")) {
             if (dnis == null) {
                 rd = "usuarios.jsp?error=dni";
-            else{
+            }else{
                 for(int i=0; i< dnis.length; i++){
                     System.out.println("servlet.AsignarAProyecto.processRequest()"+dnis.length+"*"+categorias.length+"*"+participacion.length);
                     //Comprobacion: estoy tomando un usuario checked

@@ -55,6 +55,12 @@ public class Tarea implements Serializable {
         this.tareaPK = tareaPK;
     }
 
+    public Tarea(String tipo, int idInforme, Miembro idMiembro, Actividad idActividad) {
+        this.tareaPK = new TareaPK(tipo, idInforme);
+        this.idActividad = idActividad;
+        this.idMiembro = idMiembro;
+    }
+
     public Tarea(String tipo, int idInforme) {
         this.tareaPK = new TareaPK(tipo, idInforme);
     }

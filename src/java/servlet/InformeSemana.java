@@ -101,7 +101,7 @@ public class InformeSemana extends HttpServlet {
                     List<Tarea> tareas = tareaFacade.findByIdMiembro(miembroFacade.findByDni(user));
                     List<Tarea> tarPeriodo = new ArrayList<>();
                     for(Tarea t: tareas){
-                        Date fecha = t.getIdInforme().getSemana();
+                        Date fecha = t.getInformetareas().getSemana();
                         /*Como seleccionamos semanas enteras si la fecha del
                         * informe se encuentra comprendida entre la inicial y 
                         *la final lo mostramos
