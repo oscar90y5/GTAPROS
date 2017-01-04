@@ -17,7 +17,7 @@
                 <div class="caja_small2">
                     <h1>Bienvenido <%=session.getAttribute("idUser")%></h1>
                     <div class="columna_caja_principal">  
-                         <h2> Elija qué desea hacer: </h2>
+                        <h2> Elija qué desea hacer: </h2>
                         <form action="Desarrollador" method="POST" style="margin-top: 20px;">
                             <input type="submit" name="accion" value="Introducir tarea" class="btn btn-lg btn-primary btn-block"/>
                             <input type="submit" name="accion" value="Modificar tareas activas" class="btn btn-lg btn-primary btn-block"/>
