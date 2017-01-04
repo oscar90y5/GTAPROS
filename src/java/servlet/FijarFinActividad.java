@@ -6,7 +6,9 @@
 package servlet;
 
 import dominio.Actividad;
+import dominio.Informetareas;
 import dominio.Proyecto;
+import dominio.Tarea;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
@@ -23,6 +25,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import persistencia.ActividadFacadeLocal;
+import persistencia.InformetareasFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
 
 /**
@@ -31,6 +34,9 @@ import persistencia.ProyectoFacadeLocal;
  */
 @WebServlet(name = "FijarFinProyecto", urlPatterns = {"/FijarFinProyecto"})
 public class FijarFinActividad extends HttpServlet {
+
+    @EJB
+    private InformetareasFacadeLocal informetareasFacade;
 
     @EJB
     private ProyectoFacadeLocal proyectoFacade;
@@ -54,31 +60,50 @@ public class FijarFinActividad extends HttpServlet {
           int id = Integer.valueOf(request.getParameter("idActividad"));
           Actividad a = actividadFacade.findById(id);
           Date fechaFin = new Date();
-          a.setFechaFin(fechaFin);
-          a.setEstado("Cerrado");
-          actividadFacade.edit(a);
-          List <Actividad> sucesoras = a.getActividadList1();
-          //Ponemos como fecha de inicio de todas las sucesoras la fecha fin de la actividad
-          for(Actividad actividad : sucesoras){
-              actividad.setFechaInicio(fechaFin);
+          List<Tarea> listadoTareas = a.getTareaList();
+          int count =0;
+          for(Tarea t : listadoTareas){
+              Informetareas i = t.getIdInforme();
+              String estadoInforme = i.getEstado();
+              if(!estadoInforme.equals("Cerrado")){
+                  break;
+              } 
+              else count++;
           }
-          int idProyecto = a.getIdProyecto().getId();
-          Proyecto p = proyectoFacade.findById(id);
-          List <Actividad> actividadesProyecto = p.getActividadList();
-          int count = 0;
-          //Recogemos todas las actividades del proyecto y vemos si todas están cerradas
-          for (Actividad ac : actividadesProyecto){
-              if(ac.getEstado().equals("Cerrado")) count++;
+          // Todos los informes de tareas tienen estado cerrado y podemos cerrar la actividad
+          if(count == listadoTareas.size()){
+              a.setFechaFin(fechaFin);
+              a.setEstado("Cerrado");
+              actividadFacade.edit(a);
+               List <Actividad> sucesoras = a.getActividadList1();
+                //Ponemos como fecha de inicio de todas las sucesoras la fecha fin de la actividad
+                for(Actividad actividad : sucesoras){
+                    actividad.setFechaInicio(fechaFin);
+                }
+                int idProyecto = a.getIdProyecto().getId();
+                Proyecto p = proyectoFacade.findById(id);
+                List <Actividad> actividadesProyecto = p.getActividadList();
+                int contador = 0;
+                //Recogemos todas las actividades del proyecto y vemos si todas están cerradas
+                for (Actividad ac : actividadesProyecto){
+                    if(ac.getEstado().equals("Cerrado")) contador++;
+                }
+                //Si todas las actividades están cerradas, cerramos el proyecto
+                if(contador == actividadesProyecto.size()){
+                    p.setFechaFin(fechaFin);
+                    p.setEstado("Cerrado");
+                    proyectoFacade.edit(p);
+                }
+                response.sendRedirect("exito.jsp"); 
+
           }
-          //Si todas las actividades están cerradas, cerramos el proyecto
-          if(count == actividadesProyecto.size()){
-              p.setFechaFin(fechaFin);
-              p.setEstado("Cerrado");
-              proyectoFacade.edit(p);
+          //Hay informes de tareas que no tienen estado cerrado
+          else{
+              out.println("<script type=\"text/javascript\">");
+                out.println("alert('Debe cerrar todos los informes de las tareas para poder cerrar la actividad');");
+                out.println("location='administrador.jsp';");
+                out.println("</script>");
           }
-          response.sendRedirect("exito.jsp"); 
-          
-          
         }
     }
 
