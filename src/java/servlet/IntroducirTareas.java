@@ -150,9 +150,10 @@ public class IntroducirTareas extends HttpServlet {
             }
         
             //Si no se ha introducido ninguna tarea borramos el informe
-            if(informe.getTareaList().size()==0){
+            /*INFORME.GETtAREAS O TAREA.FINDbYiDiNFORME
+            if(){
                 informetareasFacade.remove(informe);
-            }
+            }*/
         }
         
         request.getRequestDispatcher(rd).forward(request, response);
