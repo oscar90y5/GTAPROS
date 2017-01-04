@@ -108,7 +108,7 @@ public class CargarPlan extends HttpServlet {
                 nextId = nextId + 1;
                 actual.setEstado("Abierto");
                 if (duracion != 0) {
-                    r = rolFacade.findByNombreRolAndIdProyecto(array[2], proyect);
+                    r = rolFacade.findByNombreRolAndIdProyecto(array[2], proyect.getId());
                     actual.setIdRol(r);
                 }
                 mapaActs.put(nombre, actual);
@@ -142,6 +142,7 @@ public class CargarPlan extends HttpServlet {
 
             //Cambiar proyecto de Pendiente-->EnCurso
             proyect.setEstado("EnCurso");
+            proyect.setFechaInicio(myDate);
             proyectoFacade.edit(proyect);
             rd = "exito.jsp";
         }
