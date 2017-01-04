@@ -99,10 +99,7 @@ public class FijarFinActividad extends HttpServlet {
           }
           //Hay informes de tareas que no tienen estado cerrado
           else{
-              out.println("<script type=\"text/javascript\">");
-                out.println("alert('Debe cerrar todos los informes de las tareas para poder cerrar la actividad');");
-                out.println("location='administrador.jsp';");
-                out.println("</script>");
+            request.getRequestDispatcher("administrador.jsp?error=CierreInformes").forward(request, response);
           }
         }
     }

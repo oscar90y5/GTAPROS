@@ -8,6 +8,18 @@
         <%@include file="WEB-INF/jspf/includes.jspf" %>
     </head>
     <body>
+         <% 
+                String error = null;
+                try{
+                    error = (String) request.getParameter("error");
+                    if(error.equals("NoActividades")){
+                %>
+                <p style="color:red">No hay actividades para cerrar</p>
+                <%}
+                    if(error.equals("NoActividadesAbiertas")){ %>
+                <p style="color:red">No hay actividades sin asignar</p>
+                <%}}catch(NullPointerException e){ }
+                %>
         <section class="container">
             <section class="login-form">
                 <h1>Bienvenido <%=session.getAttribute("idUser")%></h1>

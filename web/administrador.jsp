@@ -8,6 +8,15 @@
         <%@include file="WEB-INF/jspf/includes.jspf" %>
     </head>
     <body>
+         <% 
+                String error = null;
+                try{
+                    error = (String) request.getParameter("error");
+                    if(error.equals("CierreInformes")){
+                %>
+                <p style="color:red">Debe cerrar todos los informes de las tareas para poder cerrar la actividad</p>
+                <%}}catch(NullPointerException e){ }
+                %>
         <section class="container">
             <section class="login-form">
                 <h1>Bienvenido <%=session.getAttribute("idUser")%></h1>
