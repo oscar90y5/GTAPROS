@@ -75,6 +75,8 @@ public class ConsultarTareas extends HttpServlet {
             }
         }
         System.out.println("ei");
+        
+        System.out.println("empieza");
         List<Tarea> tareas = new ArrayList<Tarea>();
         for (Tarea t : tareaFacade.findAll()) {
             //Mostrar tarea
@@ -83,11 +85,12 @@ public class ConsultarTareas extends HttpServlet {
                 tareas.add(t);
                 System.out.println("tarea " + t.getTareaPK().getTipo() + " = "
                         + t.getEsfuerzoReal() + 
-                        " idInforme=" + t.getInformetareas().getId() + 
+                        " idInforme=" + t.getInformetareas() + 
                         " idActividad="
                         + t.getIdActividad().getId() + " idMiembro=" + t.getIdMiembro().getIdMiembro());
             }
         }
+        System.out.println("no llega");
         request.setAttribute("tareas", tareas);
         String rd = "tareas.jsp";
         request.getRequestDispatcher(rd).forward(request, response);

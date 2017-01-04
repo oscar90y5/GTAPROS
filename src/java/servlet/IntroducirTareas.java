@@ -115,7 +115,7 @@ public class IntroducirTareas extends HttpServlet {
 
                 Integer idMiembro = miembroFacade.findByIdProyectoAndDni(proyecto, user).getIdMiembro();
                 Miembro miembro = miembroFacade.find(idMiembro);
-                Integer idActividad = Integer.valueOf((String) request.getServletContext().getAttribute("idActividad"));
+                Integer idActividad = Integer.valueOf(request.getParameter("idActividad"));
                 Actividad actividad = actividadFacade.find(idActividad);
                 Tarea nuevaTarea;
 
@@ -164,7 +164,7 @@ public class IntroducirTareas extends HttpServlet {
                 }
 
                 //Si no se ha introducido ninguna tarea borramos el informe
-                if (tareaFacade.findByIdInforme(informe).isEmpty()) {
+                if (tareaFacade.findByIdInforme(informe.getId()).isEmpty()) {
                     informetareasFacade.remove(informe);
                 }
             }
