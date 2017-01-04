@@ -1,10 +1,14 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package dominio;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author miki
  */
 @Entity
-@Table(name = "Miembro")
+@Table(name = "miembro")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Miembro.findAll", query = "SELECT m FROM Miembro m")
@@ -35,12 +39,13 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Miembro.findByIdMiembro", query = "SELECT m FROM Miembro m WHERE m.idMiembro = :idMiembro")
     , @NamedQuery(name = "Miembro.findByParticipacion", query = "SELECT m FROM Miembro m WHERE m.participacion = :participacion")
     , @NamedQuery(name = "Miembro.findByIdProyectoAndDni", query = "SELECT m FROM Miembro m WHERE m.idProyecto = :idProyecto AND m.dni = :dni")
- , @NamedQuery(name = "Miembro.findByDniAndIdProyecto", query = "SELECT m FROM Miembro m WHERE m.idProyecto.id = :idProyecto AND m.dni.dni = :dni")})
-@JsonIgnoreProperties(value={"actividadList","tareaList"})
+    , @NamedQuery(name = "Miembro.findByDniAndIdProyecto", query = "SELECT m FROM Miembro m WHERE m.idProyecto.id = :idProyecto AND m.dni.dni = :dni")})
+@JsonIgnoreProperties(value = {"actividadList", "tareaList"})
 public class Miembro implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "idMiembro")
     private Integer idMiembro;
@@ -48,7 +53,7 @@ public class Miembro implements Serializable {
     private Integer participacion;
     @ManyToMany(mappedBy = "miembroList", fetch = FetchType.EAGER)
     private List<Actividad> actividadList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "miembro", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "idMiembro", fetch = FetchType.EAGER)
     private List<Tarea> tareaList;
     @JoinColumn(name = "idProyecto", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.EAGER)
@@ -149,5 +154,5 @@ public class Miembro implements Serializable {
     public String toString() {
         return "dominio.Miembro[ idMiembro=" + idMiembro + " ]";
     }
-    
+
 }

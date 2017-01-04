@@ -23,9 +23,9 @@ public interface ActividadFacadeLocal {
     void remove(Actividad actividad);
 
     Actividad find(Object id);
-    
+
     Actividad findById(int id);
-    
+
     List<Actividad> findByIdProject(Object idProyecto);
 
     List<Actividad> findAll();
@@ -33,10 +33,11 @@ public interface ActividadFacadeLocal {
     List<Actividad> findRange(int[] range);
 
     int count();
-    
+
     List<Actividad> findByIdProyectoAndDni(Object idProyecto, Object dni);
-    
+
     List<Actividad> findActiveActivities(Object idProyecto);
-    
+
     Actividad findById(Object id);
+
 }

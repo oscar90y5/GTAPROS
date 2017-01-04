@@ -6,7 +6,6 @@
 package dominio;
 
 import java.io.Serializable;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -23,15 +22,15 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author miki
  */
 @Entity
-@Table(name = "Tarea")
+@Table(name = "tarea")
 @XmlRootElement
 @NamedQueries({
-        @NamedQuery(name = "Tarea.findAll", query = "SELECT t FROM Tarea t")
+    @NamedQuery(name = "Tarea.findAll", query = "SELECT t FROM Tarea t")
     , @NamedQuery(name = "Tarea.findByEsfuerzoReal", query = "SELECT t FROM Tarea t WHERE t.esfuerzoReal = :esfuerzoReal")
     , @NamedQuery(name = "Tarea.findByTipo", query = "SELECT t FROM Tarea t WHERE t.tareaPK.tipo = :tipo")
-    , @NamedQuery(name = "Tarea.findByIdMiembro", query = "SELECT t FROM Tarea t WHERE t.tareaPK.idMiembro = :idMiembro")
-    , @NamedQuery(name = "Tarea.findByIdActividadAndMiembro", query = "SELECT t FROM Tarea t WHERE t.actividad.id = :idActividad AND t.miembro.idMiembro = :idMiembro")})
-
+    , @NamedQuery(name = "Tarea.findByIdInforme", query = "SELECT t FROM Tarea t WHERE t.tareaPK.idInforme = :idInforme")
+    , @NamedQuery(name = "Tarea.findByIdMiembro", query = "SELECT t FROM Tarea t WHERE t.idMiembro.idMiembro = :idMiembro")
+    , @NamedQuery(name = "Tarea.findByIdActividadAndMiembro", query = "SELECT t FROM Tarea t WHERE t.idActividad.id = :idActividad AND t.idMiembro.idMiembro = :idMiembro")})
 public class Tarea implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,15 +38,15 @@ public class Tarea implements Serializable {
     protected TareaPK tareaPK;
     @Column(name = "esfuerzoReal")
     private Integer esfuerzoReal;
-    @JoinColumn(name = "idActividad", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "idActividad", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Actividad idActividad;
+    @JoinColumn(name = "idInforme", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Actividad actividad;
-    @JoinColumn(name = "idInforme", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    private Informetareas idInforme;
-    @JoinColumn(name = "idMiembro", referencedColumnName = "idMiembro", insertable = false, updatable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Miembro miembro;
+    private Informetareas informetareas;
+    @JoinColumn(name = "idMiembro", referencedColumnName = "idMiembro")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Miembro idMiembro;
 
     public Tarea() {
     }
@@ -56,8 +55,8 @@ public class Tarea implements Serializable {
         this.tareaPK = tareaPK;
     }
 
-    public Tarea(String tipo, int idMiembro, int idActividad) {
-        this.tareaPK = new TareaPK(tipo, idMiembro, idActividad);
+    public Tarea(String tipo, int idInforme) {
+        this.tareaPK = new TareaPK(tipo, idInforme);
     }
 
     public TareaPK getTareaPK() {
@@ -76,28 +75,28 @@ public class Tarea implements Serializable {
         this.esfuerzoReal = esfuerzoReal;
     }
 
-    public Actividad getActividad() {
-        return actividad;
+    public Actividad getIdActividad() {
+        return idActividad;
     }
 
-    public void setActividad(Actividad actividad) {
-        this.actividad = actividad;
+    public void setIdActividad(Actividad idActividad) {
+        this.idActividad = idActividad;
     }
 
-    public Informetareas getIdInforme() {
-        return idInforme;
+    public Informetareas getInformetareas() {
+        return informetareas;
     }
 
-    public void setIdInforme(Informetareas idInforme) {
-        this.idInforme = idInforme;
+    public void setInformetareas(Informetareas informetareas) {
+        this.informetareas = informetareas;
     }
 
-    public Miembro getMiembro() {
-        return miembro;
+    public Miembro getIdMiembro() {
+        return idMiembro;
     }
 
-    public void setMiembro(Miembro miembro) {
-        this.miembro = miembro;
+    public void setIdMiembro(Miembro idMiembro) {
+        this.idMiembro = idMiembro;
     }
 
     @Override

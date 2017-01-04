@@ -30,8 +30,8 @@
                 <%
                     List<Informetareas> lista = new ArrayList<Informetareas>();
                     for (Tarea t : tareas) {
-                        if (!lista.contains(t.getIdInforme())) {
-                            lista.add(t.getIdInforme());
+                        if (!lista.contains(t.getInformetareas())) {
+                            lista.add(t.getInformetareas());
                         }
                     }
 
@@ -51,7 +51,7 @@
                             </tr>
                             <%
                                 for (Tarea t : tareas) {
-                                    if (i.getId().equals(t.getIdInforme().getId())) {
+                                    if (i.getId().equals(t.getInformetareas().getId())) {
                                         //Mostrar tareas                             
 %>
                             <tr>

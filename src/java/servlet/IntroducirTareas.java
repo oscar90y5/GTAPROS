@@ -67,43 +67,43 @@ public class IntroducirTareas extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+
         HttpSession sesion = request.getSession();
-        
+
         int idProject = (Integer) sesion.getAttribute("idProject");
         Proyecto proyecto = proyectoFacade.find(idProject);
-        
+
         String dni = (String) sesion.getAttribute("idUser");
         Usuario user = usuarioFacade.find(dni);
-        
+
         String accion = (String) request.getParameter("accion");
         String rd = "desarrollador.jsp";
-        
-        if(accion.equals("Cancelar")){
 
-                   //Obtenemos la lista de actividades activas pertenecientes al proyecto y al usuario
-                    List<Actividad> actividades = actividadFacade.findActiveActivities(proyecto);
-                    List<Miembro> miembros;
-                    Actividad a;
-                    //si el for es de la forma: (Actividad a : actividades) falla al borrar elementos.
-                    for(int i = 0; i<actividades.size();i++){
-                        a = actividades.get(i);
-                        if(!a.getMiembroList().contains(miembroFacade.findByIdProyectoAndDni(proyecto, user))){
-                            actividades.remove(a);
-                            i--;
-                        }
-                    }
-                    if(actividades.size()==1){
-                        //redirigimos a introducir tareas con el id de la actividad
-                        response.sendRedirect("introducirTareas.jsp?idActividad="+actividades.get(0).getId());
-                    } else {
-                        request.setAttribute("actividades", actividades);
-                        request.setAttribute("destino", "introducirTareas.jsp");
-                        rd = "actividades.jsp";
-                    }                             
+        if (accion.equals("Cancelar")) {
+
+            //Obtenemos la lista de actividades activas pertenecientes al proyecto y al usuario
+            List<Actividad> actividades = actividadFacade.findActiveActivities(proyecto);
+            List<Miembro> miembros;
+            Actividad a;
+            //si el for es de la forma: (Actividad a : actividades) falla al borrar elementos.
+            for (int i = 0; i < actividades.size(); i++) {
+                a = actividades.get(i);
+                if (!a.getMiembroList().contains(miembroFacade.findByIdProyectoAndDni(proyecto, user))) {
+                    actividades.remove(a);
+                    i--;
+                }
+            }
+            if (actividades.size() == 1) {
+                //redirigimos a introducir tareas con el id de la actividad
+                response.sendRedirect("introducirTareas.jsp?idActividad=" + actividades.get(0).getId());
+            } else {
+                request.setAttribute("actividades", actividades);
+                request.setAttribute("destino", "introducirTareas.jsp");
+                rd = "actividades.jsp";
+            }
         }
-        
-        if(accion.equals("Aceptar")){
+
+        if (accion.equals("Aceptar")) {
             //AÑADIR ID AL INFORME
             Informetareas informe = new Informetareas();
             informe.setSemana(Date.valueOf(request.getParameter("semana")));
@@ -112,45 +112,51 @@ public class IntroducirTareas extends HttpServlet {
             informetareasFacade.create(informe);
 
             Integer idMiembro = miembroFacade.findByIdProyectoAndDni(proyecto, user).getIdMiembro();
-           
+            Miembro miembro = miembroFacade.find(idMiembro);
             Integer idActividad = Integer.valueOf((String) request.getServletContext().getAttribute("idActividad"));
-            
+            Actividad actividad = actividadFacade.find(idActividad);
+
             Tarea nuevaTarea;
 
-            nuevaTarea = new Tarea("TratoConUsuarios",idMiembro, idActividad);
-            nuevaTarea.setIdInforme(informe);
+            nuevaTarea = new Tarea("TratoConUsuarios", informe.getId());
+            nuevaTarea.setIdActividad(actividad);
+            nuevaTarea.setIdMiembro(miembro);
             nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("tratoUsuarios")));
             tareaFacade.create(nuevaTarea);
-            
-            nuevaTarea = new Tarea("ReunionesInternasExternas",idMiembro,idActividad);
-            nuevaTarea.setIdInforme(informe);
+
+            nuevaTarea = new Tarea("ReunionesInternasExternas", informe.getId());
+            nuevaTarea.setIdActividad(actividad);
+            nuevaTarea.setIdMiembro(miembro);
             nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("reuniones")));
             tareaFacade.create(nuevaTarea);
 
-            nuevaTarea = new Tarea("LecturaRevisionDocumentacion",idMiembro,idActividad);
-            nuevaTarea.setIdInforme(informe);
+            nuevaTarea = new Tarea("LecturaRevisionDocumentacion", informe.getId());
+            nuevaTarea.setIdActividad(actividad);
+            nuevaTarea.setIdMiembro(miembro);
             nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("leerRevisarDocumentacion")));
             tareaFacade.create(nuevaTarea);
 
-            nuevaTarea = new Tarea("ElaboracionDocumentacion",idMiembro,idActividad);
-            nuevaTarea.setIdInforme(informe);
+            nuevaTarea = new Tarea("ElaboracionDocumentacion", informe.getId());
+            nuevaTarea.setIdActividad(actividad);
+            nuevaTarea.setIdMiembro(miembro);
             nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("elaborDocumentacion")));
             tareaFacade.create(nuevaTarea);
 
-            nuevaTarea = new Tarea("DesarrolloVerificacionProgramas",idMiembro,idActividad);
-            nuevaTarea.setIdInforme(informe);
+            nuevaTarea = new Tarea("DesarrolloVerificacionProgramas", informe.getId());
+            nuevaTarea.setIdActividad(actividad);
+            nuevaTarea.setIdMiembro(miembro);
             nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("programar")));
             tareaFacade.create(nuevaTarea);
 
-            nuevaTarea = new Tarea("FormacionUsuariosYOtros",idMiembro,idActividad);
-            nuevaTarea.setIdInforme(informe);
+            nuevaTarea = new Tarea("FormacionUsuariosYOtros", informe.getId());
+            nuevaTarea.setIdActividad(actividad);
+            nuevaTarea.setIdMiembro(miembro);
             nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("formar")));
             tareaFacade.create(nuevaTarea);
 
-            
             request.setAttribute("informe", informe);
         }
-        
+
         request.getRequestDispatcher(rd).forward(request, response);
     }
 

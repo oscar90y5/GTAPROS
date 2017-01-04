@@ -179,8 +179,8 @@ public class Desarrollador extends HttpServlet {
     private boolean hayInformesRechazadosOPendientesEnvio(Actividad a) {
         boolean devolver = false;
         for (Tarea t : a.getTareaList()) {
-            if (t.getIdInforme().getEstado().equalsIgnoreCase("PendienteEnvio")
-                    || t.getIdInforme().getEstado().equalsIgnoreCase("Rechazado")) {
+            if (t.getInformetareas().getEstado().equalsIgnoreCase("PendienteEnvio")
+                    || t.getInformetareas().getEstado().equalsIgnoreCase("Rechazado")) {
                 devolver = true;
             }
         }

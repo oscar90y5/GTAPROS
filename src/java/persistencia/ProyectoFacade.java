@@ -28,10 +28,10 @@ public class ProyectoFacade extends AbstractFacade<Proyecto> implements Proyecto
     public ProyectoFacade() {
         super(Proyecto.class);
     }
-    
-     @Override
-    public Proyecto findById(int id){
-        return (Proyecto)em.createNamedQuery("Proyecto.findById").setParameter("id", id).getSingleResult();
+
+    @Override
+    public Proyecto findById(int id) {
+        return (Proyecto) em.createNamedQuery("Proyecto.findById").setParameter("id", id).getSingleResult();
     }
-    
+
 }
