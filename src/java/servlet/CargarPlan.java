@@ -41,13 +41,13 @@ import persistencia.RolFacadeLocal;
 @WebServlet(name = "CargarPlan", urlPatterns = {"/CargarPlan"})
 @MultipartConfig
 public class CargarPlan extends HttpServlet {
-
+    
     @EJB
     private RolFacadeLocal rolFacade;
-
+    
     @EJB
     private ActividadFacadeLocal actividadFacade;
-
+    
     @EJB
     private ProyectoFacadeLocal proyectoFacade;
 
@@ -66,12 +66,12 @@ public class CargarPlan extends HttpServlet {
         HttpSession sesion = request.getSession();
         String accion = (String) request.getParameter("accion");
         int idProject = (Integer) sesion.getAttribute("idProject");
-
+        
         System.out.println(accion + " " + idProject);
         Proyecto proyect = proyectoFacade.find(idProject);
         //Para despachar
         String rd = "cargarPlan.jsp";
-
+        
         if (accion.equals("Cargar")) {
             //Obtencion Fecha de inicio
             String fecha = (String) request.getParameter("fecha");
@@ -139,12 +139,16 @@ public class CargarPlan extends HttpServlet {
                 System.out.println("Actividad agregada" + actual.toString());
                 actividadFacade.edit(actual);
             }
+
+            //Cambiar proyecto de Pendiente-->EnCurso
+            proyect.setEstado("EnCurso");
+            proyectoFacade.edit(proyect);
             rd = "exito.jsp";
         }
         if (accion.equals("Cancelar")) {
             rd = "jefeProyecto.jsp";
         }
-
+        
         request.getRequestDispatcher(rd).forward(request, response);
     }
 
