@@ -77,12 +77,12 @@ public class Actividad implements Serializable {
     @Size(max = 300)
     @Column(name = "descripcion")
     private String descripcion;
-    @JoinTable(name = "asignacionactividad", joinColumns = {
+    @JoinTable(name = "AsignacionActividad", joinColumns = {
         @JoinColumn(name = "idActividad", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idMiembro", referencedColumnName = "idMiembro")})
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Miembro> miembroList;
-    @JoinTable(name = "predecesora", joinColumns = {
+    @JoinTable(name = "Predecesora", joinColumns = {
         @JoinColumn(name = "idPredecedora", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idSucesora", referencedColumnName = "id")})
     @ManyToMany(fetch = FetchType.EAGER)
