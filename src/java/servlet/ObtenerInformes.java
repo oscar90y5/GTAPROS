@@ -61,7 +61,7 @@ public class ObtenerInformes extends HttpServlet {
         Usuario user = usuarioFacade.find(idUser);
         List<Miembro> roles = miembroFacade.findByDni(user);
         
-        String rd = "proyectos.jsp";
+        String rd = null;
         
         for(Miembro m: roles){
             if(m.getIdProyecto().getId().equals(idP)){
@@ -71,12 +71,15 @@ public class ObtenerInformes extends HttpServlet {
                     rd = "informes.jsp?in=true";
                 }else{
                     String json = mapper.writeValueAsString(proyecto);
-                    request.setAttribute("proyecto", proyecto);
+                    request.setAttribute("proyecto", json);
                     rd = "informes.jsp?in=true";
                 }
-            }else
-               rd = "informes.jsp?in=false";
+            }else{
+                if(rd==null)
+                    rd = "informes.jsp?in=false";
+            }
         }
+        System.out.println(rd);
         request.getRequestDispatcher(rd).forward(request, response);
     }
 

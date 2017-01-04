@@ -34,5 +34,15 @@ public class TareaFacade extends AbstractFacade<Tarea> implements TareaFacadeLoc
     public List<Tarea> findByIdActividadAndMiembro(Object idActividad, Object idMiembro) {
         return em.createNamedQuery("Tarea.findByIdActividadAndMiembro").setParameter("idActividad", idActividad).setParameter("idMiembro", idMiembro).getResultList();
     }
+    
+    @Override
+    public List<Tarea> findByIdInforme(Object idInforme){
+        return em.createNamedQuery("Tarea.findByIdInforme").setParameter("idInforme", idInforme).getResultList();
+    }
+    
+     @Override
+    public List<Tarea> findByIdMiembro(Object idMiembro){
+        return em.createNamedQuery("Tarea.findByIdMiembro").setParameter("idMiembro", idMiembro).getResultList();
+    }
 
 }

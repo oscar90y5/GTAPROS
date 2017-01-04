@@ -14,6 +14,12 @@
         <div class="container">
             <div class="caja_principal">
                 <h2> Introducir tareas de actividad <%=actividad %> :</h2>
+                <% try{
+                    String error = (String) request.getParameter("error");
+                    if(error!=null){
+                %>
+                <p style="color:red">No se ha introducido una semana de Lunes a Domingo</p>
+                <%}}catch(NullPointerException e){ }%>
                 <div class="caja_small">
                     <form role="form" action='IntroducirTareas' method="post">
                         <div class="form">
@@ -42,8 +48,9 @@
                                 <input type="number" min="0" name="formar" placeholder="Tiempo dedicado (h/hombre)" />
                             </p>
                             <p>
-                                <label for="semana">Semana:</label>
-                                <input type="week" name="semana" placeholder="Numero de semana" required/>
+                                <label for="semana">Semana(LUNES-DOMINGO):</label>
+                                <input type="Date" name="fecha1" placeholder="Seleccione fecha inicio"/>
+                                <input type="Date" name="fecha2" placeholder="Seleccione fecha fin"/>
                             </p>
                         </div>
                         <div class="box-footer text-right" style="margin-top: 10px">

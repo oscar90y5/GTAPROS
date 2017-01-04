@@ -69,22 +69,24 @@ public class AsignarAProyecto extends HttpServlet {
                 rd = "usuarios.jsp?error=dni";
             else{
                 for(int i=0; i< dnis.length; i++){
-                    Miembro m = new Miembro();
-                    Usuario u = usuarioFacade.find(dnis[i]);
-                    m.setDni(u);
-                    Proyecto p = proyectoFacade.find(idProject);
-                    m.setIdProyecto(p);
-                    int idRol = rolFacade.count()+1;
-                    Rol r = rolFacade.findByNombreRolAndIdProyecto(categorias[i], idProject);
-                    m.setIdRol(r);
-                    m.setParticipacion(Integer.parseInt(participacion[i]));
-                    int id = miembroFacade.count()+1;
-                    m.setIdMiembro(id);
-                    miembroFacade.create(m);
-
-                    //Limpio sesion
-                    sesion.removeAttribute("usuarios");
-                    sesion.removeAttribute("participacion");
+                    System.out.println("servlet.AsignarAProyecto.processRequest()"+dnis.length+"*"+categorias.length+"*"+participacion.length);
+                    //Comprobacion: estoy tomando un usuario checked
+                    if(!dnis[i].equals("0")){
+                        Miembro m = new Miembro();
+                        Usuario u = usuarioFacade.find(dnis[i]);
+                        m.setDni(u);
+                        Proyecto p = proyectoFacade.find(idProject);
+                        m.setIdProyecto(p);
+                        Rol r = rolFacade.findByNombreRolAndIdProyecto(categorias[i], p);
+                        m.setIdRol(r);
+                        m.setParticipacion(Integer.parseInt(participacion[i]));
+                        int id = miembroFacade.count()+1;
+                        m.setIdMiembro(id);
+                        miembroFacade.create(m);
+                    }
+                        //Limpio sesion
+                        sesion.removeAttribute("usuarios");
+                        sesion.removeAttribute("participacion");
                 }
         }
         }

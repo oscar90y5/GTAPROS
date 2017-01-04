@@ -74,15 +74,12 @@ public class Desarrollador extends HttpServlet {
                 List<Actividad> actividades = actividadFacade.findActiveActivities(proyecto);
                 List<Miembro> miembros;
                 Actividad a;
-                System.out.println("actividades activas");
                 //si el for es de la forma: (Actividad a : actividades) falla al borrar elementos.
                 for (int i = 0; i < actividades.size(); i++) {
                     a = actividades.get(i);
                     if (!a.getMiembroList().contains(miembroActual)) {
-                        System.out.println("borramos");
                         actividades.remove(a);
                         i--;
-                        System.out.println("borrado");
                     }
                 }
                 System.out.println("actividades: " + actividades.size());
@@ -95,8 +92,6 @@ public class Desarrollador extends HttpServlet {
                     request.setAttribute("destino", "introducirTareas.jsp");
                     rd = "actividades.jsp";
                 }
-                System.out.println("salimos");
-
             }
             if (accion.equals("Modificar tareas activas")) {
                 List<Actividad> actividades = new ArrayList<>();
@@ -107,7 +102,6 @@ public class Desarrollador extends HttpServlet {
                         }
                     }
                 }
-                System.out.println("actividades " + actividades.size());
                 request.setAttribute("actividades", actividades);
                 request.setAttribute("destino", "ModificarTarea");
                 rd = "actividades.jsp";
@@ -119,7 +113,7 @@ public class Desarrollador extends HttpServlet {
                         actividades.add(a);
                     }
                 }
-                System.out.println(actividades.size());
+     
                 request.setAttribute("actividades", actividades);
                 request.setAttribute("destino", "ConsultarTareas");
                 rd = "actividades.jsp";

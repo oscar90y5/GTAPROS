@@ -46,34 +46,12 @@
                             String datos = (String) request.getAttribute("datos");   
                             if(datos.equals("porBuscar")){
                         %> 
-                                <input type="text" id="fecha1" name="fecha1" class="form-control"/>
-                                <button id="fechaIni">Seleccione fecha inicio</button>
-                                <script type="text/javascript">
-                                   Calendar.setup({
-                                     inputField: "fecha1",
-                                     ifFormat:   "%d/%m/%Y",
-                                     weekNumbers: false,
-                                     displayArea: "fechaIni",
-                                     daFormat:    "%A, %d de %B de %Y"
-                                   });
-                                </script>
-                                <div class="form-group">
-                                <input type="text" id="fecha2" name="fecha2" class="form-control"/>
-                                <button id="fechaFin">Seleccione fecha fin</button>
-                                <script type="text/javascript">
-                                   Calendar.setup({
-                                     inputField: "fecha2",
-                                     ifFormat:   "%d/%m/%Y",
-                                     weekNumbers: false,
-                                     displayArea: "fechaFin",
-                                     daFormat:    "%A, %d de %B de %Y"
-                                   });
-                                </script>
-                                </div>
+                                <input type="Date" name="fecha1" class="form-control"/>
+                                <input type="Date" name="fecha2" class="form-control"/>
                             <%}}catch(ClassCastException e){
                                 String vista = (String) sesion.getAttribute("vista");
                                 if(vista.equals("desarrollador.jsp")){
-                                    List<Informetareas> datos = (List<Informetareas>) request.getAttribute("datos");
+                                    List<Tarea> datos = (List<Tarea>) request.getAttribute("datos");
                                     if(datos==null){
                             %>
                             <p>No tienes informes de tarea en este periodo</p>
@@ -87,15 +65,14 @@
                                     <td><h4>Semana</h4></td>
                                     <td><h4>Estado</h4></td>
                                 </tr>
-                                <%for(Informetareas i: datos){
-                                    List<Tarea> tareas = i.getTareaList();
-                                    Tarea t = tareas.get(0);
+                                <%for(Tarea t: datos){
+                                    
                                 %>
                                 <tr>
-                                    <td><%=i.getId()%></td>
+                                    <td><%=t.getIdInforme().getId()%></td>
                                     <td><%=t.getActividad().getNombre()%></td>
-                                    <td><%=i.getSemana()%></td>
-                                    <td><%=i.getEstado()%></td>
+                                    <td><%=t.getIdInforme().getSemana()%></td>
+                                    <td><%=t.getIdInforme().getEstado()%></td>
                                 </tr>
                                 <%}}%>
                             </table>
