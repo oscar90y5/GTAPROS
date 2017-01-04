@@ -79,36 +79,18 @@ public class IntroducirTareas extends HttpServlet {
         String accion = (String) request.getParameter("accion");
         String rd = "desarrollador.jsp";
         
-        if(accion.equals("Cancelar")){
-
-                   //Obtenemos la lista de actividades activas pertenecientes al proyecto y al usuario
-                    List<Actividad> actividades = actividadFacade.findActiveActivities(proyecto);
-                    List<Miembro> miembros;
-                    Actividad a;
-                    //si el for es de la forma: (Actividad a : actividades) falla al borrar elementos.
-                    for(int i = 0; i<actividades.size();i++){
-                        a = actividades.get(i);
-                        if(!a.getMiembroList().contains(miembroFacade.findByIdProyectoAndDni(proyecto, user))){
-                            actividades.remove(a);
-                            i--;
-                        }
-                    }
-                    if(actividades.size()==1){
-                        //redirigimos a introducir tareas con el id de la actividad
-                        response.sendRedirect("introducirTareas.jsp?idActividad="+actividades.get(0).getId());
-                    } else {
-                        request.setAttribute("actividades", actividades);
-                        request.setAttribute("destino", "introducirTareas.jsp");
-                        rd = "actividades.jsp";
-                    }                             
-        }
-        
-        if(accion.equals("Aceptar")){
+        if( accion.equals("Ahora") || accion.equals("Tarde") ){
             //AÑADIR ID AL INFORME
-            Informetareas informe = new Informetareas();
+            Informetareas informe = new Informetareas(informetareasFacade.count()+1);
             informe.setSemana(Date.valueOf(request.getParameter("semana")));
-            informe.setFechaEnvio(Date.from(Instant.now()));
-            informe.setEstado("PendienteAprobacion");
+            
+            if(accion.equals("Ahora")){
+                informe.setFechaEnvio(Date.from(Instant.now()));
+                informe.setEstado("PendienteAprobacion");
+            } else {
+                informe.setEstado("PendienteEnvio");
+            }
+            
             informetareasFacade.create(informe);
 
             Integer idMiembro = miembroFacade.findByIdProyectoAndDni(proyecto, user).getIdMiembro();
@@ -116,39 +98,61 @@ public class IntroducirTareas extends HttpServlet {
             Integer idActividad = Integer.valueOf((String) request.getServletContext().getAttribute("idActividad"));
             
             Tarea nuevaTarea;
-
-            nuevaTarea = new Tarea("TratoConUsuarios",idMiembro, idActividad);
-            nuevaTarea.setIdInforme(informe);
-            nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("tratoUsuarios")));
-            tareaFacade.create(nuevaTarea);
             
-            nuevaTarea = new Tarea("ReunionesInternasExternas",idMiembro,idActividad);
-            nuevaTarea.setIdInforme(informe);
-            nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("reuniones")));
-            tareaFacade.create(nuevaTarea);
+            String esfuerzo;
 
-            nuevaTarea = new Tarea("LecturaRevisionDocumentacion",idMiembro,idActividad);
-            nuevaTarea.setIdInforme(informe);
-            nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("leerRevisarDocumentacion")));
-            tareaFacade.create(nuevaTarea);
-
-            nuevaTarea = new Tarea("ElaboracionDocumentacion",idMiembro,idActividad);
-            nuevaTarea.setIdInforme(informe);
-            nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("elaborDocumentacion")));
-            tareaFacade.create(nuevaTarea);
-
-            nuevaTarea = new Tarea("DesarrolloVerificacionProgramas",idMiembro,idActividad);
-            nuevaTarea.setIdInforme(informe);
-            nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("programar")));
-            tareaFacade.create(nuevaTarea);
-
-            nuevaTarea = new Tarea("FormacionUsuariosYOtros",idMiembro,idActividad);
-            nuevaTarea.setIdInforme(informe);
-            nuevaTarea.setEsfuerzoReal(Integer.valueOf(request.getParameter("formar")));
-            tareaFacade.create(nuevaTarea);
-
+            esfuerzo = request.getParameter("tratoUsuarios");
+            if(!esfuerzo.isEmpty() && !esfuerzo.equals("0")){
+                nuevaTarea = new Tarea("TratoConUsuarios",idMiembro, idActividad);
+                nuevaTarea.setIdInforme(informe);
+                nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
+                tareaFacade.create(nuevaTarea);
+            }
             
-            request.setAttribute("informe", informe);
+            esfuerzo = request.getParameter("reuniones");
+            if(!esfuerzo.isEmpty() && !esfuerzo.equals("0")){
+                nuevaTarea = new Tarea("ReunionesInternasExternas",idMiembro,idActividad);
+                nuevaTarea.setIdInforme(informe);
+                nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
+                tareaFacade.create(nuevaTarea);
+            }
+            
+            esfuerzo = request.getParameter("leerRevisarDocumentacion");
+            if(!esfuerzo.isEmpty() && !esfuerzo.equals("0")){
+                nuevaTarea = new Tarea("LecturaRevisionDocumentacion",idMiembro,idActividad);
+                nuevaTarea.setIdInforme(informe);
+                nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
+                tareaFacade.create(nuevaTarea);
+            }
+            
+            esfuerzo = request.getParameter("elaborDocumentacion");
+            if(!esfuerzo.isEmpty() && !esfuerzo.equals("0")){
+                nuevaTarea = new Tarea("ElaboracionDocumentacion",idMiembro,idActividad);
+                nuevaTarea.setIdInforme(informe);
+                nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
+                tareaFacade.create(nuevaTarea);
+            }
+            
+            esfuerzo = request.getParameter("programar");
+            if(!esfuerzo.isEmpty() && !esfuerzo.equals("0")){
+                nuevaTarea = new Tarea("DesarrolloVerificacionProgramas",idMiembro,idActividad);
+                nuevaTarea.setIdInforme(informe);
+                nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
+                tareaFacade.create(nuevaTarea);
+            }
+            
+            esfuerzo = request.getParameter("formar");
+            if(!esfuerzo.isEmpty() && !esfuerzo.equals("0")){
+                nuevaTarea = new Tarea("FormacionUsuariosYOtros",idMiembro,idActividad);
+                nuevaTarea.setIdInforme(informe);
+                nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
+                tareaFacade.create(nuevaTarea);
+            }
+        
+            //Si no se ha introducido ninguna tarea borramos el informe
+            if(informe.getTareaList().size()==0){
+                informetareasFacade.remove(informe);
+            }
         }
         
         request.getRequestDispatcher(rd).forward(request, response);

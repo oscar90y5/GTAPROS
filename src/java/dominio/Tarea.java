@@ -42,7 +42,7 @@ public class Tarea implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Actividad actividad;
     @JoinColumn(name = "idInforme", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Informetareas idInforme;
     @JoinColumn(name = "idMiembro", referencedColumnName = "idMiembro", insertable = false, updatable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
