@@ -78,7 +78,7 @@
             }
         %>
         <form role="form" action="VolverMenu" method="POST">
-            <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Volver</button>
+            <button type="submit" class="btn btn-primary" name="accion" value="Volver">Volver</button>
         </form>
     </div>
 </div>

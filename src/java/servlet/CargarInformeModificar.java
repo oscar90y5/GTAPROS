@@ -49,37 +49,43 @@ public class CargarInformeModificar extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         System.out.println("CargarInformeModificar");
-        HttpSession sesion = request.getSession();
-        String dni = (String) sesion.getAttribute("idUser");
-        int idProject = (Integer) sesion.getAttribute("idProject");
-        Integer idActividad = (Integer) sesion.getAttribute("idActividad");
-        //sesion.removeAttribute("idActividad");
-        Actividad actividad = actividadFacade.find(idActividad);
-        System.out.println("idProyecto -" + idProject + "- idActividad -" + idActividad + "- dni -" + dni + "-");
-        System.out.println("actividad string " + actividad);
-        Miembro miembro = miembroFacade.findByDniAndIdProyecto(dni, idProject);
-        System.out.println("miembro " + miembro);
-
-        String combo = request.getParameter("informeCombo");
-        System.out.println(combo);
+        String accion = request.getParameter("accion");
         String rd = "";
-        if (combo == null || combo.equals("")) {
-            rd = "seleccionModificarTarea.jsp";
+        if (!accion.equals("Aceptar")) {
+            rd = "VolverMenu";
         } else {
-            int pos = combo.indexOf('-');
-            int idInforme = Integer.parseInt(combo.substring(4, pos).trim());
-            System.out.println(idInforme);
-            List<Tarea> tareas=new ArrayList<Tarea>();
-            for (Tarea t : actividad.getTareaList()) {
-                if (t.getIdInforme().getId().equals(idInforme)) {
-                    tareas.add(t);
+            HttpSession sesion = request.getSession();
+            String dni = (String) sesion.getAttribute("idUser");
+            int idProject = (Integer) sesion.getAttribute("idProject");
+            Integer idActividad = (Integer) sesion.getAttribute("idActividad");
+            //sesion.removeAttribute("idActividad");
+            Actividad actividad = actividadFacade.find(idActividad);
+            System.out.println("idProyecto -" + idProject + "- idActividad -" + idActividad + "- dni -" + dni + "-");
+            System.out.println("actividad string " + actividad);
+            Miembro miembro = miembroFacade.findByDniAndIdProyecto(dni, idProject);
+            System.out.println("miembro " + miembro);
+
+            String combo = request.getParameter("informeCombo");
+            System.out.println(combo);
+
+            if (combo == null || combo.equals("")) {
+                request.setAttribute("error", "Selecciona una opción en el selector por favor.");
+                rd = "seleccionModificarTarea.jsp";
+            } else {
+                int pos = combo.indexOf('-');
+                int idInforme = Integer.parseInt(combo.substring(4, pos).trim());
+                System.out.println(idInforme);
+                List<Tarea> tareas = new ArrayList<Tarea>();
+                for (Tarea t : actividad.getTareaList()) {
+                    if (t.getIdInforme().getId().equals(idInforme)) {
+                        tareas.add(t);
+                    }
                 }
+                request.setAttribute("tareas", tareas);
+                rd = "modificarInforme.jsp";
             }
-            request.setAttribute("tareas", tareas);
-            rd = "modificarInforme.jsp";
         }
         request.getRequestDispatcher(rd).forward(request, response);
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

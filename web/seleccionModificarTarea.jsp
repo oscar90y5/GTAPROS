@@ -39,14 +39,19 @@
                     }
                 %>
                 <div class="caja_small">
+                    <%
+                        String error = null;
+                        if ((error = (String) request.getAttribute("error")) != null) {
+                             %><p style="color:red"><%=error%></p><%
+                        }
+                    %>
                     <form role="form" action="CargarInformeModificar" method="post">
                         <label for="informeCombo">Selecciona un informe:</label>
                         <select class="form-control" 
                                 id="informeCombo" 
                                 name="informeCombo">
                             <option selected></option>
-                            <%
-                                for (Informetareas i : lista) {
+                            <%                                for (Informetareas i : lista) {
                             %>
                             <option>id = <%=i.getId()%> - <%=i.getSemanaEnvioPrettyPrinter()%></option>
                             <% } %>
@@ -60,6 +65,9 @@
                 <%
                     }
                 %>
+                <form role="form" action="VolverMenu" method="POST">
+                    <button type="submit" class="btn btn-primary" name="accion" value="Volver">Volver</button>
+                </form>
             </div>
         </div>
     </body>

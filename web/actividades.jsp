@@ -17,6 +17,12 @@
     <body>
         <div class="container">
             <div class="caja_principal">
+                <%
+                    List<Actividad> actividades = (List<Actividad>) request.getAttribute("actividades");
+                    if (actividades == null || actividades.size() == 0) {%>
+                <h3>No existen actividades relevantes para la accion que usted quiere realizar.</h3>
+                <%} else {
+                %>
                 <table class="table columna_caja_principal" >
                     <tr><h1>Selecciona una actividad:</h1></tr>
                     <tr style="align-content: center">
@@ -30,13 +36,10 @@
                         <td><h4>Descripcion</h4></td>
                     </tr>
                     <%
-                        List<Actividad> actividades = (List<Actividad>) request.getAttribute("actividades");
-                        if (actividades == null) {%>
-                    <tr>No existen actividades en este proyecto.</tr>
-                    <%} else {
                         String destino = (String) request.getAttribute("destino");
                         for (Actividad a : actividades) {
                     %>
+
                     <tr style="cursor:pointer" 
                         onclick="document.location.href = '<%= destino%>?idActividad=<%=a.getId()%>'"
                         onmouseover="this.style.color = '#2B58CC';" onmouseout="this.style.color = '#4E4E4E';">
@@ -53,6 +56,9 @@
                         }
                     %>
                 </table>
+                <form role="form" action="VolverMenu" method="POST">
+                    <button type="submit" class="btn btn-primary" name="accion" value="Volver">Volver</button>
+                </form>
             </div>
         </div>
     </body>
