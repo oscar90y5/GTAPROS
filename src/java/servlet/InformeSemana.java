@@ -7,6 +7,7 @@ package servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dominio.Actividad;
+import dominio.Informetareas;
 import dominio.Proyecto;
 import dominio.Tarea;
 import java.io.IOException;
@@ -25,6 +26,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import persistencia.InformetareasFacadeLocal;
 import persistencia.MiembroFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
 
@@ -34,6 +36,9 @@ import persistencia.ProyectoFacadeLocal;
  */
 @WebServlet(name = "InformeSemana", urlPatterns = {"/InformeSemana"})
 public class InformeSemana extends HttpServlet {
+
+    @EJB
+    private InformetareasFacadeLocal informetareasFacade;
 
     @EJB
     private MiembroFacadeLocal miembroFacade;
@@ -56,6 +61,7 @@ public class InformeSemana extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
+        String vista = (String) sesion.getAttribute("vista");
         String fecha1= null;
         String fecha2 = null;
         String rd;
@@ -69,44 +75,47 @@ public class InformeSemana extends HttpServlet {
         }else{
             Date fechaInicio = obtenerFecha(fecha1);
             Date fechaFinal =  obtenerFecha(fecha2);
-            Date fechaActual = new Date();
             long diferencia = fechaFinal.getTime() - fechaInicio.getTime();
             long dias = diferencia / (1000 * 60 * 60 * 24);
             String stringP = (String) sesion.getAttribute("idP");
             int idP = Integer.parseInt(stringP);
             Proyecto p = proyectoFacade.find(idP);
-            List<Tarea> datosTarea = new ArrayList<>();
 
             if(dias!=7){
                 request.setAttribute("datos", "porBuscar");
                 rd = "informeSemana.jsp?error=dias";
             }else{
-                List<Actividad> actividades = p.getActividadList();
-                ArrayList<Actividad> actPeriodo = new ArrayList<>();
-                System.out.println("servlet.InformeSemana.processRequest()"+fecha1);
-                System.out.println("servlet.InformeSemana.processRequest()"+fecha2);
-                for(Actividad a: actividades){
-                    Date fechaIniA = null;
-                    Date fechaFinA = null;
-                    try{
-                        fechaIniA = a.getFechaInicio();
-                        fechaFinA = a.getFechaFin();
-                    }catch(NullPointerException e){ }
-                    //Si fechaIniA==null actividad no ha empezado, imposible que entre en periodo
-                    if(fechaIniA!=null && fechaFinA==null){
-                        if(fechaIniA.before(fechaInicio) || a.getFechaInicio().equals(fechaInicio))
-                            actPeriodo.add(a);
-                    }if(fechaIniA!=null && fechaFinA!=null){
-                        if((fechaIniA.before(fechaInicio) || fechaIniA.equals(fechaInicio))
-                            && (fechaFinal.before(fechaFinA) || fechaFinal.equals(fechaFinA)))
-                            actPeriodo.add(a);
+                if(vista.equals("desarrollador.jsp")){
+                    List<Informetareas> informes = informetareasFacade.findAll();
+                    //TO DO ALL
+                    
+                }if(vista.equals("jefeProyecto.jsp")){
+                    List<Actividad> actividades = p.getActividadList();
+                    ArrayList<Actividad> actPeriodo = new ArrayList<>();
+                    for(Actividad a: actividades){
+                        Date fechaIniA = null;
+                        Date fechaFinA = null;
+                        try{
+                            fechaIniA = a.getFechaInicio();
+                            fechaFinA = a.getFechaFin();
+                        }catch(NullPointerException e){ }
+                        //Si fechaIniA==null actividad no ha empezado, imposible que entre en periodo
+                        if(fechaIniA!=null && fechaFinA==null){
+                            if(fechaIniA.before(fechaInicio) || a.getFechaInicio().equals(fechaInicio))
+                                actPeriodo.add(a);
+                        }if(fechaIniA!=null && fechaFinA!=null){
+                            if((fechaIniA.before(fechaInicio) || fechaIniA.equals(fechaInicio))
+                                && (fechaFinal.before(fechaFinA) || fechaFinal.equals(fechaFinA)))
+                                actPeriodo.add(a);
+                        }
                     }
+
+                    request.setAttribute("fecha1", fecha1);
+                    request.setAttribute("fecha2", fecha2);
+                    request.setAttribute("datos", actPeriodo);
+                    sesion.removeAttribute("idP");
                 }
-                
-                request.setAttribute("fecha1", fecha1);
-                request.setAttribute("fecha2", fecha2);
-                request.setAttribute("datos", actPeriodo);
-                sesion.removeAttribute("idP");
+
                 rd = "informeSemana.jsp";
             }
         }

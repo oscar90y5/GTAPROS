@@ -59,10 +59,10 @@ public class FijarVacaciones extends HttpServlet {
         String rd = "exito.jsp";
         
         if(accion.equals("Cancelar")){
-            //TO DO ALL
-            rd = "desarrollador.jsp";
-            rd = "administrador.jsp";
-            rd = "jefeProyecto.jsp";
+            String vista = (String) sesion.getAttribute("vista");
+            if(vista.equals("administrador.jsp")) rd = "administrador.jsp";
+            if(vista.equals("desarrollador.jsp")) rd = "desarrollador.jsp";
+            if(vista.equals("administrador.jsp")) rd = "administrador.jsp";        
         
         }if(accion.equals("Aceptar")){
             String fecha1 = (String) request.getParameter("fecha1");

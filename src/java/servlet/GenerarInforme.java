@@ -114,7 +114,6 @@ public class GenerarInforme extends HttpServlet {
         }
         if(informe.equals("Actividades/Recursos por periodo posterior")){
             sesion.setAttribute("idP", stringP);
-            System.out.println("servlet.GenerarInforme.processRequest()"+stringP);
             request.setAttribute("datos", "porBuscar");
             rd = "informePeriodo.jsp?infor=recursos";
         }
@@ -124,7 +123,14 @@ public class GenerarInforme extends HttpServlet {
             rd = "informePeriodo.jsp?infor=trabajadores";
         }
         if(informe.equals("Informe general")){
-            //Generar informe
+             datosActividad = actividadFacade.findByIdProject(p);
+             rd = "informe.jsp?infor=general";
+        }
+        
+        if(informe.equals("Informes Actividad por periodo semanal")){
+            sesion.setAttribute("idP", stringP);
+            request.setAttribute("datos", "porBuscar");
+            rd = "informeSemana.jsp?infor=actividades";
         }
         
         if(!datosTarea.isEmpty()){

@@ -64,7 +64,6 @@ public class ObtenerInformes extends HttpServlet {
         String rd = "proyectos.jsp";
         
         for(Miembro m: roles){
-            System.out.println("servlet.ObtenerInformes.processRequest()"+ roles);
             if(m.getIdProyecto().getId().equals(idP)){
                 if(m.getIdRol().getNombreRol().equals("JefeProyecto")){
                     String json = mapper.writeValueAsString(proyecto);
@@ -73,7 +72,7 @@ public class ObtenerInformes extends HttpServlet {
                 }else{
                     String json = mapper.writeValueAsString(proyecto);
                     request.setAttribute("proyecto", proyecto);
-                    rd = "informeDesarrollador.jsp";
+                    rd = "informes.jsp?in=true";
                 }
             }else
                rd = "informes.jsp?in=false";

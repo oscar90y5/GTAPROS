@@ -21,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import persistencia.ActividadFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
 import persistencia.UsuarioFacadeLocal;
+import static servlet.JefeProyecto.mapper;
 
 /**
  *
@@ -56,7 +57,7 @@ public class Desarrollador extends HttpServlet {
         String dni = (String) sesion.getAttribute("idUser");
         Usuario user = usuarioFacade.find(dni);
         //Proyecto proyect = proyectoFacade.find(idProject);
-        System.out.println("Desarrollador: dni " + dni + " idProject " + idProject);
+        List<Proyecto> proyects = null;
         String accion = request.getParameter("accion");
         String rd = "Desarrollador.jsp";
         if (accion != null) {
@@ -75,12 +76,19 @@ public class Desarrollador extends HttpServlet {
                 rd = "actividades.jsp";
             }
             if (accion.equals("Obtener informes")) {
-                // out.print("Obtener informes en desarrollo....");
+                proyects = proyectoFacade.findAll();
+                rd = "proyectos.jsp?accion=informes";
             }
             if (accion.equals("Fijar vacaciones")) rd = "vacaciones.jsp";
             if(accion.equals("Cerrar Sesion")) rd = "index.jsp";
 
         }
+        
+        if (proyects != null) {
+            String json = mapper.writeValueAsString(proyects);
+            request.setAttribute("proyectos", json);
+        }
+        
         request.getRequestDispatcher(rd).forward(request, response);
     }
 
