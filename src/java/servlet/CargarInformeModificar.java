@@ -5,32 +5,36 @@
  */
 package servlet;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import dominio.Actividad;
+import dominio.Informetareas;
 import dominio.Miembro;
-import dominio.Usuario;
+import dominio.Tarea;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import persistencia.ActividadFacadeLocal;
 import persistencia.MiembroFacadeLocal;
-import persistencia.RolFacadeLocal;
-import persistencia.UsuarioFacadeLocal;
 
-public class LoginServlet extends HttpServlet {
-
-    @EJB
-    private RolFacadeLocal rolFacade;
-    public static final ObjectMapper mapper = new ObjectMapper();
+/**
+ *
+ * @author miki
+ */
+@WebServlet(name = "CargarInformeModificar", urlPatterns = {"/CargarInformeModificar"})
+public class CargarInformeModificar extends HttpServlet {
 
     @EJB
     private MiembroFacadeLocal miembroFacade;
 
     @EJB
-    private UsuarioFacadeLocal usuarioFacade;
+    private ActividadFacadeLocal actividadFacade;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,45 +47,44 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html");
-        HttpSession sesion = request.getSession();
-        String id = request.getParameter("id");
-        String password = request.getParameter("password");
-        String rd = "index.jsp";
+        response.setContentType("text/html;charset=UTF-8");
+        System.out.println("CargarInformeModificar");
+        String accion = request.getParameter("accion");
+        String rd = "";
+        if (!accion.equals("Aceptar")) {
+            rd = "VolverMenu";
+        } else {
+            HttpSession sesion = request.getSession();
+            String dni = (String) sesion.getAttribute("idUser");
+            int idProject = (Integer) sesion.getAttribute("idProject");
+            Integer idActividad = (Integer) sesion.getAttribute("idActividad");
+            //sesion.removeAttribute("idActividad");
+            Actividad actividad = actividadFacade.find(idActividad);
+            System.out.println("idProyecto -" + idProject + "- idActividad -" + idActividad + "- dni -" + dni + "-");
+            System.out.println("actividad string " + actividad);
+            Miembro miembro = miembroFacade.findByDniAndIdProyecto(dni, idProject);
+            System.out.println("miembro " + miembro);
 
-        Usuario user = usuarioFacade.find(id);
+            String combo = request.getParameter("informeCombo");
+            System.out.println(combo);
 
-        if (user != null) {
-            if (password.equals(user.getClave())) {
-                sesion.setAttribute("idUser", id);
-                if (user.getEsAdmin()) {
-                    rd = "administrador.jsp";
-                    sesion.setAttribute("vista", "administrador.jsp");
-                } else {
-                    List<Miembro> miembros = miembroFacade.findByDni(user);
-                    if (miembros.size() == 1) {
-                        int idProject = miembros.get(0).getIdProyecto().getId();
-                        sesion.setAttribute("idProject", idProject);
-                        if (miembros.get(0).getIdRol().getNombreRol().equals("JefeProyecto")) {
-                            rd = "jefeProyecto.jsp";
-                            sesion.setAttribute("vista", "jefeProyecto.jsp");
-                        } else {
-                            rd = "desarrollador.jsp";
-                            sesion.setAttribute("vista", "desarrollador.jsp");
-                        }
-                    } else {
-                        String json = mapper.writeValueAsString(miembros);
-                        request.setAttribute("misProjects", json);
-                        rd = "misProyectos.jsp";
+            if (combo == null || combo.equals("")) {
+                request.setAttribute("error", "Selecciona una opción en el selector por favor.");
+                rd = "seleccionModificarTarea.jsp";
+            } else {
+                int pos = combo.indexOf('-');
+                int idInforme = Integer.parseInt(combo.substring(4, pos).trim());
+                System.out.println(idInforme);
+                List<Tarea> tareas = new ArrayList<Tarea>();
+                for (Tarea t : actividad.getTareaList()) {
+                    if (t.getIdInforme().getId().equals(idInforme)) {
+                        tareas.add(t);
                     }
                 }
-            } else {
-                rd = "index.jsp?error=clave";
+                request.setAttribute("tareas", tareas);
+                rd = "modificarInforme.jsp";
             }
-        } else {
-            rd = "index.jsp?error=dni";
         }
-
         request.getRequestDispatcher(rd).forward(request, response);
     }
 

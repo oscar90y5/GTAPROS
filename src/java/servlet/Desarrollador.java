@@ -6,10 +6,13 @@
 package servlet;
 
 import dominio.Actividad;
+import dominio.Miembro;
 import dominio.Proyecto;
+import dominio.Tarea;
 import dominio.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -19,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import persistencia.ActividadFacadeLocal;
+import persistencia.MiembroFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
 import persistencia.UsuarioFacadeLocal;
 import static servlet.JefeProyecto.mapper;
@@ -29,6 +33,9 @@ import static servlet.JefeProyecto.mapper;
  */
 @WebServlet(name = "Desarrollador", urlPatterns = {"/Desarrollador"})
 public class Desarrollador extends HttpServlet {
+
+    @EJB
+    private MiembroFacadeLocal miembroFacade;
 
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
@@ -56,31 +63,77 @@ public class Desarrollador extends HttpServlet {
         Proyecto proyecto = proyectoFacade.find(idProject);
         String dni = (String) sesion.getAttribute("idUser");
         Usuario user = usuarioFacade.find(dni);
+        Miembro miembroActual = miembroFacade.findByIdProyectoAndDni(proyecto, user);
         //Proyecto proyect = proyectoFacade.find(idProject);
         List<Proyecto> proyects = null;
         String accion = request.getParameter("accion");
         String rd = "Desarrollador.jsp";
         if (accion != null) {
             if (accion.equals("Introducir tarea")) {
-                //  out.print("Introducir datos de tareas un desarrollo....");
-                rd = "introducirTarea.jsp";
+                //Obtenemos la lista de actividades activas pertenecientes al proyecto y al usuario
+                List<Actividad> actividades = actividadFacade.findActiveActivities(proyecto);
+                List<Miembro> miembros;
+                Actividad a;
+                System.out.println("actividades activas");
+                //si el for es de la forma: (Actividad a : actividades) falla al borrar elementos.
+                for (int i = 0; i < actividades.size(); i++) {
+                    a = actividades.get(i);
+                    if (!a.getMiembroList().contains(miembroActual)) {
+                        System.out.println("borramos");
+                        actividades.remove(a);
+                        i--;
+                        System.out.println("borrado");
+                    }
+                }
+                System.out.println("actividades: " + actividades.size());
+
+                if (actividades.size() == 1) {
+                    //redirigimos a introducir tareas con el id de la actividad
+                    response.sendRedirect("introducirTareas.jsp?idActividad=" + actividades.get(0).getId());
+                } else {
+                    request.setAttribute("actividades", actividades);
+                    request.setAttribute("destino", "introducirTareas.jsp");
+                    rd = "actividades.jsp";
+                }
+                System.out.println("salimos");
+
             }
             if (accion.equals("Modificar tareas activas")) {
-                // out.print("Modificar datos de tareas en desarrollo....");
+                List<Actividad> actividades = new ArrayList<>();
+                for (Actividad a : miembroActual.getActividadList()) {
+                    if (a.getEstado().equalsIgnoreCase("Abierto")) {
+                        if (hayInformesRechazadosOPendientesEnvio(a)) {
+                            actividades.add(a);
+                        }
+                    }
+                }
+                System.out.println("actividades " + actividades.size());
+                request.setAttribute("actividades", actividades);
+                request.setAttribute("destino", "ModificarTarea");
+                rd = "actividades.jsp";
             }
             if (accion.equals("Consultar datos de tareas")) {
-                List<Actividad> actividades = actividadFacade.findByIdProyectoAndDni(proyecto, user);
-                System.out.println(actividades);
+                List<Actividad> actividades = new ArrayList<>();
+                for (Actividad a : miembroActual.getActividadList()) {
+                    if (a.getIdProyecto().getId().equals(idProject)) {
+                        actividades.add(a);
+                    }
+                }
                 System.out.println(actividades.size());
                 request.setAttribute("actividades", actividades);
+                request.setAttribute("destino", "ConsultarTareas");
                 rd = "actividades.jsp";
             }
             if (accion.equals("Obtener informes")) {
                 proyects = proyectoFacade.findAll();
                 rd = "proyectos.jsp?accion=informes";
             }
-            if (accion.equals("Fijar vacaciones")) rd = "vacaciones.jsp";
-            if(accion.equals("Cerrar Sesion")) rd = "index.jsp";
+            if (accion.equals("Fijar vacaciones")) {
+                rd = "vacaciones.jsp";
+            }
+            if (accion.equals("Cerrar Sesion")) {
+                rd = "index.jsp";
+            }
 
         }
         
@@ -130,5 +183,16 @@ public class Desarrollador extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private boolean hayInformesRechazadosOPendientesEnvio(Actividad a) {
+        boolean devolver = false;
+        for (Tarea t : a.getTareaList()) {
+            if (t.getIdInforme().getEstado().equalsIgnoreCase("PendienteEnvio")
+                    || t.getIdInforme().getEstado().equalsIgnoreCase("Rechazado")) {
+                devolver = true;
+            }
+        }
+        return devolver;
+    }
 
 }

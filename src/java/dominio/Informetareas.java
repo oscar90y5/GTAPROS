@@ -6,36 +6,35 @@
 package dominio;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author miki
  */
 @Entity
-@Table(name = "informetareas")
+@Table(name = "InformeTareas")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Informetareas.findAll", query = "SELECT i FROM Informetareas i")
     , @NamedQuery(name = "Informetareas.findById", query = "SELECT i FROM Informetareas i WHERE i.id = :id")
     , @NamedQuery(name = "Informetareas.findByFechaEnvio", query = "SELECT i FROM Informetareas i WHERE i.fechaEnvio = :fechaEnvio")
     , @NamedQuery(name = "Informetareas.findByEstado", query = "SELECT i FROM Informetareas i WHERE i.estado = :estado")
-    , @NamedQuery(name = "Informetareas.findBySemana", query = "SELECT i FROM Informetareas i WHERE i.semana = :semana")})
+    , @NamedQuery(name = "Informetareas.findBySemana", query = "SELECT i FROM Informetareas i WHERE i.semana = :semana")
+    , @NamedQuery(name = "Informetareas.findByIdActividad", query = "SELECT i FROM Informetareas i, Tarea t WHERE i.id = t.idInforme AND t.actividad.id = :idActividad")})
+
 public class Informetareas implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,8 +51,6 @@ public class Informetareas implements Serializable {
     @Column(name = "semana")
     @Temporal(TemporalType.DATE)
     private Date semana;
-    @OneToMany(mappedBy = "idInforme", fetch = FetchType.EAGER)
-    private List<Tarea> tareaList;
 
     public Informetareas() {
     }
@@ -73,6 +70,14 @@ public class Informetareas implements Serializable {
     public Date getFechaEnvio() {
         return fechaEnvio;
     }
+    
+    public String getFechaEnvioPrettyPrinter() {
+         if (fechaEnvio != null) {
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            return df.format(fechaEnvio);
+        }
+        return " - ";
+    }
 
     public void setFechaEnvio(Date fechaEnvio) {
         this.fechaEnvio = fechaEnvio;
@@ -89,18 +94,17 @@ public class Informetareas implements Serializable {
     public Date getSemana() {
         return semana;
     }
+    
+     public String getSemanaEnvioPrettyPrinter() {
+         if (semana != null) {
+            SimpleDateFormat df = new SimpleDateFormat("'Semana' W '('dd/MM/yyyy')'");
+            return df.format(semana);
+        }
+        return "";
+    }
 
     public void setSemana(Date semana) {
         this.semana = semana;
-    }
-
-    @XmlTransient
-    public List<Tarea> getTareaList() {
-        return tareaList;
-    }
-
-    public void setTareaList(List<Tarea> tareaList) {
-        this.tareaList = tareaList;
     }
 
     @Override
@@ -127,5 +131,5 @@ public class Informetareas implements Serializable {
     public String toString() {
         return "dominio.Informetareas[ id=" + id + " ]";
     }
-    
+
 }

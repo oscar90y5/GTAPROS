@@ -17,8 +17,8 @@
                         if(error.equals("clave") || error.equals("dni")){%>
                         <p style="color:red">Usuario o contraseña incorrectos</p>
                     <%}}catch(NullPointerException e){ }%>
-                    <input type="text" name="id" placeholder="User" required class="form-control input-lg" />
-                    <input type="password" name="password" placeholder="Password" required class="form-control input-lg" />
+                    <input type="text" name="id" placeholder="DNI" required class="form-control input-lg" />
+                    <input type="password" name="password" placeholder="clave" required class="form-control input-lg" />
                     <button type="submit" name="go" class="btn btn-lg btn-primary btn-block">Entrar</button>
                 </form>
                 <div class="form-links">
