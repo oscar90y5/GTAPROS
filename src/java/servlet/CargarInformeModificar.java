@@ -9,12 +9,9 @@ import dominio.Actividad;
 import dominio.Informetareas;
 import dominio.Miembro;
 import dominio.Tarea;
-import dominio.TareaPK;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -24,22 +21,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import persistencia.ActividadFacadeLocal;
-import persistencia.InformetareasFacadeLocal;
 import persistencia.MiembroFacadeLocal;
-import persistencia.TareaFacadeLocal;
 
 /**
  *
  * @author miki
  */
-@WebServlet(name = "ModificarInforme", urlPatterns = {"/ModificarInforme"})
-public class ModificarInforme extends HttpServlet {
-
-    @EJB
-    private TareaFacadeLocal tareaFacade;
-
-    @EJB
-    private InformetareasFacadeLocal informetareasFacade;
+@WebServlet(name = "CargarInformeModificar", urlPatterns = {"/CargarInformeModificar"})
+public class CargarInformeModificar extends HttpServlet {
 
     @EJB
     private MiembroFacadeLocal miembroFacade;
@@ -59,75 +48,38 @@ public class ModificarInforme extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        System.out.println("ModificarInforme");
+        System.out.println("CargarInformeModificar");
         HttpSession sesion = request.getSession();
         String dni = (String) sesion.getAttribute("idUser");
         int idProject = (Integer) sesion.getAttribute("idProject");
         Integer idActividad = (Integer) sesion.getAttribute("idActividad");
-        sesion.removeAttribute("idActividad");
+        //sesion.removeAttribute("idActividad");
         Actividad actividad = actividadFacade.find(idActividad);
         System.out.println("idProyecto -" + idProject + "- idActividad -" + idActividad + "- dni -" + dni + "-");
-        int idInforme = Integer.parseInt(request.getParameter("idInforme"));
-        System.out.println("idInforme " + idInforme);
+        System.out.println("actividad string " + actividad);
         Miembro miembro = miembroFacade.findByDniAndIdProyecto(dni, idProject);
         System.out.println("miembro " + miembro);
 
-        Informetareas i = informetareasFacade.find(idInforme);
-
-        //Tareas insertadas en el form
-        List<String> nombres = Arrays.asList("TratoConUsuarios", "ReunionesInternasExternas",
-                "LecturaRevisionDocumentacion", "ElaboracionDocumentacion",
-                "DesarrolloVerificacionProgramas", "FormacionUsuariosYOtros");
-        String s;
-        int dur;
-        HashMap<String, Integer> tareasModificadas = new HashMap<String, Integer>();
-        for (String nombre : nombres) {
-            s = request.getParameter(nombre);
-            if (s != null && !s.equals("")) {
-                dur = Integer.parseInt(s);
-                if (dur > 0 && !tareasModificadas.containsKey(nombre)) {
-                    tareasModificadas.put(nombre, dur);
+        String combo = request.getParameter("informeCombo");
+        System.out.println(combo);
+        String rd = "";
+        if (combo == null || combo.equals("")) {
+            rd = "seleccionModificarTarea.jsp";
+        } else {
+            int pos = combo.indexOf('-');
+            int idInforme = Integer.parseInt(combo.substring(4, pos).trim());
+            System.out.println(idInforme);
+            List<Tarea> tareas=new ArrayList<Tarea>();
+            for (Tarea t : actividad.getTareaList()) {
+                if (t.getIdInforme().getId().equals(idInforme)) {
+                    tareas.add(t);
                 }
             }
+            request.setAttribute("tareas", tareas);
+            rd = "modificarInforme.jsp";
         }
-        for (String una : tareasModificadas.keySet()) {
-            System.out.println(una + " - " + tareasModificadas.get(una));
-        }
+        request.getRequestDispatcher(rd).forward(request, response);
 
-        //Extraemos tareas de la BD
-        List<Tarea> tareasInBD = new ArrayList<Tarea>();
-        for (Tarea t : actividad.getTareaList()) {
-            if (t.getIdInforme().getId().equals(i.getId())) {
-                tareasInBD.add(t);
-            }
-        }
-        //Comparamos con las tareas del informe
-        Tarea tar;
-        for (String modif : tareasModificadas.keySet()) {
-            if ((tar = estaEnBD(modif, tareasInBD)) != null) {
-                //Editar
-                tar.setEsfuerzoReal(tareasModificadas.get(tar.getTareaPK().getTipo()));
-                tareaFacade.edit(tar);
-            } else {
-                //Insertar
-                tar = new Tarea(modif, miembro.getIdMiembro(), idActividad);
-                tar.setIdInforme(i);
-                tar.setEsfuerzoReal(tareasModificadas.get(tar.getTareaPK().getTipo()));
-                tareaFacade.create(tar);
-            }
-        }
-
-//        for (Tarea t : actividad.getTareaList()) {
-//            if (t.getIdInforme().getId().equals(i.getId())) {
-//                //Tareas del informe
-//                System.out.println("iniciales" + t.getTareaPK().getTipo());
-//                if (tareasModificadas.containsKey(t.getTareaPK().getTipo())) {
-//                    //Esta tarea se ha modificado
-//                    t.setEsfuerzoReal(tareasModificadas.get(t.getTareaPK().getTipo()));
-//                    tareaFacade.edit(t);
-//                }
-//            }
-//        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -168,14 +120,5 @@ public class ModificarInforme extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-    private Tarea estaEnBD(String modif, List<Tarea> tareasInBD) {
-        for (Tarea t : tareasInBD) {
-            if (t.getTareaPK().getTipo().equals(modif)) {
-                return t;
-            }
-        }
-        return null;
-    }
 
 }
