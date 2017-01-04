@@ -69,6 +69,7 @@
                     <button type="submit" class="btn btn-danger" name="accion" value="Cancelar">Cancelar</button>
                 </form>
             </div>
-       </div>
+        </div>
+        </div>
     </body>
 </html>

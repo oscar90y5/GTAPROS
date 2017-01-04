@@ -4,6 +4,8 @@
     Author     : Rebeca
 --%>
 
+<%@page import="dominio.Tarea"%>
+<%@page import="dominio.Informetareas"%>
 <%@page import="dominio.Actividad"%>
 <%@page import="com.fasterxml.jackson.core.type.TypeReference"%>
 <%@page import="com.fasterxml.jackson.databind.ObjectMapper"%>
@@ -26,7 +28,7 @@
             <div class="caja_principal">
                 <h2>Relacion Trabajadores/Actividades por periodo semanal: </h2>
                 <% 
-                ObjectMapper mapper = new ObjectMapper();
+                HttpSession sesion = request.getSession();
                 String error = null;
                 try{
                     error = (String) request.getParameter("error");
@@ -69,6 +71,35 @@
                                 </script>
                                 </div>
                             <%}}catch(ClassCastException e){
+                                String vista = (String) sesion.getAttribute("vista");
+                                if(vista.equals("desarrollador.jsp")){
+                                    List<Informetareas> datos = (List<Informetareas>) request.getAttribute("datos");
+                                    if(datos==null){
+                            %>
+                            <p>No tienes informes de tarea en este periodo</p>
+                            <%}else{
+                            %>
+                            <table class="table columna_caja_principal" >
+                                <tr><p>Periodo: <%=fecha1%> - <%=fecha2%></p></tr>
+                                <tr>
+                                    <td><h4>Id Informe</h4></td>
+                                    <td><h4>Nombre Actividad</h4></td>
+                                    <td><h4>Semana</h4></td>
+                                    <td><h4>Estado</h4></td>
+                                </tr>
+                                <%for(Informetareas i: datos){
+                                    List<Tarea> tareas = i.getTareaList();
+                                    Tarea t = tareas.get(0);
+                                %>
+                                <tr>
+                                    <td><%=i.getId()%></td>
+                                    <td><%=t.getActividad().getNombre()%></td>
+                                    <td><%=i.getSemana()%></td>
+                                    <td><%=i.getEstado()%></td>
+                                </tr>
+                                <%}}%>
+                            </table>
+                            <%}if(vista.equals("jefeProyecto.jsp")){
                                 List<Actividad> datos = (List<Actividad>) request.getAttribute("datos");
                                 if(datos==null){
                             %>
@@ -84,10 +115,8 @@
                                     <td><h4>Periodo Actividad</h4></td>
                                 </tr>
                                 <%for(Actividad a: datos){
-                                    System.out.println("className.methodName()"+a);
                                     List<Miembro> miembros = a.getMiembroList();
                                     for(Miembro m: miembros){
-                                        System.out.println("className.methodName()"+m);
                                 %>
                                 <tr>
                                     <td><%=m.getDni().getDni()%></td>
@@ -95,9 +124,9 @@
                                     <td><%=a.getNombre()%></td>
                                     <td><%=a.getFechaInicioPrettyString()%> - <%=a.getFechaFinPrettyString()%></td>
                                 </tr>
-                                <%}}}%>
+                                <%}}%>
                             </table>
-                        <%}}catch(NullPointerException e){ }%>
+                        <%}}}}catch(NullPointerException e){ }%>
                         <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Aceptar</button>
                 </form>
             </div>

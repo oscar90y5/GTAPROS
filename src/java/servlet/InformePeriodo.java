@@ -5,11 +5,8 @@
  */
 package servlet;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dominio.Actividad;
-import dominio.Informetareas;
 import dominio.Proyecto;
-import dominio.Tarea;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -26,28 +23,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import persistencia.InformetareasFacadeLocal;
-import persistencia.MiembroFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
 
 /**
  *
  * @author Rebeca
  */
-@WebServlet(name = "InformeSemana", urlPatterns = {"/InformeSemana"})
-public class InformeSemana extends HttpServlet {
-
-    @EJB
-    private InformetareasFacadeLocal informetareasFacade;
-
-    @EJB
-    private MiembroFacadeLocal miembroFacade;
+@WebServlet(name = "InformePeriodo", urlPatterns = {"/InformePeriodo"})
+public class InformePeriodo extends HttpServlet {
 
     @EJB
     private ProyectoFacadeLocal proyectoFacade;
 
-    public static final ObjectMapper mapper = new ObjectMapper();
-    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -61,10 +48,11 @@ public class InformeSemana extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
-        String vista = (String) sesion.getAttribute("vista");
         String fecha1= null;
         String fecha2 = null;
-        String rd;
+        ArrayList<Actividad> actPeriodo = new ArrayList<>();
+        String infor = (String) request.getParameter("infor");
+        String rd = "informePeriodo.jsp";
         try{
             fecha1 = (String) request.getParameter("fecha1");
             fecha2 = (String) request.getParameter("fecha2");
@@ -75,23 +63,40 @@ public class InformeSemana extends HttpServlet {
         }else{
             Date fechaInicio = obtenerFecha(fecha1);
             Date fechaFinal =  obtenerFecha(fecha2);
-            long diferencia = fechaFinal.getTime() - fechaInicio.getTime();
-            long dias = diferencia / (1000 * 60 * 60 * 24);
+            Date fechaActual = new Date();
             String stringP = (String) sesion.getAttribute("idP");
-            int idP = Integer.parseInt(stringP);
+            int idP = Integer.valueOf(stringP);
             Proyecto p = proyectoFacade.find(idP);
-
-            if(dias!=7){
-                request.setAttribute("datos", "porBuscar");
-                rd = "informeSemana.jsp?error=dias";
-            }else{
-                if(vista.equals("desarrollador.jsp")){
-                    List<Informetareas> informes = informetareasFacade.findAll();
-                    //TO DO ALL
-                    
-                }if(vista.equals("jefeProyecto.jsp")){
-                    List<Actividad> actividades = p.getActividadList();
-                    ArrayList<Actividad> actPeriodo = new ArrayList<>();
+            List<Actividad> actividades = p.getActividadList();
+            
+            if(infor.equals("realplanificado")){
+                for(Actividad a: actividades){
+                    Date fechaIniA = null;
+                    Date fechaFinA = null;
+                    try{
+                        fechaIniA = a.getFechaInicio();
+                        fechaFinA = a.getFechaFin();
+                    }catch(NullPointerException e){ }
+                    //Si fechaIniA==null actividad no ha empezado, imposible que entre en periodo
+                    //Si fechaFinA==null aun no ha acabado, no tenemos su tiempoReal
+                    if(fechaIniA!=null && fechaFinA!=null){
+                        if((fechaInicio.before(fechaIniA) || fechaIniA.equals(fechaInicio))
+                            && (fechaFinA.before(fechaFinal) || fechaFinal.equals(fechaFinA)))
+                            actPeriodo.add(a);
+                    }
+                }
+                
+                request.setAttribute("fecha1", fecha1);
+                request.setAttribute("fecha2", fecha2);
+                request.setAttribute("datos", actPeriodo);
+                sesion.removeAttribute("idP");
+                rd = "informePeriodo.jsp?infor=realplanificado";
+                
+            }if(infor.equals("recursos")){
+                if(fechaInicio.before(fechaActual)){
+                    request.setAttribute("datos", "porBuscar");
+                    rd = "informePeriodo.jsp?infor=recursos&error=dias";
+                }else{   
                     for(Actividad a: actividades){
                         Date fechaIniA = null;
                         Date fechaFinA = null;
@@ -99,28 +104,59 @@ public class InformeSemana extends HttpServlet {
                             fechaIniA = a.getFechaInicio();
                             fechaFinA = a.getFechaFin();
                         }catch(NullPointerException e){ }
-                        //Si fechaIniA==null actividad no ha empezado, imposible que entre en periodo
-                        if(fechaIniA!=null && fechaFinA==null){
-                            if(fechaIniA.before(fechaInicio) || a.getFechaInicio().equals(fechaInicio))
+                        /*Buscamos actividades por realizar (o en realizacion), 
+                        *en presente o futuro, da igual cuando hayan empezado
+                        *importa que no hayan acabado
+                        */
+                        if((fechaIniA==null || fechaIniA!=null) && fechaFinA==null)
+                            actPeriodo.add(a);
+                        if(fechaIniA!=null && fechaFinA!=null){
+                            if((fechaFinal.before(fechaFinA) || fechaFinal.equals(fechaFinA)))
                                 actPeriodo.add(a);
-                        }if(fechaIniA!=null && fechaFinA!=null){
-                            if((fechaIniA.before(fechaInicio) || fechaIniA.equals(fechaInicio))
-                                && (fechaFinal.before(fechaFinA) || fechaFinal.equals(fechaFinA)))
-                                actPeriodo.add(a);
-                        }
+                        }                
                     }
-
-                    request.setAttribute("fecha1", fecha1);
-                    request.setAttribute("fecha2", fecha2);
-                    request.setAttribute("datos", actPeriodo);
-                    sesion.removeAttribute("idP");
+                    
+                request.setAttribute("fecha1", fecha1);
+                request.setAttribute("fecha2", fecha2);
+                request.setAttribute("datos", actPeriodo);
+                sesion.removeAttribute("idP");
+                rd = "informePeriodo.jsp?infor=recursos";
+                } 
+                
+            }if(infor.equals("trabajadores")){
+                if(fechaInicio.before(fechaActual)){
+                    request.setAttribute("datos", "porBuscar");
+                    rd = "informePeriodo.jsp?infor=trabajadores&error=dias";
+                }else{ 
+                    for(Actividad a: actividades){
+                        Date fechaIniA = null;
+                        Date fechaFinA = null;
+                        try{
+                            fechaIniA = a.getFechaInicio();
+                            fechaFinA = a.getFechaFin();
+                        }catch(NullPointerException e){ }
+                        /*Buscamos actividades que ya tengan una tarea con
+                        * un esfuerzo real dedicado por el trabajador. fechaIniA 
+                        * no puede ser null porque no habria empezado la actividad
+                        * (no habria tareas asignadas)
+                        */
+                        if((fechaIniA!=null) && fechaFinA==null)
+                            actPeriodo.add(a);
+                        if(fechaIniA!=null && fechaFinA!=null){
+                            if((fechaFinal.before(fechaFinA) || fechaFinal.equals(fechaFinA)))
+                                actPeriodo.add(a);
+                        }                
+                    }
+                    
+                request.setAttribute("fecha1", fecha1);
+                request.setAttribute("fecha2", fecha2);
+                request.setAttribute("datos", actPeriodo);
+                sesion.removeAttribute("idP");
+                rd = "informePeriodo.jsp?infor=trabajadores";
                 }
-
-                rd = "informeSemana.jsp";
             }
         }
         request.getRequestDispatcher(rd).forward(request, response);
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -161,8 +197,8 @@ public class InformeSemana extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
-    public Date obtenerFecha(String fecha){
+
+     public Date obtenerFecha(String fecha){
           String[] partes = fecha.split("/");
           Date myDate = null;
           try {

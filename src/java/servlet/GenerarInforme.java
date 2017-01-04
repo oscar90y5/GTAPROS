@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import persistencia.ActividadFacadeLocal;
-import persistencia.InformetareasFacadeLocal;
 import persistencia.MiembroFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
 
@@ -95,7 +94,10 @@ public class GenerarInforme extends HttpServlet {
             rd = "informe.jsp?infor=pendienteAprob";
         }
         if(informe.equals("Tiempo real/planificado de actividades por periodo")){
-            //Primero mostrar calendario (similar vacaciones.jsp), luego generar informe
+            sesion.setAttribute("idP", stringP);
+            System.out.println("servlet.GenerarInforme.processRequest()"+stringP);
+            request.setAttribute("datos", "porBuscar");
+            rd = "informePeriodo.jsp?infor=realplanificado";
         }
         if(informe.equals("Actividades con tiempo real mayor del esperado")){
             List<Actividad> actividades = actividadFacade.findByIdProject(p);
@@ -111,13 +113,24 @@ public class GenerarInforme extends HttpServlet {
             rd = "informe.jsp?infor=realmayor";
         }
         if(informe.equals("Actividades/Recursos por periodo posterior")){
-            //Primero pedir días despues de fecha actual, luego genera informe
+            sesion.setAttribute("idP", stringP);
+            request.setAttribute("datos", "porBuscar");
+            rd = "informePeriodo.jsp?infor=recursos";
         }
         if(informe.equals("Trabajadores/Actividades/Tiempo por periodo posterior")){
-            //Primero pedir días despues de fecha actual, luego genera informe
+            sesion.setAttribute("idP", stringP);
+            request.setAttribute("datos", "porBuscar");
+            rd = "informePeriodo.jsp?infor=trabajadores";
         }
         if(informe.equals("Informe general")){
-            //Generar informe
+             datosActividad = actividadFacade.findByIdProject(p);
+             rd = "informe.jsp?infor=general";
+        }
+        
+        if(informe.equals("Informes Actividad por periodo semanal")){
+            sesion.setAttribute("idP", stringP);
+            request.setAttribute("datos", "porBuscar");
+            rd = "informeSemana.jsp?infor=actividades";
         }
         
         if(!datosTarea.isEmpty()){
