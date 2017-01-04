@@ -1,3 +1,4 @@
+<%@page import="dominio.Tarea"%>
 <%@page import="dominio.Rol"%>
 <%@page import="dominio.Actividad"%>
 <%@page import="java.util.List"%>
@@ -26,7 +27,6 @@
                         <td><h4>Duracion (horas/hombre)</h4></td>
                         <td><h4>Fecha de inicio</h4></td>
                         <td><h4>Fecha de fin</h4></td>
-                        <td><h4>Numero de tareas</h4></td>
                         <td><h4>Descripcion</h4></td>
                     </tr>
                     <%
@@ -36,8 +36,6 @@
                     <%} else {
                         String destino = (String) request.getAttribute("destino");
                         for (Actividad a : actividades) {
-                            
-                    
                     %>
                     <tr style="cursor:pointer" 
                         onclick="document.location.href = '<%= destino%>?idActividad=<%=a.getId()%>'"
@@ -49,7 +47,6 @@
                         <td><%=a.getDuracion()%></td>
                         <td><%=a.getFechaInicioPrettyString()%></td>
                         <td><%=a.getFechaFinPrettyString()%></td>
-                        <td><%=a.getTareaList().size()%></td>
                         <td><%=a.getDescripcion()%></td>
                     </tr>
                     <%}

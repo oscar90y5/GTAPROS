@@ -37,4 +37,6 @@ public interface ActividadFacadeLocal {
     List<Actividad> findByIdProyectoAndDni(Object idProyecto, Object dni);
     
     List<Actividad> findActiveActivities(Object idProyecto);
+    
+    Actividad findById(Object id);
 }

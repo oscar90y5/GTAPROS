@@ -17,7 +17,7 @@
             <section class="login-form">
             <h2>La operación se ha realizado con éxito</h2>
             <div class="columna_caja_principal"> 
-            <form role="form" action="index.jsp" method="POST">
+            <form role="form" action="VolverMenu" method="POST">
                 <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Aceptar</button>
             </form>
             </div>
