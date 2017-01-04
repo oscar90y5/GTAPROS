@@ -12,7 +12,9 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,7 +71,11 @@ public class FijarVacaciones extends HttpServlet {
             String fecha2 = (String) request.getParameter("fecha2");  
             Date fechaInicio = obtenerFecha(fecha1);
             Date fechaFinal =  obtenerFecha(fecha2);
-            Date fechaActual = new Date();
+            Calendar actual = new GregorianCalendar();      
+            Date fechaActual = obtenerFecha(Integer.toString(actual.get(Calendar.YEAR))+"-"+
+                    Integer.toString(actual.get(Calendar.MONTH +1))+"-"+
+                    Integer.toString(actual.get(Calendar.DATE)));
+            
             long diferencia = fechaFinal.getTime() - fechaInicio.getTime();
             long dias = diferencia / (1000 * 60 * 60 * 24);
             List<Vacaciones> vacaciones = vacacionesFacade.findByUser(idUser);
@@ -154,11 +160,11 @@ public class FijarVacaciones extends HttpServlet {
     }// </editor-fold>
 
     public Date obtenerFecha(String fecha){
-        String[] partes = fecha.split("/");
+        String[] partes = fecha.split("-");
         Date myDate = null;
         try {
             String dateString = partes[2] + "-" + partes[1] + "-" + partes[0];
-            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat formatter = new SimpleDateFormat("dd-mm-yyyy");
             myDate = formatter.parse(dateString);
         } catch (ParseException ex) {
             Logger.getLogger(CargarPlan.class.getName()).log(Level.SEVERE, null, ex);

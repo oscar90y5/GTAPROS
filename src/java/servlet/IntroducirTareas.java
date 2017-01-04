@@ -5,17 +5,19 @@
  */
 package servlet;
 
-import dominio.Actividad;
 import dominio.Informetareas;
-import dominio.Miembro;
 import dominio.Proyecto;
 import dominio.Tarea;
 import dominio.Usuario;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Date;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.List;
+import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,7 +25,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import persistencia.ActividadFacadeLocal;
 import persistencia.InformetareasFacadeLocal;
 import persistencia.MiembroFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
@@ -52,9 +53,6 @@ public class IntroducirTareas extends HttpServlet {
     @EJB
     private MiembroFacadeLocal miembroFacade;
 
-    @EJB
-    private ActividadFacadeLocal actividadFacade;
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -82,78 +80,93 @@ public class IntroducirTareas extends HttpServlet {
         if( accion.equals("Ahora") || accion.equals("Tarde") ){
             //AÑADIR ID AL INFORME
             Informetareas informe = new Informetareas(informetareasFacade.count()+1);
-            informe.setSemana(Date.valueOf(request.getParameter("semana")));
+            String fecha1 = (String) request.getParameter("fecha1");
+            String fecha2 = (String) request.getParameter("fecha2");  
+            Date fechaInicio = obtenerFecha(fecha1);
+            Date fechaFinal =  obtenerFecha(fecha2);
+            long diferencia = fechaFinal.getTime() - fechaInicio.getTime();
+            long dias = diferencia / (1000 * 60 * 60 * 24);
+            Calendar c1 = Calendar.getInstance();
+            Calendar c2 = Calendar.getInstance();
+            c1.setTime(fechaInicio);
+            c2.setTime(fechaFinal);
             
-            if(accion.equals("Ahora")){
-                informe.setFechaEnvio(Date.from(Instant.now()));
-                informe.setEstado("PendienteAprobacion");
-            } else {
-                informe.setEstado("PendienteEnvio");
-            }
-            
-            informetareasFacade.create(informe);
+            //sunday=1, monday=2.....saturday=7
+            if(c1.get(Calendar.DAY_OF_WEEK)!=2 || c2.get(Calendar.DAY_OF_WEEK)!=1 || dias!=6){
+                rd = "introducirTareas.jsp?error=dias";
+            }else{
+                informe.setSemana(fechaInicio);
 
-            Integer idMiembro = miembroFacade.findByIdProyectoAndDni(proyecto, user).getIdMiembro();
-           
-            Integer idActividad = Integer.valueOf((String) request.getServletContext().getAttribute("idActividad"));
-            
-            Tarea nuevaTarea;
-            
-            String esfuerzo;
+                if(accion.equals("Ahora")){
+                    informe.setFechaEnvio(Date.from(Instant.now()));
+                    informe.setEstado("PendienteAprobacion");
+                } else {
+                    informe.setEstado("PendienteEnvio");
+                }
 
-            esfuerzo = request.getParameter("tratoUsuarios");
-            if(!esfuerzo.isEmpty() && !esfuerzo.equals("0")){
-                nuevaTarea = new Tarea("TratoConUsuarios",idMiembro, idActividad);
-                nuevaTarea.setIdInforme(informe);
-                nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
-                tareaFacade.create(nuevaTarea);
+                informetareasFacade.create(informe);
+
+                Integer idMiembro = miembroFacade.findByIdProyectoAndDni(proyecto, user).getIdMiembro();
+
+                Integer idActividad = Integer.valueOf((String) request.getServletContext().getAttribute("idActividad"));
+
+                Tarea nuevaTarea;
+
+                String esfuerzo;
+
+                esfuerzo = request.getParameter("tratoUsuarios");
+                if(!esfuerzo.isEmpty() && !esfuerzo.equals("0")){
+                    nuevaTarea = new Tarea("TratoConUsuarios",idMiembro, idActividad);
+                    nuevaTarea.setIdInforme(informe);
+                    nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
+                    tareaFacade.create(nuevaTarea);
+                }
+
+                esfuerzo = request.getParameter("reuniones");
+                if(!esfuerzo.isEmpty() && !esfuerzo.equals("0")){
+                    nuevaTarea = new Tarea("ReunionesInternasExternas",idMiembro,idActividad);
+                    nuevaTarea.setIdInforme(informe);
+                    nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
+                    tareaFacade.create(nuevaTarea);
+                }
+
+                esfuerzo = request.getParameter("leerRevisarDocumentacion");
+                if(!esfuerzo.isEmpty() && !esfuerzo.equals("0")){
+                    nuevaTarea = new Tarea("LecturaRevisionDocumentacion",idMiembro,idActividad);
+                    nuevaTarea.setIdInforme(informe);
+                    nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
+                    tareaFacade.create(nuevaTarea);
+                }
+
+                esfuerzo = request.getParameter("elaborDocumentacion");
+                if(!esfuerzo.isEmpty() && !esfuerzo.equals("0")){
+                    nuevaTarea = new Tarea("ElaboracionDocumentacion",idMiembro,idActividad);
+                    nuevaTarea.setIdInforme(informe);
+                    nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
+                    tareaFacade.create(nuevaTarea);
+                }
+
+                esfuerzo = request.getParameter("programar");
+                if(!esfuerzo.isEmpty() && !esfuerzo.equals("0")){
+                    nuevaTarea = new Tarea("DesarrolloVerificacionProgramas",idMiembro,idActividad);
+                    nuevaTarea.setIdInforme(informe);
+                    nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
+                    tareaFacade.create(nuevaTarea);
+                }
+
+                esfuerzo = request.getParameter("formar");
+                if(!esfuerzo.isEmpty() && !esfuerzo.equals("0")){
+                    nuevaTarea = new Tarea("FormacionUsuariosYOtros",idMiembro,idActividad);
+                    nuevaTarea.setIdInforme(informe);
+                    nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
+                    tareaFacade.create(nuevaTarea);
+                }
+
+                //Si no se ha introducido ninguna tarea borramos el informe
+                if(tareaFacade.findByIdInforme(informe).isEmpty()){
+                    informetareasFacade.remove(informe);
+                }
             }
-            
-            esfuerzo = request.getParameter("reuniones");
-            if(!esfuerzo.isEmpty() && !esfuerzo.equals("0")){
-                nuevaTarea = new Tarea("ReunionesInternasExternas",idMiembro,idActividad);
-                nuevaTarea.setIdInforme(informe);
-                nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
-                tareaFacade.create(nuevaTarea);
-            }
-            
-            esfuerzo = request.getParameter("leerRevisarDocumentacion");
-            if(!esfuerzo.isEmpty() && !esfuerzo.equals("0")){
-                nuevaTarea = new Tarea("LecturaRevisionDocumentacion",idMiembro,idActividad);
-                nuevaTarea.setIdInforme(informe);
-                nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
-                tareaFacade.create(nuevaTarea);
-            }
-            
-            esfuerzo = request.getParameter("elaborDocumentacion");
-            if(!esfuerzo.isEmpty() && !esfuerzo.equals("0")){
-                nuevaTarea = new Tarea("ElaboracionDocumentacion",idMiembro,idActividad);
-                nuevaTarea.setIdInforme(informe);
-                nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
-                tareaFacade.create(nuevaTarea);
-            }
-            
-            esfuerzo = request.getParameter("programar");
-            if(!esfuerzo.isEmpty() && !esfuerzo.equals("0")){
-                nuevaTarea = new Tarea("DesarrolloVerificacionProgramas",idMiembro,idActividad);
-                nuevaTarea.setIdInforme(informe);
-                nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
-                tareaFacade.create(nuevaTarea);
-            }
-            
-            esfuerzo = request.getParameter("formar");
-            if(!esfuerzo.isEmpty() && !esfuerzo.equals("0")){
-                nuevaTarea = new Tarea("FormacionUsuariosYOtros",idMiembro,idActividad);
-                nuevaTarea.setIdInforme(informe);
-                nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
-                tareaFacade.create(nuevaTarea);
-            }
-        
-            //Si no se ha introducido ninguna tarea borramos el informe
-            /*INFORME.GETtAREAS O TAREA.FINDbYiDiNFORME
-            if(){
-                informetareasFacade.remove(informe);
-            }*/
         }
         
         request.getRequestDispatcher(rd).forward(request, response);
@@ -198,4 +211,16 @@ public class IntroducirTareas extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    public java.util.Date obtenerFecha(String fecha){
+        String[] partes = fecha.split("-");
+        java.util.Date myDate = null;
+        try {
+            String dateString = partes[2] + "-" + partes[1] + "-" + partes[0];
+            DateFormat formatter = new SimpleDateFormat("dd-mm-yyyy");
+            myDate = formatter.parse(dateString);
+        } catch (ParseException ex) {
+            Logger.getLogger(CargarPlan.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return myDate;
+    }
 }

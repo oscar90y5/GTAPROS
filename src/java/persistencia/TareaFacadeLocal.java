@@ -32,4 +32,8 @@ public interface TareaFacadeLocal {
     
     List<Tarea> findByIdActividadAndMiembro(Object idActividad, Object idMiembro);
     
+    List<Tarea> findByIdInforme(Object idInforme);
+    
+    List<Tarea> findByIdMiembro(Object idMiembro);
+    
 }

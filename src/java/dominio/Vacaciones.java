@@ -5,6 +5,7 @@
  */
 package dominio;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
@@ -32,6 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Vacaciones.findByFechaInicio", query = "SELECT v FROM Vacaciones v WHERE v.vacacionesPK.fechaInicio = :fechaInicio")
     , @NamedQuery(name = "Vacaciones.findByFechaFin", query = "SELECT v FROM Vacaciones v WHERE v.fechaFin = :fechaFin")
     , @NamedQuery(name = "Vacaciones.findByDni", query = "SELECT v FROM Vacaciones v WHERE v.vacacionesPK.dni = :dni")})
+@JsonIgnoreProperties (value = {"usuario"})
 public class Vacaciones implements Serializable {
 
     private static final long serialVersionUID = 1L;

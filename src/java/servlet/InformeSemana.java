@@ -10,6 +10,7 @@ import dominio.Actividad;
 import dominio.Informetareas;
 import dominio.Proyecto;
 import dominio.Tarea;
+import dominio.Usuario;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -29,6 +30,8 @@ import javax.servlet.http.HttpSession;
 import persistencia.InformetareasFacadeLocal;
 import persistencia.MiembroFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
+import persistencia.TareaFacadeLocal;
+import persistencia.UsuarioFacadeLocal;
 
 /**
  *
@@ -36,6 +39,12 @@ import persistencia.ProyectoFacadeLocal;
  */
 @WebServlet(name = "InformeSemana", urlPatterns = {"/InformeSemana"})
 public class InformeSemana extends HttpServlet {
+
+    @EJB
+    private UsuarioFacadeLocal usuarioFacade;
+
+    @EJB
+    private TareaFacadeLocal tareaFacade;
 
     @EJB
     private InformetareasFacadeLocal informetareasFacade;
@@ -71,23 +80,40 @@ public class InformeSemana extends HttpServlet {
         }catch (NullPointerException e){ }
         
         if(fecha1==null || fecha2==null){
-            rd = "jefeProyecto.jsp";
+            rd = vista;
         }else{
             Date fechaInicio = obtenerFecha(fecha1);
             Date fechaFinal =  obtenerFecha(fecha2);
+            
             long diferencia = fechaFinal.getTime() - fechaInicio.getTime();
             long dias = diferencia / (1000 * 60 * 60 * 24);
             String stringP = (String) sesion.getAttribute("idP");
+            String idUser = (String) sesion.getAttribute("idUser");
+            Usuario user = usuarioFacade.find(idUser);
             int idP = Integer.parseInt(stringP);
             Proyecto p = proyectoFacade.find(idP);
 
-            if(dias!=7){
+            if(dias%7!=0){
                 request.setAttribute("datos", "porBuscar");
                 rd = "informeSemana.jsp?error=dias";
             }else{
                 if(vista.equals("desarrollador.jsp")){
-                    List<Informetareas> informes = informetareasFacade.findAll();
-                    //TO DO ALL
+                    List<Tarea> tareas = tareaFacade.findByIdMiembro(miembroFacade.findByDni(user));
+                    List<Tarea> tarPeriodo = new ArrayList<>();
+                    for(Tarea t: tareas){
+                        Date fecha = t.getIdInforme().getSemana();
+                        /*Como seleccionamos semanas enteras si la fecha del
+                        * informe se encuentra comprendida entre la inicial y 
+                        *la final lo mostramos
+                        */
+                        if(fechaInicio.before(fecha) && fecha.before(fechaFinal))
+                            tarPeriodo.add(t);
+                    }
+                    
+                    request.setAttribute("fecha1", fecha1);
+                    request.setAttribute("fecha2", fecha2);
+                    request.setAttribute("datos", tarPeriodo);
+                    sesion.removeAttribute("idP");
                     
                 }if(vista.equals("jefeProyecto.jsp")){
                     List<Actividad> actividades = p.getActividadList();

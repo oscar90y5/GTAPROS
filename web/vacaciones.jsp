@@ -40,30 +40,10 @@
                     }catch(NullPointerException e){ }
                     %>
                     <div class="form-group">
-                        <input type="text" id="fecha1" name="fecha1" class="form-control"/>
-                        <button id="fechaIni"> Seleccione fecha inicio </button>
-                        <script type="text/javascript">
-                           Calendar.setup({
-                             inputField: "fecha1",
-                             ifFormat:   "%d/%m/%Y",
-                             weekNumbers: false,
-                             displayArea: "fechaIni",
-                             daFormat:    "%A, %d de %B de %Y"
-                           });
-                        </script>
+                        <input type="Date" name="fecha1" placeholder="Seleccione fecha inicio"/>
                     </div>
                      <div class="form-group">
-                        <input type="text" id="fecha2" name="fecha2" class="form-control"/>
-                        <button id="fechaFin"> Seleccione fecha fin </button>
-                        <script type="text/javascript">
-                           Calendar.setup({
-                             inputField: "fecha2",
-                             ifFormat:   "%d/%m/%Y",
-                             weekNumbers: false,
-                             displayArea: "fechaFin",
-                             daFormat:    "%A, %d de %B de %Y"
-                           });
-                        </script>
+                        <input type="Date" name="fecha2" placeholder="Seleccione fecha fin"/>
                     </div>
                     <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Aceptar</button>
                     <button type="submit" class="btn btn-danger" name="accion" value="Cancelar">Cancelar</button>
