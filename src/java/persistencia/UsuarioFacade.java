@@ -1,4 +1,4 @@
-    /*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -29,20 +29,20 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     public UsuarioFacade() {
         super(Usuario.class);
     }
-    
+
     @Override
-    public List<Usuario> finByAdmin(Boolean admin){
+    public List<Usuario> finByAdmin(Boolean admin) {
         return em.createNamedQuery("Usuario.findByEsAdmin").setParameter("esAdmin", admin).getResultList();
     }
-    
+
     @Override
-    public Usuario findByNombreCompleto(String nombreCompleto){
+    public Usuario findByNombreCompleto(String nombreCompleto) {
         return (Usuario) em.createNamedQuery("Usuario.findByNombreCompleto").setParameter("nombreCompleto", nombreCompleto).getSingleResult();
     }
-     
+
     @Override
-    public List<Usuario> findByTipoCategoria(int tipoCategoria){
+    public List<Usuario> findByTipoCategoria(int tipoCategoria) {
         return em.createNamedQuery("Usuario.findByTipoCategoria").setParameter("tipoCategoria", tipoCategoria).getResultList();
     }
-    
+
 }

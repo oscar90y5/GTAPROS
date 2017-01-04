@@ -30,19 +30,20 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author miki
  */
 @Entity
-@Table(name = "Rol")
+@Table(name = "rol")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Rol.findAll", query = "SELECT r FROM Rol r")
     , @NamedQuery(name = "Rol.findByIdRol", query = "SELECT r FROM Rol r WHERE r.idRol = :idRol")
     , @NamedQuery(name = "Rol.findByNombreRol", query = "SELECT r FROM Rol r WHERE r.nombreRol = :nombreRol")
     , @NamedQuery(name = "Rol.findByTipoCategoria", query = "SELECT r FROM Rol r WHERE r.tipoCategoria = :tipoCategoria")
-    , @NamedQuery(name = "Rol.findByNombreRolAndIdProyecto", query = "SELECT r FROM Rol r WHERE r.nombreRol = :nombreRol AND r.idProyecto = :idProyecto")})
+    , @NamedQuery(name = "Rol.findByNombreRolAndIdProyecto", query = "SELECT r FROM Rol r WHERE r.nombreRol = :nombreRol AND r.idProyecto.id = :idProyecto")})
 @JsonIgnoreProperties(value = {"miembroList", "actividadList"})
 public class Rol implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "idRol")
     private Integer idRol;
@@ -64,11 +65,6 @@ public class Rol implements Serializable {
 
     public Rol(Integer idRol) {
         this.idRol = idRol;
-    }
-    
-    public Rol(Integer idRol, String nombreRol){
-        this.idRol = idRol;
-        this.nombreRol = nombreRol;
     }
 
     public Integer getIdRol() {
@@ -145,5 +141,5 @@ public class Rol implements Serializable {
     public String toString() {
         return "dominio.Rol[ idRol=" + idRol + " ]";
     }
-    
+
 }

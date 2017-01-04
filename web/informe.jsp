@@ -16,26 +16,30 @@
     </head>
     <body>
         <section class="container">
-        <% 
-        ObjectMapper mapper = new ObjectMapper();
-        String json = (String) request.getAttribute("datos");
-        String estado = request.getParameter("infor");
-        %>
-        <div class="caja_principal">
-        <form action="jefeProyecto.jsp" method="POST">
-            <%if(estado.equals("pendienteEnvio")){%>
-                <h2>Relacion Trabajadores/Actividades pendientes de envio:</h2>
-                <%}if(estado.equals("pendienteAprob")){%>
-                <h2>Relacion Trabajadores/Actividades pendientes de aprobacion</h2>
-                <%}if(estado.equals("realmayor")){%>
-                <h2>Actividades con mayor tiempo real que estimado</h2>
-                <%}%>
-            <% if(json==null){%>
-                    <%if(estado.equals("pendienteEnvio")){%>
+            <%
+                ObjectMapper mapper = new ObjectMapper();
+                String json = (String) request.getAttribute("datos");
+                String estado = request.getParameter("infor");
+            %>
+            <div class="caja_principal">
+                <form action="jefeProyecto.jsp" method="POST">
+                    <%if (estado.equals("pendienteEnvio")) {%>
+                    <h2>Relacion Trabajadores/Actividades pendientes de envio:</h2>
+                    <%}
+                    if (estado.equals("pendienteAprob")) {%>
+                    <h2>Relacion Trabajadores/Actividades pendientes de aprobacion</h2>
+                    <%}
+                    if (estado.equals("realmayor")) {%>
+                    <h2>Actividades con mayor tiempo real que estimado</h2>
+                    <%}%>
+                    <% if (json == null) {%>
+                    <%if (estado.equals("pendienteEnvio")) {%>
                     <p>No existen informes pendientes de envio</p>
-                    <%}if(estado.equals("pendienteAprob")){%>
+                    <%}
+                        if (estado.equals("pendienteAprob")) {%>
                     <p>No existen informes pendientes de aprobacion</p>
-                    <%}if(estado.equals("realmayor")){%>
+                    <%}
+                        if (estado.equals("realmayor")) {%>
                     <p>No existen actividades con mayor tiempo real que estimado</p>
             <%}}else{%>
                     <%if(estado.equals("pendienteEnvio") || estado.equals("pendienteAprob")){

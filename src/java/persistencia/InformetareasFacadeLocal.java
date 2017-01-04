@@ -31,4 +31,5 @@ public interface InformetareasFacadeLocal {
     int count();
 
     List<Informetareas> findByIdActividad(Object idActividad);
+
 }

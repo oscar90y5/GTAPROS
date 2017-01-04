@@ -29,10 +29,10 @@ public class VacacionesFacade extends AbstractFacade<Vacaciones> implements Vaca
     public VacacionesFacade() {
         super(Vacaciones.class);
     }
-    
+
     @Override
-    public List<Vacaciones> findByUser(Object dni){
+    public List<Vacaciones> findByUser(Object dni) {
         return em.createNamedQuery("Vacaciones.findByDni").setParameter("dni", dni).getResultList();
     }
-    
+
 }

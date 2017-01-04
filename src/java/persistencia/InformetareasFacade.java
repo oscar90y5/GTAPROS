@@ -34,5 +34,4 @@ public class InformetareasFacade extends AbstractFacade<Informetareas> implement
     public List<Informetareas> findByIdActividad(Object idActividad) {
         return em.createNamedQuery("Informetareas.findByIdActividad").setParameter("idActividad", idActividad).getResultList();
     }
-
 }

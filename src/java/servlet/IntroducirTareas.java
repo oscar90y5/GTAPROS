@@ -65,15 +65,15 @@ public class IntroducirTareas extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+
         HttpSession sesion = request.getSession();
-        
+
         int idProject = (Integer) sesion.getAttribute("idProject");
         Proyecto proyecto = proyectoFacade.find(idProject);
-        
+
         String dni = (String) sesion.getAttribute("idUser");
         Usuario user = usuarioFacade.find(dni);
-        
+
         String accion = (String) request.getParameter("accion");
         String rd = "desarrollador.jsp";
         
@@ -168,7 +168,7 @@ public class IntroducirTareas extends HttpServlet {
                 }
             }
         }
-        
+
         request.getRequestDispatcher(rd).forward(request, response);
     }
 

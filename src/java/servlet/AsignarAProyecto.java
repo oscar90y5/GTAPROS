@@ -40,7 +40,6 @@ public class AsignarAProyecto extends HttpServlet {
 
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
-    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -56,16 +55,25 @@ public class AsignarAProyecto extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
         String accion = request.getParameter("accion");
-        String [] dnis = request.getParameterValues("dni");
-        String [] categorias = request.getParameterValues("tipoCategoria");
+        String[] dnis = request.getParameterValues("dni");
+        String[] categorias = request.getParameterValues("tipoCategoria");
         String[] participacion = request.getParameterValues("participacion");
         Integer idProject = (Integer) sesion.getAttribute("idProject");
         String rd = "exito.jsp";
-        
-        if(accion.equals("Cancelar"))
+        System.out.println("dnis " + dnis);
+        for (int x = 0; x < dnis.length; x++) {
+            System.out.print(dnis[x] + " ");
+        }
+        System.out.println("participacion " + participacion);
+        for (int x = 0; x < participacion.length; x++) {
+            System.out.print("x=" + x + " +" + participacion[x] + " ");
+        }
+        System.out.println("participacion selected" + participacion[0]);
+        if (accion.equals("Cancelar")) {
             rd = "jefeProyecto.jsp";
-        if(accion.equals("Aceptar")){
-            if(dnis==null)
+        }
+        if (accion.equals("Aceptar")) {
+            if (dnis == null) {
                 rd = "usuarios.jsp?error=dni";
             else{
                 for(int i=0; i< dnis.length; i++){
@@ -88,7 +96,7 @@ public class AsignarAProyecto extends HttpServlet {
                         sesion.removeAttribute("usuarios");
                         sesion.removeAttribute("participacion");
                 }
-        }
+            }
         }
         request.getRequestDispatcher(rd).forward(request, response);
 

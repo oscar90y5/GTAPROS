@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author miki
  */
 @Entity
-@Table(name = "Usuario")
+@Table(name = "usuario")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")
@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Usuario.findByVacacionesFijadas", query = "SELECT u FROM Usuario u WHERE u.vacacionesFijadas = :vacacionesFijadas")
     , @NamedQuery(name = "Usuario.findByTipoCategoria", query = "SELECT u FROM Usuario u WHERE u.tipoCategoria = :tipoCategoria")
     , @NamedQuery(name = "Usuario.findByEsAdmin", query = "SELECT u FROM Usuario u WHERE u.esAdmin = :esAdmin")})
-@JsonIgnoreProperties(value={"miembroList"})
+@JsonIgnoreProperties(value = {"miembroList"})
 public class Usuario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -172,5 +172,5 @@ public class Usuario implements Serializable {
     public String toString() {
         return "dominio.Usuario[ dni=" + dni + " ]";
     }
-    
+
 }

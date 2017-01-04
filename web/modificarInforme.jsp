@@ -25,9 +25,9 @@
                 %>
                 No existe el informe de tareas seleccionado.
                 <%} else {
-                    Informetareas informe = tareas.get(0).getIdInforme();
+                    Informetareas informe = tareas.get(0).getInformetareas();
                 %>
-                <h3>Informe de la actividad id = <%=tareas.get(0).getActividad().getId()%></h3>
+                <h3>Informe de la actividad id = <%=tareas.get(0).getIdActividad().getId()%></h3>
                 <form role="form" action='ModificarInforme' method="post">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
