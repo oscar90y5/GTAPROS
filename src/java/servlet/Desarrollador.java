@@ -96,10 +96,10 @@ public class Desarrollador extends HttpServlet {
             if (accion.equals("Modificar tareas activas")) {
                 List<Actividad> actividades = new ArrayList<>();
                 for (Actividad a : miembroActual.getActividadList()) {
-                    if (a.getEstado().equalsIgnoreCase("Abierto")) {
-                        if (hayInformesRechazadosOPendientesEnvio(a)) {
-                            actividades.add(a);
-                        }
+                    if (a.getEstado().equalsIgnoreCase("Abierto")
+                            && hayInformesRechazadosOPendientesEnvio(a)) {
+                        actividades.add(a);
+
                     }
                 }
                 request.setAttribute("actividades", actividades);
@@ -113,7 +113,7 @@ public class Desarrollador extends HttpServlet {
                         actividades.add(a);
                     }
                 }
-                System.out.println("actividades size "+actividades.size());
+                System.out.println("actividades size " + actividades.size());
                 request.setAttribute("actividades", actividades);
                 request.setAttribute("destino", "ConsultarTareas");
                 rd = "actividades.jsp";
@@ -130,12 +130,12 @@ public class Desarrollador extends HttpServlet {
             }
 
         }
-        
+
         if (proyects != null) {
             String json = mapper.writeValueAsString(proyects);
             request.setAttribute("proyectos", json);
         }
-        
+
         request.getRequestDispatcher(rd).forward(request, response);
     }
 
