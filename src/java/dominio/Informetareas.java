@@ -6,7 +6,7 @@
 package dominio;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -14,34 +14,32 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Entity
 @Table(name = "InformeTareas")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "InformeTareas.findAll", query = "SELECT i FROM InformeTareas i")
-    , @NamedQuery(name = "InformeTareas.findById", query = "SELECT i FROM InformeTareas i WHERE i.id = :id")
-    , @NamedQuery(name = "InformeTareas.findByFechaEnvio", query = "SELECT i FROM InformeTareas i WHERE i.fechaEnvio = :fechaEnvio")
-    , @NamedQuery(name = "InformeTareas.findByEstado", query = "SELECT i FROM InformeTareas i WHERE i.estado = :estado")
-    , @NamedQuery(name = "InformeTareas.findBySemana", query = "SELECT i FROM InformeTareas i WHERE i.semana = :semana")})
-public class InformeTareas implements Serializable {
+    @NamedQuery(name = "Informetareas.findAll", query = "SELECT i FROM Informetareas i")
+    , @NamedQuery(name = "Informetareas.findById", query = "SELECT i FROM Informetareas i WHERE i.id = :id")
+    , @NamedQuery(name = "Informetareas.findByFechaEnvio", query = "SELECT i FROM Informetareas i WHERE i.fechaEnvio = :fechaEnvio")
+    , @NamedQuery(name = "Informetareas.findByEstado", query = "SELECT i FROM Informetareas i WHERE i.estado = :estado")
+    , @NamedQuery(name = "Informetareas.findBySemana", query = "SELECT i FROM Informetareas i WHERE i.semana = :semana")
+    , @NamedQuery(name = "Informetareas.findByIdActividad", query = "SELECT i FROM Informetareas i, Tarea t WHERE i.id = t.idInforme AND t.actividad.id = :idActividad")})
+
+public class Informetareas implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
     private Integer id;
     @Column(name = "fechaEnvio")
@@ -53,13 +51,11 @@ public class InformeTareas implements Serializable {
     @Column(name = "semana")
     @Temporal(TemporalType.DATE)
     private Date semana;
-    @OneToMany(mappedBy = "idInforme")
-    private Collection<Tarea> tareaCollection;
 
-    public InformeTareas() {
+    public Informetareas() {
     }
 
-    public InformeTareas(Integer id) {
+    public Informetareas(Integer id) {
         this.id = id;
     }
 
@@ -73,6 +69,14 @@ public class InformeTareas implements Serializable {
 
     public Date getFechaEnvio() {
         return fechaEnvio;
+    }
+    
+    public String getFechaEnvioPrettyPrinter() {
+         if (fechaEnvio != null) {
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            return df.format(fechaEnvio);
+        }
+        return " - ";
     }
 
     public void setFechaEnvio(Date fechaEnvio) {
@@ -90,18 +94,17 @@ public class InformeTareas implements Serializable {
     public Date getSemana() {
         return semana;
     }
+    
+     public String getSemanaEnvioPrettyPrinter() {
+         if (semana != null) {
+            SimpleDateFormat df = new SimpleDateFormat("'Semana' W '('dd/MM/yyyy')'");
+            return df.format(semana);
+        }
+        return "";
+    }
 
     public void setSemana(Date semana) {
         this.semana = semana;
-    }
-
-    @XmlTransient
-    public Collection<Tarea> getTareaCollection() {
-        return tareaCollection;
-    }
-
-    public void setTareaCollection(Collection<Tarea> tareaCollection) {
-        this.tareaCollection = tareaCollection;
     }
 
     @Override
@@ -114,10 +117,10 @@ public class InformeTareas implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof InformeTareas)) {
+        if (!(object instanceof Informetareas)) {
             return false;
         }
-        InformeTareas other = (InformeTareas) object;
+        Informetareas other = (Informetareas) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -126,7 +129,7 @@ public class InformeTareas implements Serializable {
 
     @Override
     public String toString() {
-        return "dominio.InformeTareas[ id=" + id + " ]";
+        return "dominio.Informetareas[ id=" + id + " ]";
     }
-    
+
 }

@@ -11,7 +11,7 @@ import javax.ejb.Local;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Local
 public interface VacacionesFacadeLocal {
@@ -23,6 +23,8 @@ public interface VacacionesFacadeLocal {
     void remove(Vacaciones vacaciones);
 
     Vacaciones find(Object id);
+    
+    List<Vacaciones> findByUser(Object dni);
 
     List<Vacaciones> findAll();
 

@@ -11,7 +11,7 @@ import javax.ejb.Local;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Local
 public interface ProyectoFacadeLocal {
@@ -23,6 +23,8 @@ public interface ProyectoFacadeLocal {
     void remove(Proyecto proyecto);
 
     Proyecto find(Object id);
+    
+    Proyecto findById(int id);
 
     List<Proyecto> findAll();
 

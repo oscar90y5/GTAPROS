@@ -12,7 +12,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Stateless
 public class ProyectoFacade extends AbstractFacade<Proyecto> implements ProyectoFacadeLocal {
@@ -27,6 +27,11 @@ public class ProyectoFacade extends AbstractFacade<Proyecto> implements Proyecto
 
     public ProyectoFacade() {
         super(Proyecto.class);
+    }
+    
+     @Override
+    public Proyecto findById(int id){
+        return (Proyecto)em.createNamedQuery("Proyecto.findById").setParameter("id", id).getSingleResult();
     }
     
 }

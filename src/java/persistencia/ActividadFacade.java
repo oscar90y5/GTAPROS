@@ -6,13 +6,14 @@
 package persistencia;
 
 import dominio.Actividad;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Stateless
 public class ActividadFacade extends AbstractFacade<Actividad> implements ActividadFacadeLocal {
@@ -28,5 +29,30 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
     public ActividadFacade() {
         super(Actividad.class);
     }
+
+    @Override
+    public List<Actividad> findByIdProject(Object idProyecto) {
+        return em.createNamedQuery("Actividad.findByIdProyecto").setParameter("idProyecto", idProyecto).getResultList();
+    }
+
+    @Override
+    public List<Actividad> findByIdProyectoAndDni(Object idProyecto, Object dni) {
+        return em.createNamedQuery("Actividad.findByIdProyectoAndDni").setParameter("idProyecto", idProyecto).setParameter("dni", dni).getResultList();
+    }
+
+    @Override
+    public Actividad findById(Object id) {
+        return (Actividad) em.createNamedQuery("Actividad.findById").setParameter("id", id).getSingleResult();
+    }
+
+    @Override
+    public List<Actividad> findActiveActivities(Object idProyecto) {
+        return em.createNamedQuery("Actividad.findActiveActivities").setParameter("idProyecto", idProyecto).getResultList();
+    }
     
+    @Override
+    public Actividad findById(int id) {
+        return (Actividad)em.createNamedQuery("Actividad.findById").setParameter("id", id).getSingleResult();
+    }
+
 }

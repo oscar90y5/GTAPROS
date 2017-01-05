@@ -6,9 +6,11 @@
 package dominio;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -18,17 +20,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Entity
 @Table(name = "Tarea")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Tarea.findAll", query = "SELECT t FROM Tarea t")
+        @NamedQuery(name = "Tarea.findAll", query = "SELECT t FROM Tarea t")
     , @NamedQuery(name = "Tarea.findByEsfuerzoReal", query = "SELECT t FROM Tarea t WHERE t.esfuerzoReal = :esfuerzoReal")
     , @NamedQuery(name = "Tarea.findByTipo", query = "SELECT t FROM Tarea t WHERE t.tareaPK.tipo = :tipo")
-    , @NamedQuery(name = "Tarea.findByDni", query = "SELECT t FROM Tarea t WHERE t.tareaPK.dni = :dni")
-    , @NamedQuery(name = "Tarea.findByIdActividad", query = "SELECT t FROM Tarea t WHERE t.tareaPK.idActividad = :idActividad")})
+    , @NamedQuery(name = "Tarea.findByIdMiembro", query = "SELECT t FROM Tarea t WHERE t.tareaPK.idMiembro = :idMiembro")
+    , @NamedQuery(name = "Tarea.findByIdActividadAndMiembro", query = "SELECT t FROM Tarea t WHERE t.actividad.id = :idActividad AND t.miembro.idMiembro = :idMiembro")})
+
 public class Tarea implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,15 +39,15 @@ public class Tarea implements Serializable {
     protected TareaPK tareaPK;
     @Column(name = "esfuerzoReal")
     private Integer esfuerzoReal;
-    @JoinColumn(name = "dni", referencedColumnName = "dni", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
-    private Miembro miembro;
     @JoinColumn(name = "idActividad", referencedColumnName = "id", insertable = false, updatable = false)
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Actividad actividad;
     @JoinColumn(name = "idInforme", referencedColumnName = "id")
-    @ManyToOne
-    private InformeTareas idInforme;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Informetareas idInforme;
+    @JoinColumn(name = "idMiembro", referencedColumnName = "idMiembro", insertable = false, updatable = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private Miembro miembro;
 
     public Tarea() {
     }
@@ -53,8 +56,8 @@ public class Tarea implements Serializable {
         this.tareaPK = tareaPK;
     }
 
-    public Tarea(String tipo, String dni, int idActividad) {
-        this.tareaPK = new TareaPK(tipo, dni, idActividad);
+    public Tarea(String tipo, int idMiembro, int idActividad) {
+        this.tareaPK = new TareaPK(tipo, idMiembro, idActividad);
     }
 
     public TareaPK getTareaPK() {
@@ -73,14 +76,6 @@ public class Tarea implements Serializable {
         this.esfuerzoReal = esfuerzoReal;
     }
 
-    public Miembro getMiembro() {
-        return miembro;
-    }
-
-    public void setMiembro(Miembro miembro) {
-        this.miembro = miembro;
-    }
-
     public Actividad getActividad() {
         return actividad;
     }
@@ -89,12 +84,20 @@ public class Tarea implements Serializable {
         this.actividad = actividad;
     }
 
-    public InformeTareas getIdInforme() {
+    public Informetareas getIdInforme() {
         return idInforme;
     }
 
-    public void setIdInforme(InformeTareas idInforme) {
+    public void setIdInforme(Informetareas idInforme) {
         this.idInforme = idInforme;
+    }
+
+    public Miembro getMiembro() {
+        return miembro;
+    }
+
+    public void setMiembro(Miembro miembro) {
+        this.miembro = miembro;
     }
 
     @Override
@@ -121,5 +124,5 @@ public class Tarea implements Serializable {
     public String toString() {
         return "dominio.Tarea[ tareaPK=" + tareaPK + " ]";
     }
-    
+
 }

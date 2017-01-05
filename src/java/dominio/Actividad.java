@@ -1,17 +1,20 @@
-/*
+/**
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 package dominio;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.util.Collection;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -30,7 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Entity
 @Table(name = "Actividad")
@@ -38,11 +41,17 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Actividad.findAll", query = "SELECT a FROM Actividad a")
     , @NamedQuery(name = "Actividad.findById", query = "SELECT a FROM Actividad a WHERE a.id = :id")
+    , @NamedQuery(name = "Actividad.findByIdProyecto", query = "SELECT a FROM Actividad a WHERE a.idProyecto = :idProyecto")
+    , @NamedQuery(name = "Actividad.findByNombre", query = "SELECT a FROM Actividad a WHERE a.nombre = :nombre")
     , @NamedQuery(name = "Actividad.findByFechaInicio", query = "SELECT a FROM Actividad a WHERE a.fechaInicio = :fechaInicio")
     , @NamedQuery(name = "Actividad.findByFechaFin", query = "SELECT a FROM Actividad a WHERE a.fechaFin = :fechaFin")
     , @NamedQuery(name = "Actividad.findByDuracion", query = "SELECT a FROM Actividad a WHERE a.duracion = :duracion")
     , @NamedQuery(name = "Actividad.findByEstado", query = "SELECT a FROM Actividad a WHERE a.estado = :estado")
-    , @NamedQuery(name = "Actividad.findByDescripcion", query = "SELECT a FROM Actividad a WHERE a.descripcion = :descripcion")})
+    , @NamedQuery(name = "Actividad.findByDescripcion", query = "SELECT a FROM Actividad a WHERE a.descripcion = :descripcion")
+    , @NamedQuery(name = "Actividad.findByIdProyectoAndDni", query = "SELECT a FROM Actividad a, Miembro m WHERE a.idProyecto = :idProyecto AND a.idProyecto = m.idProyecto AND m.dni = :dni")
+    , @NamedQuery(name = "Actividad.findActiveActivities", query = "SELECT a FROM Actividad a WHERE a.idProyecto = :idProyecto AND a.estado = 'Abierto'")
+    , @NamedQuery(name = "Actividad.findByIdProyectoAndDni", query = "SELECT a FROM Actividad a, Miembro m WHERE a.idProyecto = :idProyecto AND a.idProyecto = m.idProyecto AND m.dni = :dni")})
+@JsonIgnoreProperties(value = {"actividadList", "actividadList1", "miembroList", "tareaList"})
 public class Actividad implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,6 +60,9 @@ public class Actividad implements Serializable {
     @NotNull
     @Column(name = "id")
     private Integer id;
+    @Size(max = 30)
+    @Column(name = "nombre")
+    private String nombre;
     @Column(name = "fechaInicio")
     @Temporal(TemporalType.DATE)
     private Date fechaInicio;
@@ -67,27 +79,38 @@ public class Actividad implements Serializable {
     private String descripcion;
     @JoinTable(name = "AsignacionActividad", joinColumns = {
         @JoinColumn(name = "idActividad", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "dni", referencedColumnName = "dni")})
-    @ManyToMany
-    private Collection<Miembro> miembroCollection;
+        @JoinColumn(name = "idMiembro", referencedColumnName = "idMiembro")})
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Miembro> miembroList;
     @JoinTable(name = "Predecesora", joinColumns = {
         @JoinColumn(name = "idPredecedora", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idSucesora", referencedColumnName = "id")})
-    @ManyToMany
-    private Collection<Actividad> actividadCollection;
-    @ManyToMany(mappedBy = "actividadCollection")
-    private Collection<Actividad> actividadCollection1;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Actividad> actividadList;
+    @ManyToMany(mappedBy = "actividadList", fetch = FetchType.EAGER)
+    private List<Actividad> actividadList1;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actividad", fetch = FetchType.EAGER)
+    private List<Tarea> tareaList;
+    @JoinColumn(name = "idRol", referencedColumnName = "idRol")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Rol idRol;
     @JoinColumn(name = "idProyecto", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Proyecto idProyecto;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actividad")
-    private Collection<Tarea> tareaCollection;
 
     public Actividad() {
     }
 
     public Actividad(Integer id) {
         this.id = id;
+    }
+
+    public Actividad(Integer id, String nombre, Integer duracion, String descripcion, Proyecto idProyecto) {
+        this.id = id;
+        this.nombre = nombre;
+        this.duracion = duracion;
+        this.descripcion = descripcion;
+        this.idProyecto = idProyecto;
     }
 
     public Integer getId() {
@@ -98,8 +121,24 @@ public class Actividad implements Serializable {
         this.id = id;
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
     public Date getFechaInicio() {
         return fechaInicio;
+    }
+
+    public String getFechaInicioPrettyString() {
+        if (fechaInicio != null) {
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            return df.format(fechaInicio);
+        }
+        return "";
     }
 
     public void setFechaInicio(Date fechaInicio) {
@@ -108,6 +147,14 @@ public class Actividad implements Serializable {
 
     public Date getFechaFin() {
         return fechaFin;
+    }
+
+    public String getFechaFinPrettyString() {
+        if (fechaFin != null) {
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            return df.format(fechaFin);
+        }
+        return "";
     }
 
     public void setFechaFin(Date fechaFin) {
@@ -139,30 +186,47 @@ public class Actividad implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Miembro> getMiembroCollection() {
-        return miembroCollection;
+    public List<Miembro> getMiembroList() {
+        return miembroList;
     }
 
-    public void setMiembroCollection(Collection<Miembro> miembroCollection) {
-        this.miembroCollection = miembroCollection;
-    }
-
-    @XmlTransient
-    public Collection<Actividad> getActividadCollection() {
-        return actividadCollection;
-    }
-
-    public void setActividadCollection(Collection<Actividad> actividadCollection) {
-        this.actividadCollection = actividadCollection;
+    public void setMiembroList(List<Miembro> miembroList) {
+        this.miembroList = miembroList;
     }
 
     @XmlTransient
-    public Collection<Actividad> getActividadCollection1() {
-        return actividadCollection1;
+    public List<Actividad> getActividadList() {
+        return actividadList;
     }
 
-    public void setActividadCollection1(Collection<Actividad> actividadCollection1) {
-        this.actividadCollection1 = actividadCollection1;
+    public void setActividadList(List<Actividad> actividadList) {
+        this.actividadList = actividadList;
+    }
+
+    @XmlTransient
+    public List<Actividad> getActividadList1() {
+        return actividadList1;
+    }
+
+    public void setActividadList1(List<Actividad> actividadList1) {
+        this.actividadList1 = actividadList1;
+    }
+
+    @XmlTransient
+    public List<Tarea> getTareaList() {
+        return tareaList;
+    }
+
+    public void setTareaList(List<Tarea> tareaList) {
+        this.tareaList = tareaList;
+    }
+
+    public Rol getIdRol() {
+        return idRol;
+    }
+
+    public void setIdRol(Rol idRol) {
+        this.idRol = idRol;
     }
 
     public Proyecto getIdProyecto() {
@@ -171,15 +235,6 @@ public class Actividad implements Serializable {
 
     public void setIdProyecto(Proyecto idProyecto) {
         this.idProyecto = idProyecto;
-    }
-
-    @XmlTransient
-    public Collection<Tarea> getTareaCollection() {
-        return tareaCollection;
-    }
-
-    public void setTareaCollection(Collection<Tarea> tareaCollection) {
-        this.tareaCollection = tareaCollection;
     }
 
     @Override
@@ -204,7 +259,9 @@ public class Actividad implements Serializable {
 
     @Override
     public String toString() {
-        return "dominio.Actividad[ id=" + id + " ]";
+        return "dominio.Actividad[ id=" + id + " nombre " + nombre
+                + " predecesoras-size:" + actividadList.size()
+                + "]";
     }
-    
+
 }

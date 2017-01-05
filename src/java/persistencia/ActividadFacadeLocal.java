@@ -11,7 +11,7 @@ import javax.ejb.Local;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Local
 public interface ActividadFacadeLocal {
@@ -23,6 +23,10 @@ public interface ActividadFacadeLocal {
     void remove(Actividad actividad);
 
     Actividad find(Object id);
+    
+    Actividad findById(int id);
+    
+    List<Actividad> findByIdProject(Object idProyecto);
 
     List<Actividad> findAll();
 
@@ -30,4 +34,9 @@ public interface ActividadFacadeLocal {
 
     int count();
     
+    List<Actividad> findByIdProyectoAndDni(Object idProyecto, Object dni);
+    
+    List<Actividad> findActiveActivities(Object idProyecto);
+    
+    Actividad findById(Object id);
 }

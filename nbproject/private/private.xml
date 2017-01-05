@@ -3,24 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/MiembroFacade.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/UsuarioFacade.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/MiembroFacadeLocal.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/ActividadFacadeLocal.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/UsuarioFacadeLocal.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/ActividadFacade.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/InformeTareasFacade.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/ConnectionPool.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/VacacionesFacade.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/dominio/Usuario.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/ProyectoFacadeLocal.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/servlet/LoginServlet.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/TareaFacadeLocal.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/TareaFacade.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/AbstractFacade.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/InformeTareasFacadeLocal.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/ProyectoFacade.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/src/java/persistencia/VacacionesFacadeLocal.java</file>
+            <file>file:/home/oscar/Documentos/Asignaturas/PGP/GTAPROS/src/java/dominio/TareaPK.java</file>
+            <file>file:/home/oscar/Documentos/Asignaturas/PGP/GTAPROS/src/java/servlet/FijarVacaciones.java</file>
+            <file>file:/home/oscar/Documentos/Asignaturas/PGP/GTAPROS/src/java/dominio/Informetareas.java</file>
+            <file>file:/home/oscar/Documentos/Asignaturas/PGP/GTAPROS/src/java/servlet/Desarrollador.java</file>
+            <file>file:/home/oscar/Documentos/Asignaturas/PGP/GTAPROS/web/actividades.jsp</file>
+            <file>file:/home/oscar/Documentos/Asignaturas/PGP/GTAPROS/web/introducirTareas.jsp</file>
+            <file>file:/home/oscar/Documentos/Asignaturas/PGP/GTAPROS/src/java/dominio/Tarea.java</file>
+            <file>file:/home/oscar/Documentos/Asignaturas/PGP/GTAPROS/src/java/servlet/IntroducirTareas.java</file>
         </group>
     </open-files>
 </project-private>

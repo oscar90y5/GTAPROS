@@ -2,7 +2,14 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="GTAPROSPU" transaction-type="JTA">
     <jta-data-source>pgp_grupo02</jta-data-source>
+    <class>dominio.Actividad</class>
+    <class>dominio.InformeTareas</class>
+    <class>dominio.Miembro</class>
+    <class>dominio.Proyecto</class>
+    <class>dominio.Tarea</class>
+    <class>dominio.Usuario</class>
+    <class>dominio.Vacaciones</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties/>
+    <properties />
   </persistence-unit>
 </persistence>

@@ -11,7 +11,7 @@ import javax.ejb.Local;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Local
 public interface UsuarioFacadeLocal {
@@ -23,10 +23,16 @@ public interface UsuarioFacadeLocal {
     void remove(Usuario usuario);
 
     Usuario find(Object id);
+    
+    Usuario findByNombreCompleto(String nombreCompleto);
 
     List<Usuario> findAll();
 
     List<Usuario> findRange(int[] range);
+    
+    List<Usuario> finByAdmin(Boolean admin);
+    
+    List<Usuario> findByTipoCategoria(int tipoCategoria);
 
     int count();
     

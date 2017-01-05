@@ -5,12 +5,16 @@
  */
 package dominio;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -25,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Rebeca
+ * @author miki
  */
 @Entity
 @Table(name = "Proyecto")
@@ -36,13 +40,15 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Proyecto.findByNombre", query = "SELECT p FROM Proyecto p WHERE p.nombre = :nombre")
     , @NamedQuery(name = "Proyecto.findByFechaInicio", query = "SELECT p FROM Proyecto p WHERE p.fechaInicio = :fechaInicio")
     , @NamedQuery(name = "Proyecto.findByFechaFin", query = "SELECT p FROM Proyecto p WHERE p.fechaFin = :fechaFin")
-    , @NamedQuery(name = "Proyecto.findByEstado", query = "SELECT p FROM Proyecto p WHERE p.estado = :estado")})
+    , @NamedQuery(name = "Proyecto.findByEstado", query = "SELECT p FROM Proyecto p WHERE p.estado = :estado")
+    , @NamedQuery(name = "Proyecto.findByDescripcion", query = "SELECT p FROM Proyecto p WHERE p.descripcion = :descripcion")
+    , @NamedQuery(name = "Proyecto.findByCargado", query = "SELECT p FROM Proyecto p WHERE p.cargado = :cargado")})
+@JsonIgnoreProperties(value = {"miembroList", "actividadList","rolList"})
 public class Proyecto implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
@@ -59,10 +65,17 @@ public class Proyecto implements Serializable {
     @Size(max = 10)
     @Column(name = "estado")
     private String estado;
-    @OneToMany(mappedBy = "idProyecto")
-    private Collection<Miembro> miembroCollection;
-    @OneToMany(mappedBy = "idProyecto")
-    private Collection<Actividad> actividadCollection;
+    @Size(max = 300)
+    @Column(name = "descripcion")
+    private String descripcion;
+    @Column(name = "cargado")
+    private Boolean cargado;
+    @OneToMany(mappedBy = "idProyecto", fetch = FetchType.EAGER)
+    private List<Miembro> miembroList;
+    @OneToMany(mappedBy = "idProyecto", fetch = FetchType.EAGER)
+    private List<Rol> rolList;
+    @OneToMany(mappedBy = "idProyecto", fetch = FetchType.EAGER)
+    private List<Actividad> actividadList;
 
     public Proyecto() {
     }
@@ -116,22 +129,47 @@ public class Proyecto implements Serializable {
         this.estado = estado;
     }
 
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public Boolean getCargado() {
+        return cargado;
+    }
+
+    public void setCargado(Boolean cargado) {
+        this.cargado = cargado;
+    }
+
     @XmlTransient
-    public Collection<Miembro> getMiembroCollection() {
-        return miembroCollection;
+    public List<Miembro> getMiembroList() {
+        return miembroList;
     }
 
-    public void setMiembroCollection(Collection<Miembro> miembroCollection) {
-        this.miembroCollection = miembroCollection;
+    public void setMiembroList(List<Miembro> miembroList) {
+        this.miembroList = miembroList;
     }
 
     @XmlTransient
-    public Collection<Actividad> getActividadCollection() {
-        return actividadCollection;
+    public List<Rol> getRolList() {
+        return rolList;
     }
 
-    public void setActividadCollection(Collection<Actividad> actividadCollection) {
-        this.actividadCollection = actividadCollection;
+    public void setRolList(List<Rol> rolList) {
+        this.rolList = rolList;
+    }
+
+    @XmlTransient
+    public List<Actividad> getActividadList() {
+        return actividadList;
+    }
+
+    public void setActividadList(List<Actividad> actividadList) {
+        this.actividadList = actividadList;
     }
 
     @Override
