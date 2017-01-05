@@ -41,7 +41,7 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">Tareas del informe  id = <%=i.getId()%>
-                            <div class="right" style="text-align: right"><%=i.getSemanaEnvioPrettyPrinter()%></div></h3>
+                            <div class="right" style="text-align: right"><%=i.getSemanaPrettyPrinter()%></div></h3>
                     </div>
                     <div class="panel-body">                           
                         <table class="table table-rol">
