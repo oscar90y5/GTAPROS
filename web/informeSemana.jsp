@@ -25,16 +25,20 @@
     </head>
     <body>
         <div class="container">
+            <%HttpSession sesion = request.getSession();
+            String vista = (String) sesion.getAttribute("vista");%>
             <div class="caja_principal">
+                <%if(vista.equals("jefeProyecto.jsp")){%>
                 <h2>Relacion Trabajadores/Actividades por periodo semanal: </h2>
+                <%}if(vista.equals("desarrollador.jsp")){%>
+                <h2>Datos Actividad por periodo semanal: </h2>
                 <% 
-                HttpSession sesion = request.getSession();
-                String error = null;
+                }String error = null;
                 try{
                     error = (String) request.getParameter("error");
                     if(error.equals("dias")){
                 %>
-                <p style="color:red">El numero de dias entre las fechas elegidas no corresponde a una semana (7dias)</p>
+                <p style="color:red">El numero de dias entre las fechas elegidas no corresponde a semanas completas (7días)</p>
                 <%}}catch(NullPointerException e){ }
                 %>
                 <form role="form" action="InformeSemana" name="Informesemana" method="post">
@@ -46,10 +50,11 @@
                             String datos = (String) request.getAttribute("datos");   
                             if(datos.equals("porBuscar")){
                         %> 
+                        <div class="caja_small">
                                 <input type="Date" name="fecha1" class="form-control"/>
                                 <input type="Date" name="fecha2" class="form-control"/>
+                        </div>
                             <%}}catch(ClassCastException e){
-                                String vista = (String) sesion.getAttribute("vista");
                                 if(vista.equals("desarrollador.jsp")){
                                     List<Tarea> datos = (List<Tarea>) request.getAttribute("datos");
                                     if(datos==null){
@@ -71,7 +76,7 @@
                                 <tr>
                                     <td><%=t.getIdInforme().getId()%></td>
                                     <td><%=t.getActividad().getNombre()%></td>
-                                    <td><%=t.getIdInforme().getSemana()%></td>
+                                    <td><%=t.getIdInforme().getSemanaPrettyPrinter()%></td>
                                     <td><%=t.getIdInforme().getEstado()%></td>
                                 </tr>
                                 <%}}%>
@@ -104,7 +109,11 @@
                                 <%}}%>
                             </table>
                         <%}}}}catch(NullPointerException e){ }%>
-                        <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Aceptar</button>
+                        <div class="caja_small">
+                        <div class="box-footer text-right" style="margin-top: 10px">
+                            <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Aceptar</button>
+                        </div>
+                        </div>
                 </form>
             </div>
         </div>

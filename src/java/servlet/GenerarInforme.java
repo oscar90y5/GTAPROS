@@ -127,7 +127,7 @@ public class GenerarInforme extends HttpServlet {
              rd = "informe.jsp?infor=general";
         }
         
-        if(informe.equals("Informes Actividad por periodo semanal")){
+        if(informe.equals("Datos Actividad por periodo semanal")){
             sesion.setAttribute("idP", stringP);
             request.setAttribute("datos", "porBuscar");
             rd = "informeSemana.jsp?infor=actividades";

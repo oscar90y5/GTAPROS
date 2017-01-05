@@ -3,18 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/web/informePeriodo.jsp</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/src/java/servlet/IntroducirTareas.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/src/java/persistencia/TareaFacadeLocal.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/src/java/servlet/ObtenerInformes.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/web/informes.jsp</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/nbproject/build-impl.xml</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/src/java/dominio/Informetareas.java</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/src/java/dominio/Rol.java</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/src/java/dominio/Tarea.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/src/java/persistencia/TareaFacade.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/src/java/servlet/GenerarInforme.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/src/java/servlet/InformePeriodo.java</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/web/vacaciones.jsp</file>
-            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/src/java/servlet/FijarVacaciones.java</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/web/introducirTareas.jsp</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/src/java/persistencia/RolFacade.java</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/web/actividades.jsp</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/src/java/servlet/InformeSemana.java</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/web/usuarios.jsp</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/src/java/servlet/AsignarAProyecto.java</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/src/java/servlet/Desarrollador.java</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/src/java/servlet/AltaProyecto.java</file>
+            <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/web/informeSemana.jsp</file>
         </group>
     </open-files>
 </project-private>

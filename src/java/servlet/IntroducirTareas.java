@@ -78,8 +78,7 @@ public class IntroducirTareas extends HttpServlet {
         String rd = "desarrollador.jsp";
         
         if( accion.equals("Ahora") || accion.equals("Tarde") ){
-            //AÑADIR ID AL INFORME
-            Informetareas informe = new Informetareas(informetareasFacade.count()+1);
+            Informetareas informe = new Informetareas();
             String fecha1 = (String) request.getParameter("fecha1");
             String fecha2 = (String) request.getParameter("fecha2");  
             Date fechaInicio = obtenerFecha(fecha1);
@@ -96,6 +95,7 @@ public class IntroducirTareas extends HttpServlet {
                 rd = "introducirTareas.jsp?error=dias";
             }else{
                 informe.setSemana(fechaInicio);
+                informe.setId(informetareasFacade.count()+1);
 
                 if(accion.equals("Ahora")){
                     informe.setFechaEnvio(Date.from(Instant.now()));
@@ -166,6 +166,8 @@ public class IntroducirTareas extends HttpServlet {
                 if(tareaFacade.findByIdInforme(informe).isEmpty()){
                     informetareasFacade.remove(informe);
                 }
+                
+                rd = "exito.jsp";
             }
         }
         
@@ -211,12 +213,12 @@ public class IntroducirTareas extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    public java.util.Date obtenerFecha(String fecha){
+    public Date obtenerFecha(String fecha){
         String[] partes = fecha.split("-");
-        java.util.Date myDate = null;
+        Date myDate = null;
         try {
             String dateString = partes[2] + "-" + partes[1] + "-" + partes[0];
-            DateFormat formatter = new SimpleDateFormat("dd-mm-yyyy");
+            DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             myDate = formatter.parse(dateString);
         } catch (ParseException ex) {
             Logger.getLogger(CargarPlan.class.getName()).log(Level.SEVERE, null, ex);
