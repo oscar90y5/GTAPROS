@@ -1,4 +1,4 @@
-/**
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author miki
  */
 @Entity
-@Table(name = "Actividad")
+@Table(name = "actividad")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Actividad.findAll", query = "SELECT a FROM Actividad a")
@@ -77,19 +77,19 @@ public class Actividad implements Serializable {
     @Size(max = 300)
     @Column(name = "descripcion")
     private String descripcion;
-    @JoinTable(name = "asignacionactividad", joinColumns = {
+    @JoinTable(name = "AsignacionActividad", joinColumns = {
         @JoinColumn(name = "idActividad", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idMiembro", referencedColumnName = "idMiembro")})
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Miembro> miembroList;
-    @JoinTable(name = "predecesora", joinColumns = {
+    @JoinTable(name = "Predecesora", joinColumns = {
         @JoinColumn(name = "idPredecedora", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "idSucesora", referencedColumnName = "id")})
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Actividad> actividadList;
     @ManyToMany(mappedBy = "actividadList", fetch = FetchType.EAGER)
     private List<Actividad> actividadList1;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "actividad", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "idActividad", fetch = FetchType.EAGER)
     private List<Tarea> tareaList;
     @JoinColumn(name = "idRol", referencedColumnName = "idRol")
     @ManyToOne(fetch = FetchType.EAGER)
@@ -101,16 +101,16 @@ public class Actividad implements Serializable {
     public Actividad() {
     }
 
-    public Actividad(Integer id) {
-        this.id = id;
-    }
-
     public Actividad(Integer id, String nombre, Integer duracion, String descripcion, Proyecto idProyecto) {
         this.id = id;
         this.nombre = nombre;
         this.duracion = duracion;
         this.descripcion = descripcion;
         this.idProyecto = idProyecto;
+    }
+
+    public Actividad(Integer id) {
+        this.id = id;
     }
 
     public Integer getId() {
@@ -133,28 +133,12 @@ public class Actividad implements Serializable {
         return fechaInicio;
     }
 
-    public String getFechaInicioPrettyString() {
-        if (fechaInicio != null) {
-            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-            return df.format(fechaInicio);
-        }
-        return "";
-    }
-
     public void setFechaInicio(Date fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
     public Date getFechaFin() {
         return fechaFin;
-    }
-
-    public String getFechaFinPrettyString() {
-        if (fechaFin != null) {
-            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-            return df.format(fechaFin);
-        }
-        return "";
     }
 
     public void setFechaFin(Date fechaFin) {
@@ -264,4 +248,19 @@ public class Actividad implements Serializable {
                 + "]";
     }
 
+    public String getFechaInicioPrettyString() {
+        if (fechaInicio != null) {
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            return df.format(fechaInicio);
+        }
+        return "";
+    }
+
+    public String getFechaFinPrettyString() {
+        if (fechaFin != null) {
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            return df.format(fechaFin);
+        }
+        return " - ";
+    }
 }

@@ -32,16 +32,16 @@ import persistencia.TareaFacadeLocal;
  */
 @WebServlet(name = "ModificarInforme", urlPatterns = {"/ModificarInforme"})
 public class ModificarInforme extends HttpServlet {
-
+    
     @EJB
     private TareaFacadeLocal tareaFacade;
-
+    
     @EJB
     private InformetareasFacadeLocal informetareasFacade;
-
+    
     @EJB
     private MiembroFacadeLocal miembroFacade;
-
+    
     @EJB
     private ActividadFacadeLocal actividadFacade;
 
@@ -72,7 +72,7 @@ public class ModificarInforme extends HttpServlet {
             System.out.println("idInforme " + idInforme);
             Miembro miembro = miembroFacade.findByDniAndIdProyecto(dni, idProject);
             System.out.println("miembro " + miembro);
-
+            
             Informetareas i = informetareasFacade.find(idInforme);
 
             //Tareas insertadas en el form
@@ -98,7 +98,7 @@ public class ModificarInforme extends HttpServlet {
             //Extraemos tareas de la BD
             List<Tarea> tareasInBD = new ArrayList<Tarea>();
             for (Tarea t : actividad.getTareaList()) {
-                if (t.getIdInforme().getId().equals(i.getId())) {
+                if (t.getInformetareas().getId().equals(i.getId())) {
                     tareasInBD.add(t);
                 }
             }
@@ -111,13 +111,14 @@ public class ModificarInforme extends HttpServlet {
                     tareaFacade.edit(tar);
                 } else {
                     //Insertar
-                    tar = new Tarea(modif, miembro.getIdMiembro(), idActividad);
-                    tar.setIdInforme(i);
+                    tar = new Tarea(modif, i.getId());
+                    tar.setIdActividad(actividad);
+                    tar.setIdMiembro(miembro);
                     tar.setEsfuerzoReal(tareasModificadas.get(tar.getTareaPK().getTipo()));
                     tareaFacade.create(tar);
                 }
             }
-
+            
             rd = "exito.jsp";
         }
         request.getRequestDispatcher(rd).forward(request, response);
@@ -170,5 +171,5 @@ public class ModificarInforme extends HttpServlet {
         }
         return null;
     }
-
+    
 }

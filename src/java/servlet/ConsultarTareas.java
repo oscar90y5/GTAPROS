@@ -68,24 +68,29 @@ public class ConsultarTareas extends HttpServlet {
         System.out.println("ei");
         for (Tarea t : actividad.getTareaList()) {
             //Mostrar tarea
-            if (t.getMiembro().getIdMiembro().equals(miembro.getIdMiembro())) {
+            if (t.getIdMiembro().getIdMiembro().equals(miembro.getIdMiembro())) {
                 System.out.println("tarea " + t.getTareaPK().getTipo() + " = "
-                        + t.getEsfuerzoReal() + " idInforme=" + t.getIdInforme().getId() + " idActividad="
-                        + t.getTareaPK().getIdActividad() + " idMiembro=" + t.getTareaPK().getIdMiembro());
+                        + t.getEsfuerzoReal() + " idInforme=" + t.getInformetareas().getId() + " idActividad="
+                        + t.getIdActividad().getId() + " idMiembro=" + t.getIdMiembro().getIdMiembro());
             }
         }
         System.out.println("ei");
+        
+        System.out.println("empieza");
         List<Tarea> tareas = new ArrayList<Tarea>();
         for (Tarea t : tareaFacade.findAll()) {
             //Mostrar tarea
-            if (t.getActividad().getId().equals(idActividad)
-                    && t.getMiembro().getIdMiembro().equals(miembro.getIdMiembro())) {
+            if (t.getIdActividad().getId().equals(idActividad)
+                    && t.getIdMiembro().getIdMiembro().equals(miembro.getIdMiembro())) {
                 tareas.add(t);
                 System.out.println("tarea " + t.getTareaPK().getTipo() + " = "
-                        + t.getEsfuerzoReal() + " idInforme=" + t.getIdInforme().getId() + " idActividad="
-                        + t.getTareaPK().getIdActividad() + " idMiembro=" + t.getTareaPK().getIdMiembro());
+                        + t.getEsfuerzoReal() + 
+                        " idInforme=" + t.getInformetareas() + 
+                        " idActividad="
+                        + t.getIdActividad().getId() + " idMiembro=" + t.getIdMiembro().getIdMiembro());
             }
         }
+        System.out.println("no llega");
         request.setAttribute("tareas", tareas);
         String rd = "tareas.jsp";
         request.getRequestDispatcher(rd).forward(request, response);

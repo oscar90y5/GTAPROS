@@ -77,7 +77,7 @@ public class CargarInformeModificar extends HttpServlet {
                 System.out.println(idInforme);
                 List<Tarea> tareas = new ArrayList<Tarea>();
                 for (Tarea t : actividad.getTareaList()) {
-                    if (t.getIdInforme().getId().equals(idInforme)) {
+                    if (t.getInformetareas().getId().equals(idInforme)) {
                         tareas.add(t);
                     }
                 }

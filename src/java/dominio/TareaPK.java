@@ -26,20 +26,15 @@ public class TareaPK implements Serializable {
     private String tipo;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "idMiembro")
-    private int idMiembro;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "idActividad")
-    private int idActividad;
+    @Column(name = "idInforme")
+    private int idInforme;
 
     public TareaPK() {
     }
 
-    public TareaPK(String tipo, int idMiembro, int idActividad) {
+    public TareaPK(String tipo, int idInforme) {
         this.tipo = tipo;
-        this.idMiembro = idMiembro;
-        this.idActividad = idActividad;
+        this.idInforme = idInforme;
     }
 
     public String getTipo() {
@@ -50,28 +45,19 @@ public class TareaPK implements Serializable {
         this.tipo = tipo;
     }
 
-    public int getIdMiembro() {
-        return idMiembro;
+    public int getIdInforme() {
+        return idInforme;
     }
 
-    public void setIdMiembro(int idMiembro) {
-        this.idMiembro = idMiembro;
-    }
-
-    public int getIdActividad() {
-        return idActividad;
-    }
-
-    public void setIdActividad(int idActividad) {
-        this.idActividad = idActividad;
+    public void setIdInforme(int idInforme) {
+        this.idInforme = idInforme;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (tipo != null ? tipo.hashCode() : 0);
-        hash += (int) idMiembro;
-        hash += (int) idActividad;
+        hash += (int) idInforme;
         return hash;
     }
 
@@ -85,10 +71,7 @@ public class TareaPK implements Serializable {
         if ((this.tipo == null && other.tipo != null) || (this.tipo != null && !this.tipo.equals(other.tipo))) {
             return false;
         }
-        if (this.idMiembro != other.idMiembro) {
-            return false;
-        }
-        if (this.idActividad != other.idActividad) {
+        if (this.idInforme != other.idInforme) {
             return false;
         }
         return true;
@@ -96,7 +79,7 @@ public class TareaPK implements Serializable {
 
     @Override
     public String toString() {
-        return "dominio.TareaPK[ tipo=" + tipo + ", idMiembro=" + idMiembro + ", idActividad=" + idActividad + " ]";
+        return "dominio.TareaPK[ tipo=" + tipo + ", idInforme=" + idInforme + " ]";
     }
     
 }

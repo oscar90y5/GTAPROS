@@ -7,21 +7,24 @@
         <title>GTAPROS</title>
         <%@include file="WEB-INF/jspf/includes.jspf" %>
         <% String actividad = request.getParameter("idActividad");
-        pageContext.setAttribute("idActividad", actividad, PageContext.APPLICATION_SCOPE);
+            pageContext.setAttribute("idActividad", actividad, PageContext.APPLICATION_SCOPE);
         %>
     </head>
     <body>
         <div class="container">
             <div class="caja_principal">
-                <h2> Introducir tareas de actividad <%=actividad %> :</h2>
-                <% try{
-                    String error = (String) request.getParameter("error");
-                    if(error!=null){
+                <h2> Introducir tareas de actividad <%=actividad%> :</h2>
+                <% try {
+                        String error = (String) request.getParameter("error");
+                        if (error != null) {
                 %>
                 <p style="color:red">No se ha introducido una semana de Lunes a Domingo</p>
-                <%}}catch(NullPointerException e){ }%>
+                <%}
+                    } catch (NullPointerException e) {
+                    }%>
                 <div class="caja_small">
                     <form role="form" action='IntroducirTareas' method="post">
+                        <input type="hidden" name="idActividad" id="idActividad" value="<%=actividad%>"/>
                         <div class="form">
                             <p>
                                 <label for="tratoUsuarios">Trato con usuarios:</label>

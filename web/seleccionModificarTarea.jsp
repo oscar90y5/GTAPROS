@@ -29,12 +29,12 @@
                 <%} else {
 
                 %>
-                <h3>Modifica un informe de tareas de la actividad id = <%=tareas.get(0).getActividad().getId()%> :</h3>
+                <h3>Modifica un informe de tareas de la actividad id = <%=tareas.get(0).getIdActividad().getId()%> :</h3>
                 <%
                     List<Informetareas> lista = new ArrayList<Informetareas>();
                     for (Tarea t : tareas) {
-                        if (!lista.contains(t.getIdInforme())) {
-                            lista.add(t.getIdInforme());
+                        if (!lista.contains(t.getInformetareas())) {
+                            lista.add(t.getInformetareas());
                         }
                     }
                 %>
@@ -42,8 +42,8 @@
                     <%
                         String error = null;
                         if ((error = (String) request.getAttribute("error")) != null) {
-                             %><p style="color:red"><%=error%></p><%
-                        }
+                    %><p style="color:red"><%=error%></p><%
+                                 }
                     %>
                     <form role="form" action="CargarInformeModificar" method="post">
                         <label for="informeCombo">Selecciona un informe:</label>

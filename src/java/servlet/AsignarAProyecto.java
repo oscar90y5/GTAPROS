@@ -40,7 +40,6 @@ public class AsignarAProyecto extends HttpServlet {
 
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
-    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -62,13 +61,22 @@ public class AsignarAProyecto extends HttpServlet {
         int cont = 1;
         Integer idProject = (Integer) sesion.getAttribute("idProject");
         String rd = "exito.jsp";
-        
-        if(accion.equals("Cancelar"))
+        System.out.println("dnis " + dnis);
+        for (int x = 0; x < dnis.length; x++) {
+            System.out.print(dnis[x] + " ");
+        }
+        System.out.println("participacion " + participacion);
+        for (int x = 0; x < participacion.length; x++) {
+            System.out.print("x=" + x + " +" + participacion[x] + " ");
+        }
+        System.out.println("participacion selected" + participacion[0]);
+        if (accion.equals("Cancelar")) {
             rd = "jefeProyecto.jsp";
-        if(accion.equals("Aceptar")){
-            if(dnis==null)
+        }
+        if (accion.equals("Aceptar")) {
+            if (dnis == null) {
                 rd = "usuarios.jsp?error=dni";
-            else{
+            }else{
                 for(int i=0; i< dnis.length; i++){
                     //Comprobacion: estoy tomando un usuario checked
                     if(!dnis[i].equals("0")){
