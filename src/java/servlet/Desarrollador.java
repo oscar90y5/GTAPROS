@@ -100,6 +100,7 @@ public class Desarrollador extends HttpServlet {
             }
             
             if (accion.equals("Enviar informe")) {
+                //List<Informetareas> informes = informetareasFacade.findByIdProyectoAndEstadoAndDni(proyecto, "PendienteEnvio", user);
                 List<Informetareas> informes = informetareasFacade.findAll();
                 request.setAttribute("informes", informes);
                 rd = "informesTareas.jsp";
