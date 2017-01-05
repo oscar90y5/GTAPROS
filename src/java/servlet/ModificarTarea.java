@@ -59,15 +59,14 @@ public class ModificarTarea extends HttpServlet {
         Miembro miembro = miembroFacade.findByDniAndIdProyecto(dni, idProject);
         System.out.println("miembro " + miembro);
 
-        List<Tarea> tareas = new ArrayList<Tarea>();
+        List<Tarea> tareas = new ArrayList<>();
         for (Tarea t : actividad.getTareaList()) {
-            System.out.println("miembro en tarea " + t.getIdMiembro().getIdMiembro());
-            if (t.getIdMiembro().getIdMiembro().equals(miembro.getIdMiembro())) {
+            if (t.getIdMiembro().getIdMiembro().equals(miembro.getIdMiembro()))
                 tareas.add(t);
-            }
         }
+        
         request.setAttribute("tareas", tareas);
-        String rd = "seleccionModificarTarea.jsp";
+        String rd = "modificarTarea.jsp";
         request.getRequestDispatcher(rd).forward(request, response);
 
     }

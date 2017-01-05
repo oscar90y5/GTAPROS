@@ -161,7 +161,6 @@ public class JefeProyecto extends HttpServlet {
             String json = mapper.writeValueAsString(activities);
             request.setAttribute("actividades", json);
         }
-        System.out.println("termina");
         request.getRequestDispatcher(rd).forward(request, response);
     }
 

@@ -10,6 +10,6 @@
     <class>dominio.Usuario</class>
     <class>dominio.Vacaciones</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties />
+    <properties/>
   </persistence-unit>
 </persistence>

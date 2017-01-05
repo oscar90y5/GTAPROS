@@ -63,7 +63,7 @@ public class Desarrollador extends HttpServlet {
         Proyecto proyecto = proyectoFacade.find(idProject);
         String dni = (String) sesion.getAttribute("idUser");
         Usuario user = usuarioFacade.find(dni);
-        Miembro miembroActual = miembroFacade.findByIdProyectoAndDni(proyecto, user);
+        Miembro miembroActual = miembroFacade.findByDniAndIdProyecto(user, proyecto);
         //Proyecto proyect = proyectoFacade.find(idProject);
         List<Proyecto> proyects = null;
         String accion = request.getParameter("accion");
@@ -82,8 +82,7 @@ public class Desarrollador extends HttpServlet {
                         i--;
                     }
                 }
-                System.out.println("actividades: " + actividades.size());
-
+               
                 if (actividades.size() == 1) {
                     //redirigimos a introducir tareas con el id de la actividad
                     response.sendRedirect("introducirTareas.jsp?idActividad=" + actividades.get(0).getId());

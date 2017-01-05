@@ -18,9 +18,8 @@
         <div class="container">
             <div class="caja_principal">
                 <%
-                    
-                    List<Actividad> actividades = (List<Actividad>) request.getAttribute("actividades");
-                    if (actividades == null || actividades.size() == 0) {%>
+                List<Actividad> actividades = (List<Actividad>) request.getAttribute("actividades");
+                if (actividades == null || actividades.size() == 0) {%>
                 <h3>No existen actividades relevantes para la accion que usted quiere realizar.</h3>
                 <%} else {
                 %>

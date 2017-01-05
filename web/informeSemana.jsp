@@ -7,8 +7,6 @@
 <%@page import="dominio.Tarea"%>
 <%@page import="dominio.Informetareas"%>
 <%@page import="dominio.Actividad"%>
-<%@page import="com.fasterxml.jackson.core.type.TypeReference"%>
-<%@page import="com.fasterxml.jackson.databind.ObjectMapper"%>
 <%@page import="java.util.List"%>
 <%@page import="dominio.Miembro"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

@@ -10,7 +10,6 @@ import dominio.Miembro;
 import dominio.Proyecto;
 import dominio.Usuario;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -21,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import persistencia.ActividadFacadeLocal;
 import persistencia.MiembroFacadeLocal;
-import persistencia.ProyectoFacadeLocal;
 import persistencia.UsuarioFacadeLocal;
 
 /**
@@ -29,10 +27,7 @@ import persistencia.UsuarioFacadeLocal;
  * @author claramorrondo
  */
 @WebServlet(name = "AsignarUsuarioActividad", urlPatterns = {"/AsignarUsuarioActividad"})
-public class AsignarUsuarioActividad extends HttpServlet {
-
-    @EJB
-    private ProyectoFacadeLocal proyectoFacade;
+public class AsignarAActividad extends HttpServlet {
 
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
@@ -54,20 +49,19 @@ public class AsignarUsuarioActividad extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-           HttpSession sesion = request.getSession();
-           String dniUsuario = request.getParameter("UsuarioDni");
-           int id = (int) sesion.getAttribute("idActividad");
-           Actividad a = actividadFacade.findById(id);
-           Usuario user = usuarioFacade.findByDni(dniUsuario);
-           Miembro m = new Miembro();
-           m.setDni(user);
-           m.setIdRol(a.getIdRol());
-           m.setIdProyecto(a.getIdProyecto());
-           m.setParticipacion(100);
-           miembroFacade.create(m);
-           request.getRequestDispatcher("exito.jsp").forward(request, response);
-        }
+        HttpSession sesion = request.getSession();
+        String dniUsuario = request.getParameter("UsuarioDni");
+        int id = (int) sesion.getAttribute("idActividad");
+        Actividad a = actividadFacade.findById(id);
+        Proyecto proyecto = a.getIdProyecto();
+        Usuario user = usuarioFacade.findByDni(dniUsuario);
+
+        Miembro m = miembroFacade.findByDniAndIdProyecto(user, proyecto);
+        List<Actividad> actividades = m.getActividadList();
+        actividades.add(a);
+        m.setActividadList(actividades);
+
+        request.getRequestDispatcher("exito.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

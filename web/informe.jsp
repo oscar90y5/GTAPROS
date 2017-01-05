@@ -1,3 +1,5 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="dominio.Informetareas"%>
 <%@page import="dominio.Miembro"%>
 <%@page import="dominio.Actividad"%>
 <%@page import="java.util.HashMap"%>
@@ -16,11 +18,7 @@
     </head>
     <body>
         <section class="container">
-            <%
-                ObjectMapper mapper = new ObjectMapper();
-                String json = (String) request.getAttribute("datos");
-                String estado = request.getParameter("infor");
-            %>
+            <%String estado = request.getParameter("infor"); %>
             <div class="caja_principal">
                 <form action="jefeProyecto.jsp" method="POST">
                     <%if (estado.equals("pendienteEnvio")) {%>
@@ -31,36 +29,47 @@
                     <%}
                     if (estado.equals("realmayor")) {%>
                     <h2>Actividades con mayor tiempo real que estimado</h2>
-                    <%}%>
-                    <% if (json == null) {%>
+                    <%}
+                    if (estado.equals("general")){%>
+                    <h2>Informe general del proyecto:</h2>
+                    <%}if(estado.equals("pendienteEnvio") || estado.equals("pendienteAprob")){
+                        List<Informetareas> datos = (List<Informetareas>) request.getAttribute("datos");
+                        if (datos == null || datos.isEmpty()) {%>
                     <%if (estado.equals("pendienteEnvio")) {%>
                     <p>No existen informes pendientes de envio</p>
                     <%}
                         if (estado.equals("pendienteAprob")) {%>
                     <p>No existen informes pendientes de aprobacion</p>
-                    <%}
-                        if (estado.equals("realmayor")) {%>
-                    <p>No existen actividades con mayor tiempo real que estimado</p>
-            <%}}else{%>
-                    <%if(estado.equals("pendienteEnvio") || estado.equals("pendienteAprob")){
-                        List<Tarea> datos = mapper.readValue(json, new TypeReference<List<Tarea>>(){});
-                    %>
+                    <%}}else{%>
                     <table class="table columna_caja_principal" >
                     <tr>
                         <td><h4>Dni</h4></td>
+                        <td><h4>Id Informe</h4></td>
                         <td><h4>Id Actividad</h4></td>
                         <td><h4>Tipo Actividad</h4></td>
+                        <td><h4>Estado</h4></td>
                     </tr>
-                    <%for(Tarea t: datos){%>
-                    <tr>
-                        <td><%=t.getMiembro().getDni().getDni()%></td>
-                        <td><%=t.getTareaPK().getIdActividad()%></td>
-                        <td><%=t.getTareaPK().getTipo()%></td>
-                    </tr>
-                    </table>
-                    <%}}if(estado.equals("realmayor")){
-                        List<Actividad> datos = mapper.readValue(json, new TypeReference<List<Actividad>>(){});
+                    <%for(Informetareas i: datos){
+                        List<Tarea> t = i.getTareaList();
+                        System.out.println("className.methodName()"+t.size());
+                        ArrayList<String> tareas= new ArrayList<String>();
+                        for(Tarea t1: t)
+                            tareas.add(t1.getTareaPK().getTipo());
                     %>
+                    <tr>
+                        <td><%=t.get(0).getIdMiembro().getDni().getDni()%></td>
+                        <td><%=i.getId()%></td>
+                        <td><%=t.get(0).getIdActividad().getId()%></td>
+                        <td><%=tareas%></td>
+                        <td><%=i.getEstado()%></td>
+                    </tr>
+                    <%}%>
+                    </table>
+                    <%}}if(estado.equals("realmayor")){  
+                        List<Actividad> datos = (List<Actividad>) request.getAttribute("datos");
+                        if(datos == null || datos.isEmpty()){%> 
+                    <p>No existen actividades con mayor tiempo real que estimado</p>
+                    <%}else{%>
                     <table class="table columna_caja_principal" >
                     <tr>
                         <td><h4>Id Actividad</h4></td>
@@ -80,10 +89,13 @@
                         <td><%=a.getDuracion()%></td>
                         <td><%=tiempoReal%></td>
                     </tr>
+                    <%}%>
                     </table>
                     <%}}if(estado.equals("general")){
-                        List<Actividad> datos = mapper.readValue(json, new TypeReference<List<Actividad>>(){});
-                    %>
+                        List<Actividad> datos = (List<Actividad>) request.getAttribute("datos");
+                        if(datos == null || datos.isEmpty()){%> 
+                    <p>No existe un informe general para este proyecto</p>
+                    <%}else{%>
                     <table class="table columna_caja_principal" >
                     <tr>
                         <td><h4>Id Actividad</h4></td>
@@ -97,11 +109,11 @@
                             List<Tarea> tareas = a.getTareaList();
                             List<Miembro> miembros = a.getMiembroList();
                             int tiempoReal = 0;
-                            String recursos ="";
+                            ArrayList<String> recursos = new ArrayList<String>();
                             for(Tarea t: tareas)
                                 tiempoReal += t.getEsfuerzoReal();
                             for(Miembro m: miembros)
-                                recursos.concat(m.getDni().getNombreCompleto()+"\n");
+                                recursos.add(m.getDni().getNombreCompleto());
                         %>
                     <tr>
                         <td><%=a.getId()%></td>
@@ -111,11 +123,12 @@
                         <td><%=recursos%></td>
                         <td><%=tiempoReal%></td>
                     </tr>
+                    <%}%>
                     </table>
-                    <%}}}%>
+                    <%}}%>
                 <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Aceptar</button>   
-        </form>
-        </div>
+                </form>
+            </div>
         </section>
     </body>
 </html>
