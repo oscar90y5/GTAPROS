@@ -40,6 +40,13 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         return (Usuario) em.createNamedQuery("Usuario.findByNombreCompleto").setParameter("nombreCompleto", nombreCompleto).getSingleResult();
     }
      
+    
+     @Override
+    public Usuario findByDni(String dni){
+        return (Usuario) em.createNamedQuery("Usuario.findByDni").setParameter("dni", dni).getSingleResult();
+    }
+    
+    
     @Override
     public List<Usuario> findByTipoCategoria(int tipoCategoria){
         return em.createNamedQuery("Usuario.findByTipoCategoria").setParameter("tipoCategoria", tipoCategoria).getResultList();
