@@ -23,9 +23,6 @@
                     List<Tarea> tareas = (List<Tarea>) request.getAttribute("tareas");
                     if (tareas == null || tareas.size() == 0) {%>
                 No existen tareas de la actividad seleccionada.
-                <form role="form" action="VolverMenu" method="POST">
-                    <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Volver</button>
-                </form>
                 <%} else {
 
                 %>

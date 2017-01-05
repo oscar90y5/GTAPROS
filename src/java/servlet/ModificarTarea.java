@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import persistencia.ActividadFacadeLocal;
 import persistencia.MiembroFacadeLocal;
+import persistencia.TareaFacadeLocal;
 
 /**
  *
@@ -28,6 +29,9 @@ import persistencia.MiembroFacadeLocal;
  */
 @WebServlet(name = "ModificarTarea", urlPatterns = {"/ModificarTarea"})
 public class ModificarTarea extends HttpServlet {
+
+    @EJB
+    private TareaFacadeLocal tareaFacade;
 
     @EJB
     private MiembroFacadeLocal miembroFacade;
@@ -60,7 +64,7 @@ public class ModificarTarea extends HttpServlet {
         System.out.println("miembro " + miembro);
 
         List<Tarea> tareas = new ArrayList<Tarea>();
-        for (Tarea t : actividad.getTareaList()) {
+        for (Tarea t : tareaFacade.findAll()) {
             System.out.println("miembro en tarea " + t.getIdMiembro().getIdMiembro());
             if (t.getIdMiembro().getIdMiembro().equals(miembro.getIdMiembro())) {
                 tareas.add(t);

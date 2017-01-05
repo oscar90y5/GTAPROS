@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import persistencia.ActividadFacadeLocal;
 import persistencia.MiembroFacadeLocal;
+import persistencia.TareaFacadeLocal;
 
 /**
  *
@@ -29,6 +30,9 @@ import persistencia.MiembroFacadeLocal;
  */
 @WebServlet(name = "CargarInformeModificar", urlPatterns = {"/CargarInformeModificar"})
 public class CargarInformeModificar extends HttpServlet {
+
+    @EJB
+    private TareaFacadeLocal tareaFacade;
 
     @EJB
     private MiembroFacadeLocal miembroFacade;
@@ -76,11 +80,18 @@ public class CargarInformeModificar extends HttpServlet {
                 int idInforme = Integer.parseInt(combo.substring(4, pos).trim());
                 System.out.println(idInforme);
                 List<Tarea> tareas = new ArrayList<Tarea>();
-                for (Tarea t : actividad.getTareaList()) {
-                    if (t.getInformetareas().getId().equals(idInforme)) {
+                for(Tarea t: tareaFacade.findAll()){
+                    if(t.getInformetareas().getId().equals(idInforme)){
+                         System.out.println("en informe " + t.getTareaPK().getTipo() + " - " + t.getEsfuerzoReal());
                         tareas.add(t);
                     }
                 }
+//                for (Tarea t : actividad.getTareaList()) {
+//                    if (t.getInformetareas().getId().equals(idInforme)) {
+//                        System.out.println("en informe " + t.getTareaPK().getTipo() + " - " + t.getEsfuerzoReal());
+//                        tareas.add(t);
+//                    }
+//                }
                 request.setAttribute("tareas", tareas);
                 rd = "modificarInforme.jsp";
             }

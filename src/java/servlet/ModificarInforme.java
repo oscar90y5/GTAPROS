@@ -32,16 +32,16 @@ import persistencia.TareaFacadeLocal;
  */
 @WebServlet(name = "ModificarInforme", urlPatterns = {"/ModificarInforme"})
 public class ModificarInforme extends HttpServlet {
-    
+
     @EJB
     private TareaFacadeLocal tareaFacade;
-    
+
     @EJB
     private InformetareasFacadeLocal informetareasFacade;
-    
+
     @EJB
     private MiembroFacadeLocal miembroFacade;
-    
+
     @EJB
     private ActividadFacadeLocal actividadFacade;
 
@@ -72,7 +72,7 @@ public class ModificarInforme extends HttpServlet {
             System.out.println("idInforme " + idInforme);
             Miembro miembro = miembroFacade.findByDniAndIdProyecto(dni, idProject);
             System.out.println("miembro " + miembro);
-            
+
             Informetareas i = informetareasFacade.find(idInforme);
 
             //Tareas insertadas en el form
@@ -97,9 +97,10 @@ public class ModificarInforme extends HttpServlet {
 
             //Extraemos tareas de la BD
             List<Tarea> tareasInBD = new ArrayList<Tarea>();
-            for (Tarea t : actividad.getTareaList()) {
+            for (Tarea t : tareaFacade.findAll()) {
                 if (t.getInformetareas().getId().equals(i.getId())) {
                     tareasInBD.add(t);
+                    System.out.println("en bd " + t.getTareaPK().getTipo() + " - " + t.getEsfuerzoReal());
                 }
             }
             //Comparamos con las tareas del informe
@@ -125,6 +126,7 @@ public class ModificarInforme extends HttpServlet {
                         tar = new Tarea(modif, i.getId());
                         tar.setInformetareas(i);
                         tar.setIdActividad(actividad);
+                        System.out.println("actividad en tarea " + actividad);
                         tar.setIdMiembro(miembro);
                         tar.setEsfuerzoReal(tareasModificadas.get(tar.getTareaPK().getTipo()));
                         System.out.println("id desde tarea " + tar.getInformetareas());
@@ -185,5 +187,5 @@ public class ModificarInforme extends HttpServlet {
         }
         return null;
     }
-    
+
 }
