@@ -99,7 +99,7 @@ public class Informetareas implements Serializable {
  
      public String getSemanaPrettyPrinter() {
          if (semana != null) {
-            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat df = new SimpleDateFormat("'Semana' W (dd/MM/yyyy)");
             return df.format(semana);
         }
         return "";
