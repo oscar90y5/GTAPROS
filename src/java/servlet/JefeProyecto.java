@@ -106,7 +106,7 @@ public class JefeProyecto extends HttpServlet {
             if (accion.equals("Consultar datos de actividad")) {
                 List<Actividad> actividades = new ArrayList<>();
                 for (Actividad a : activities) {
-                    if (a.getEstado().equals("Abierto")) {
+                    if (a.getIdProyecto().getEstado().equals("EnCurso")) {
                         actividades.add(a);
                     }
                 }
