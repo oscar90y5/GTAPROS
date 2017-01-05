@@ -5,6 +5,7 @@
  */
 package dominio;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -41,6 +42,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Informetareas.findByEstado", query = "SELECT i FROM Informetareas i WHERE i.estado = :estado")
     , @NamedQuery(name = "Informetareas.findBySemana", query = "SELECT i FROM Informetareas i WHERE i.semana = :semana")
     , @NamedQuery(name = "Informetareas.findByIdActividad", query = "SELECT i FROM Informetareas i, Tarea t WHERE i.id = t.informetareas.id AND t.idActividad.id = :idActividad")})
+@JsonIgnoreProperties(value = {"tareaList"})
 public class Informetareas implements Serializable {
 
     private static final long serialVersionUID = 1L;
