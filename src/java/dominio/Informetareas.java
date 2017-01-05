@@ -42,7 +42,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Informetareas.findByEstado", query = "SELECT i FROM Informetareas i WHERE i.estado = :estado")
     , @NamedQuery(name = "Informetareas.findBySemana", query = "SELECT i FROM Informetareas i WHERE i.semana = :semana")
     , @NamedQuery(name = "Informetareas.findByIdActividad", query = "SELECT i FROM Informetareas i, Tarea t WHERE i.id = t.informetareas.id AND t.idActividad.id = :idActividad")
-    , @NamedQuery(name = "Informetareas.finfByProyectoAndEstadoAndDni", query = "SELECT i FROM Informetareas i, Tarea t, Miembro m WHERE i.id = t.informetareas.id AND i.estado = :estado AND t.idMiembro = m.idMiembro AND m.idProyecto = :idProyecto AND m.dni = :dni")})
+    , @NamedQuery(name = "Informetareas.finfByProyectoAndEstadoAndDni", query = "SELECT i FROM Informetareas i, Tarea t, Miembro m WHERE i.id = t.informetareas.id AND i.estado = :estado AND t.idMiembro.idMiembro = m.idMiembro AND m.idProyecto.id = :idProyecto AND m.dni.dni = :dni")})
 @JsonIgnoreProperties(value = {"tareaList"})
 public class Informetareas implements Serializable {
 

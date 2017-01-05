@@ -100,9 +100,14 @@ public class Desarrollador extends HttpServlet {
             }
             
             if (accion.equals("Enviar informe")) {
-                //List<Informetareas> informes = informetareasFacade.findByIdProyectoAndEstadoAndDni(proyecto, "PendienteEnvio", user);
-                List<Informetareas> informes = informetareasFacade.findAll();
-                request.setAttribute("informes", informes);
+                List<Informetareas> informes = informetareasFacade.findByIdProyectoAndEstadoAndDni(idProject, "PendienteEnvio", dni);
+                List<Informetareas> informes2 = new ArrayList<>();
+                for(Informetareas i : informes){
+                    if(!informes2.contains(i)){
+                        informes2.add(i);
+                    }
+                }
+                request.setAttribute("informes", informes2);
                 rd = "informesTareas.jsp";
             }
             
