@@ -93,6 +93,11 @@ public class Desarrollador extends HttpServlet {
                     rd = "actividades.jsp";
                 }
             }
+            
+            if (accion.equals("Enviar informe")) {
+            
+            }
+            
             if (accion.equals("Modificar tareas activas")) {
                 List<Actividad> actividades = new ArrayList<>();
                 for (Actividad a : miembroActual.getActividadList()) {
