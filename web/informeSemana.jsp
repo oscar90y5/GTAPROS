@@ -56,7 +56,7 @@
                         </div>
                             <%}}catch(ClassCastException e){
                                 if(vista.equals("desarrollador.jsp")){
-                                    List<Tarea> datos = (List<Tarea>) request.getAttribute("datos");
+                                    List<Informetareas> datos = (List<Informetareas>) request.getAttribute("datos");
                                     if(datos==null){
                             %>
                             <p>No tienes informes de tarea en este periodo</p>
@@ -70,14 +70,15 @@
                                     <td><h4>Semana</h4></td>
                                     <td><h4>Estado</h4></td>
                                 </tr>
-                                <%for(Tarea t: datos){
+                                <%for(Informetareas i: datos){
+                                    Tarea t = i.getTareaList().get(0);
                                     
                                 %>
                                 <tr>
-                                    <td><%=t.getIdInforme().getId()%></td>
-                                    <td><%=t.getActividad().getNombre()%></td>
-                                    <td><%=t.getIdInforme().getSemanaPrettyPrinter()%></td>
-                                    <td><%=t.getIdInforme().getEstado()%></td>
+                                    <td><%=i.getId()%></td>
+                                    <td><%=t.getIdActividad().getNombre()%></td>
+                                    <td><%=i.getSemanaPrettyPrinter()%></td>
+                                    <td><%=i.getEstado()%></td>
                                 </tr>
                                 <%}}%>
                             </table>

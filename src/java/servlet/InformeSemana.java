@@ -19,8 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -83,13 +81,10 @@ public class InformeSemana extends HttpServlet {
         if(fecha1==null || fecha2==null){
             rd = vista;
         }else{
-            System.out.println("**********"+fecha1+"-"+fecha2);
             Date fechaInicio = obtenerFecha(fecha1);
             Date fechaFinal =  obtenerFecha(fecha2);
-            System.out.println("servlet.InformeSemana.processRequest()"+fechaInicio+"-"+fechaFinal);
             long diferencia = fechaFinal.getTime() - fechaInicio.getTime();
             long dias = diferencia / (1000 * 60 * 60 * 24);
-            System.out.println("servlet.InformeSemana.processRequest()"+dias);
             String stringP = (String) sesion.getAttribute("idP");
             String idUser = (String) sesion.getAttribute("idUser");
             Usuario user = usuarioFacade.find(idUser);
@@ -110,33 +105,23 @@ public class InformeSemana extends HttpServlet {
                     /*Nunca deberia darse idM=0 en este punto porque ya se ha comprobado
                     * antes de llegar a generar el informe que el usuario pertecene a el
                     */
-                    List<Tarea> tareas = tareaFacade.findByIdMiembro(idM);
-                    List<Tarea> tarPeriodo = new ArrayList<>();
+                    List<Informetareas> allInfor = informetareasFacade.findAll();
+                    List<Informetareas> informes = new ArrayList<>();
                     
-                    for(Tarea t: tareas){
-                        if(!tarPeriodo.isEmpty()){
-                            for(Tarea tP: tarPeriodo)
-                                if(t.getTareaPK().getIdMiembro()!=(tP.getTareaPK().getIdMiembro()) &&
-                                        t.getTareaPK().getIdActividad()!=(tP.getTareaPK().getIdActividad()))
-                                    tarPeriodo.add(t);  
-                        }else
-                            tarPeriodo.add(t);
-                    }
-                    for(Tarea t: tarPeriodo){
-                        tareas = new ArrayList<>();
-                        Date semana = t.getIdInforme().getSemana();
-                        /*Como seleccionamos semanas enteras si la fecha del
-                        * informe se encuentra comprendida entre la inicial y 
-                        *la final lo mostramos
-                        */
-                        if((fechaInicio.before(semana) || fechaInicio.equals(semana)) && semana.before(fechaFinal))
-                            tareas.add(t);
-                                    
+                    for(Informetareas i: allInfor){
+                        List<Tarea> tareas = i.getTareaList();
+                        //Cojo una tarea cualquiera porque todas tiene el mismo idMiembro
+                        Tarea t = tareas.get(0);
+                        if(t.getIdMiembro().getIdMiembro()==idM){
+                            Date semana = i.getSemana();
+                            if((fechaInicio.before(semana) || fechaInicio.equals(semana)) && semana.before(fechaFinal))
+                                informes.add(i);
+                        }
                     }
                     
                     request.setAttribute("fecha1", fecha1);
                     request.setAttribute("fecha2", fecha2);
-                    request.setAttribute("datos", tareas);
+                    request.setAttribute("datos", informes);
                     sesion.removeAttribute("idP");
                     
                 }if(vista.equals("jefeProyecto.jsp")){
