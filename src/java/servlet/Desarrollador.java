@@ -10,9 +10,7 @@ import dominio.Informetareas;
 import dominio.Miembro;
 import dominio.Proyecto;
 import dominio.Tarea;
-import dominio.Usuario;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -43,9 +41,6 @@ public class Desarrollador extends HttpServlet {
     private MiembroFacadeLocal miembroFacade;
 
     @EJB
-    private UsuarioFacadeLocal usuarioFacade;
-
-    @EJB
     private ProyectoFacadeLocal proyectoFacade;
 
     @EJB
@@ -67,17 +62,16 @@ public class Desarrollador extends HttpServlet {
         int idProject = (Integer) sesion.getAttribute("idProject");
         Proyecto proyecto = proyectoFacade.find(idProject);
         String dni = (String) sesion.getAttribute("idUser");
-        Usuario user = usuarioFacade.find(dni);
-        Miembro miembroActual = miembroFacade.findByIdProyectoAndDni(proyecto, user);
+        Miembro miembroActual = miembroFacade.findByDniAndIdProyecto(dni, idProject);
         //Proyecto proyect = proyectoFacade.find(idProject);
         List<Proyecto> proyects = null;
         String accion = request.getParameter("accion");
         String rd = "Desarrollador.jsp";
         if (accion != null) {
+            
             if (accion.equals("Introducir tarea")) {
                 //Obtenemos la lista de actividades activas pertenecientes al proyecto y al usuario
                 List<Actividad> actividades = actividadFacade.findActiveActivities(proyecto);
-                List<Miembro> miembros;
                 Actividad a;
                 //si el for es de la forma: (Actividad a : actividades) falla al borrar elementos.
                 for (int i = 0; i < actividades.size(); i++) {
@@ -87,11 +81,10 @@ public class Desarrollador extends HttpServlet {
                         i--;
                     }
                 }
-                System.out.println("actividades: " + actividades.size());
-
+               
                 if (actividades.size() == 1) {
                     //redirigimos a introducir tareas con el id de la actividad
-                    response.sendRedirect("introducirTareas.jsp?idActividad=" + actividades.get(0).getId());
+                    rd = "introducirTareas.jsp?idActividad=" + actividades.get(0).getId();
                 } else {
                     request.setAttribute("actividades", actividades);
                     request.setAttribute("destino", "introducirTareas.jsp");
@@ -118,6 +111,7 @@ public class Desarrollador extends HttpServlet {
                 request.setAttribute("destino", "ModificarTarea");
                 rd = "actividades.jsp";
             }
+            
             if (accion.equals("Consultar datos de tareas")) {
                 List<Actividad> actividades = new ArrayList<>();
                 for (Actividad a : miembroActual.getActividadList()) {

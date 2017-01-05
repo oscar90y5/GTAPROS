@@ -113,7 +113,7 @@ public class IntroducirTareas extends HttpServlet {
                 System.out.println("id del informe" + informe.getId());
                 informetareasFacade.create(informe);
 
-                Integer idMiembro = miembroFacade.findByIdProyectoAndDni(proyecto, user).getIdMiembro();
+                Integer idMiembro = miembroFacade.findByDniAndIdProyecto(user, proyecto).getIdMiembro();
                 Miembro miembro = miembroFacade.find(idMiembro);
                 Integer idActividad = Integer.valueOf(request.getParameter("idActividad"));
                 Actividad actividad = actividadFacade.find(idActividad);

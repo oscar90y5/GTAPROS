@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import persistencia.ActividadFacadeLocal;
+import persistencia.InformetareasFacadeLocal;
 import persistencia.MiembroFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
 
@@ -31,6 +32,9 @@ import persistencia.ProyectoFacadeLocal;
  */
 @WebServlet(name = "GenerarInforme", urlPatterns = {"/GenerarInforme"})
 public class GenerarInforme extends HttpServlet {
+
+    @EJB
+    private InformetareasFacadeLocal informetareasFacade;
 
     @EJB
     private ActividadFacadeLocal actividadFacade;
@@ -60,8 +64,8 @@ public class GenerarInforme extends HttpServlet {
         String stringP = request.getParameter("proyecto");
         int idP = Integer.parseInt(stringP);
         Proyecto p = proyectoFacade.find(idP);
-        List<Tarea> datosTarea = new ArrayList<>();
         List<Actividad> datosActividad = new ArrayList<>();
+        List<Informetareas> datosInforme = new ArrayList<>();
         String rd = "informes.jsp";
 
         if (informe.equals("Trabajadores/Actividades por periodo semanal")) {
@@ -70,34 +74,32 @@ public class GenerarInforme extends HttpServlet {
             rd = "informeSemana.jsp";
         }
         if (informe.equals("Trabajadores/Informes pendientes de Envio")) {
-            List<Miembro> trabajadores = miembroFacade.findByIdProyecto(p);
-            for (Miembro m : trabajadores) {
-                List<Tarea> tareas = m.getTareaList();
-                for (Tarea t : tareas) {
-                    Informetareas inf = t.getInformetareas();
-                    if (inf.getEstado().equals("PendienteEnvio")) {
-                        datosTarea.add(t);
-                    }
-                }
+            List<Informetareas> allInfor = informetareasFacade.findAll();
+            for(Informetareas i: allInfor){
+                if(i.getEstado().equals("PendienteEnvio")){
+                    List<Tarea> t = i.getTareaList();
+                    //Cojo la primera tarea porque todas son del mismo miembro, mismo proyecto
+                    if(t.get(0).getIdMiembro().getIdProyecto().getId()==idP)
+                        datosInforme.add(i);
+                }        
             }
             rd = "informe.jsp?infor=pendienteEnvio";
         }
         if (informe.equals("Trabajadores/Informes pendientes de Aprobacion")) {
-            List<Miembro> trabajadores = miembroFacade.findByIdProyecto(p);
-            for (Miembro m : trabajadores) {
-                List<Tarea> tareas = m.getTareaList();
-                for (Tarea t : tareas) {
-                    Informetareas inf = t.getInformetareas();
-                    if (inf.getEstado().equals("PendienteAprobacion")) {
-                        datosTarea.add(t);
-                    }
-                }
+            List<Informetareas> allInfor = informetareasFacade.findAll();
+            for(Informetareas i: allInfor){
+                if(i.getEstado().equals("PendienteAprobacion")){
+                    List<Tarea> t = i.getTareaList();
+                    //Cojo la primera tarea porque todas son del mismo miembro, mismo proyecto
+                    if(t.get(0).getIdMiembro().getIdProyecto().getId()==idP)
+                        datosInforme.add(i);
+                }        
             }
             rd = "informe.jsp?infor=pendienteAprob";
         }
+        
         if(informe.equals("Tiempo real/planificado de actividades por periodo")){
             sesion.setAttribute("idP", stringP);
-            System.out.println("servlet.GenerarInforme.processRequest()"+stringP);
             request.setAttribute("datos", "porBuscar");
             rd = "informePeriodo.jsp?infor=realplanificado";
         }
@@ -137,14 +139,11 @@ public class GenerarInforme extends HttpServlet {
             rd = "informeSemana.jsp?infor=actividades";
         }
         
-        if(!datosTarea.isEmpty()){
-            String json = mapper.writeValueAsString(datosTarea);
-            request.setAttribute("datos", json);
-        }
-        if (!datosActividad.isEmpty()) {
-            String json = mapper.writeValueAsString(datosActividad);
-            request.setAttribute("datos", json);
-        }
+        if(!datosActividad.isEmpty()) 
+            request.setAttribute("datos", datosActividad);
+        
+        if(!datosInforme.isEmpty())
+            request.setAttribute("datos", datosInforme);
 
         request.getRequestDispatcher(rd).forward(request, response);
     }

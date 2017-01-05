@@ -18,9 +18,8 @@
         <div class="container">
             <div class="caja_principal">
                 <%
-                    
-                    List<Actividad> actividades = (List<Actividad>) request.getAttribute("actividades");
-                    if (actividades == null || actividades.size() == 0) {%>
+                List<Actividad> actividades = (List<Actividad>) request.getAttribute("actividades");
+                if (actividades == null || actividades.isEmpty()) {%>
                 <h3>No existen actividades relevantes para la accion que usted quiere realizar.</h3>
                 <%} else {
                 %>
@@ -53,9 +52,7 @@
                         <td><%=a.getFechaFinPrettyString()%></td>
                         <td><%=a.getDescripcion()%></td>
                     </tr>
-                    <%}
-                        }
-                    %>
+                    <%}}%>
                 </table>
                 <form role="form" action="VolverMenu" method="POST">
                     <button type="submit" class="btn btn-primary" name="accion" value="Volver">Volver</button>

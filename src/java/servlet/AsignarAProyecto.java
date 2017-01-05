@@ -5,11 +5,13 @@
  */
 package servlet;
 
+import dominio.Actividad;
 import dominio.Miembro;
 import dominio.Proyecto;
 import dominio.Rol;
 import dominio.Usuario;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -61,15 +63,7 @@ public class AsignarAProyecto extends HttpServlet {
         int cont = 1;
         Integer idProject = (Integer) sesion.getAttribute("idProject");
         String rd = "exito.jsp";
-        System.out.println("dnis " + dnis);
-        for (int x = 0; x < dnis.length; x++) {
-            System.out.print(dnis[x] + " ");
-        }
-        System.out.println("participacion " + participacion);
-        for (int x = 0; x < participacion.length; x++) {
-            System.out.print("x=" + x + " +" + participacion[x] + " ");
-        }
-        System.out.println("participacion selected" + participacion[0]);
+        
         if (accion.equals("Cancelar")) {
             rd = "jefeProyecto.jsp";
         }
@@ -80,17 +74,17 @@ public class AsignarAProyecto extends HttpServlet {
                 for(int i=0; i< dnis.length; i++){
                     //Comprobacion: estoy tomando un usuario checked
                     if(!dnis[i].equals("0")){
-                        System.out.println(dnis[i]+"-"+participacion[i-cont]+"-"+categorias[i]);
                         Miembro m = new Miembro();
                         Usuario u = usuarioFacade.find(dnis[i]);
                         m.setDni(u);
                         Proyecto p = proyectoFacade.find(idProject);
                         m.setIdProyecto(p);
-                        Rol r = rolFacade.findByNombreRolAndIdProyecto(categorias[i], p);
+                        Rol r = rolFacade.findByNombreRolAndIdProyecto(categorias[i], idProject);
                         m.setIdRol(r);
                         m.setParticipacion(Integer.parseInt(participacion[i-cont]));
                         int id = miembroFacade.count()+1;
                         m.setIdMiembro(id);
+                        m.setActividadList(new ArrayList<Actividad>());
                         miembroFacade.create(m);
                         cont++;
                     }
