@@ -14,14 +14,15 @@
     </head>
     <body>
         <section class="container">
-            <section class="login-form">
-            <h2>La operación se ha realizado con éxito</h2>
-            <div class="columna_caja_principal"> 
-            <form role="form" action="VolverMenu" method="POST">
-                <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Aceptar</button>
-            </form>
-            </div>
-           </section>
+            <div class="caja_principal2">
+                <div class="caja_small2">
+                    <h2>La operación se ha realizado con éxito</h2>
+                    <div class="columna_caja_principal"> 
+                        <form role="form" action="VolverMenu" method="POST">
+                            <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Aceptar</button>
+                        </form>
+                    </div>
+                </div>
         </section>
     </body>
 </html>
