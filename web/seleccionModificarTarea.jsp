@@ -53,7 +53,7 @@
                             <option selected></option>
                             <%                                for (Informetareas i : lista) {
                             %>
-                            <option>id = <%=i.getId()%> - <%=i.getSemanaEnvioPrettyPrinter()%></option>
+                            <option>id = <%=i.getId()%> - <%=i.getSemanaPrettyPrinter()%></option>
                             <% } %>
                         </select>
                         <div class="box-footer text-right" style="margin-top: 10px">

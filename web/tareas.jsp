@@ -65,7 +65,14 @@
                     </div>
                     <div class="panel-footer">
                         Estado: <%=i.getEstado()%>   <BR/>
-                        Fecha de envio: <%=i.getFechaEnvioPrettyPrinter()%>
+                        <% String fechaEnvio;
+                        try{
+                            fechaEnvio = i.getFechaEnvioPrettyPrinter();
+                        }catch(NullPointerException e){
+                            fechaEnvio = "";
+                        }
+                        %>
+                        Fecha de envio: <%=fechaEnvio%>
                     </div>
                 </div>
                 <%

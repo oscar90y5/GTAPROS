@@ -124,6 +124,7 @@ public class IntroducirTareas extends HttpServlet {
                 esfuerzo = request.getParameter("tratoUsuarios");
                 if (!esfuerzo.isEmpty() && !esfuerzo.equals("0")) {
                     nuevaTarea = new Tarea("TratoConUsuarios", informe.getId(), miembro, actividad);
+                    nuevaTarea.setInformetareas(informe);
                     nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
                     tareaFacade.create(nuevaTarea);
                 }
@@ -131,6 +132,7 @@ public class IntroducirTareas extends HttpServlet {
                 esfuerzo = request.getParameter("reuniones");
                 if (!esfuerzo.isEmpty() && !esfuerzo.equals("0")) {
                     nuevaTarea = new Tarea("ReunionesInternasExternas", informe.getId(), miembro, actividad);
+                    nuevaTarea.setInformetareas(informe);
                     nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
                     tareaFacade.create(nuevaTarea);
                 }
@@ -138,6 +140,7 @@ public class IntroducirTareas extends HttpServlet {
                 esfuerzo = request.getParameter("leerRevisarDocumentacion");
                 if (!esfuerzo.isEmpty() && !esfuerzo.equals("0")) {
                     nuevaTarea = new Tarea("LecturaRevisionDocumentacion", informe.getId(), miembro, actividad);
+                    nuevaTarea.setInformetareas(informe);
                     nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
                     tareaFacade.create(nuevaTarea);
                 }
@@ -145,6 +148,7 @@ public class IntroducirTareas extends HttpServlet {
                 esfuerzo = request.getParameter("elaborDocumentacion");
                 if (!esfuerzo.isEmpty() && !esfuerzo.equals("0")) {
                     nuevaTarea = new Tarea("ElaboracionDocumentacion", informe.getId(), miembro, actividad);
+                    nuevaTarea.setInformetareas(informe);
                     nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
                     tareaFacade.create(nuevaTarea);
                 }
@@ -152,6 +156,7 @@ public class IntroducirTareas extends HttpServlet {
                 esfuerzo = request.getParameter("programar");
                 if (!esfuerzo.isEmpty() && !esfuerzo.equals("0")) {
                     nuevaTarea = new Tarea("DesarrolloVerificacionProgramas", informe.getId(), miembro, actividad);
+                    nuevaTarea.setInformetareas(informe);
                     nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
                     tareaFacade.create(nuevaTarea);
                 }
@@ -159,6 +164,7 @@ public class IntroducirTareas extends HttpServlet {
                 esfuerzo = request.getParameter("formar");
                 if (!esfuerzo.isEmpty() && !esfuerzo.equals("0")) {
                     nuevaTarea = new Tarea("FormacionUsuariosYOtros", informe.getId(), miembro, actividad);
+                    nuevaTarea.setInformetareas(informe);
                     nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
                     tareaFacade.create(nuevaTarea);
                 }
