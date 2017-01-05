@@ -25,6 +25,8 @@ public interface UsuarioFacadeLocal {
     Usuario find(Object id);
 
     Usuario findByNombreCompleto(String nombreCompleto);
+    Usuario findByDni(String dni);
+
 
     List<Usuario> findAll();
 

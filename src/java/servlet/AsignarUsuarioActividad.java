@@ -5,33 +5,43 @@
  */
 package servlet;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import dominio.Actividad;
 import dominio.Miembro;
+import dominio.Proyecto;
 import dominio.Usuario;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import persistencia.ActividadFacadeLocal;
 import persistencia.MiembroFacadeLocal;
-import persistencia.RolFacadeLocal;
+import persistencia.ProyectoFacadeLocal;
 import persistencia.UsuarioFacadeLocal;
 
-public class LoginServlet extends HttpServlet {
+/**
+ *
+ * @author claramorrondo
+ */
+@WebServlet(name = "AsignarUsuarioActividad", urlPatterns = {"/AsignarUsuarioActividad"})
+public class AsignarUsuarioActividad extends HttpServlet {
 
     @EJB
-    private RolFacadeLocal rolFacade;
-    public static final ObjectMapper mapper = new ObjectMapper();
-
-    @EJB
-    private MiembroFacadeLocal miembroFacade;
+    private ProyectoFacadeLocal proyectoFacade;
 
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
 
+    @EJB
+    private MiembroFacadeLocal miembroFacade;
+
+        @EJB
+    private ActividadFacadeLocal actividadFacade;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -43,47 +53,21 @@ public class LoginServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html");
-        HttpSession sesion = request.getSession();
-        String id = request.getParameter("id");
-        String password = request.getParameter("password");
-        String rd = "index.jsp";
-
-        Usuario user = usuarioFacade.find(id);
-        String idUsuario = user.getDni();
-        if (user != null) {
-            if (password.equals(user.getClave())) {
-                sesion.setAttribute("idUser", id);
-                if (user.getEsAdmin()) {
-                    rd = "administrador.jsp";
-                    sesion.setAttribute("vista", "administrador.jsp");
-                } else {
-                    List<Miembro> miembros = miembroFacade.findByDni(user);
-                    if (miembros.size() == 1) {
-                        int idProject = miembros.get(0).getIdProyecto().getId();
-                        sesion.setAttribute("idProject", idProject);
-                       sesion.setAttribute("idUsuario", idUsuario);
-                        if (miembros.get(0).getIdRol().getNombreRol().equals("JefeProyecto")) {
-                            rd = "jefeProyecto.jsp";
-                            sesion.setAttribute("vista", "jefeProyecto.jsp");
-                        } else {
-                            rd = "desarrollador.jsp";
-                            sesion.setAttribute("vista", "desarrollador.jsp");
-                        }
-                    } else {
-                        String json = mapper.writeValueAsString(miembros);
-                        request.setAttribute("misProjects", json);
-                        rd = "misProyectos.jsp";
-                    }
-                }
-            } else {
-                rd = "index.jsp?error=clave";
-            }
-        } else {
-            rd = "index.jsp?error=dni";
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+           HttpSession sesion = request.getSession();
+           String dniUsuario = request.getParameter("UsuarioDni");
+           int id = (int) sesion.getAttribute("idActividad");
+           Actividad a = actividadFacade.findById(id);
+           Usuario user = usuarioFacade.findByDni(dniUsuario);
+           Miembro m = new Miembro();
+           m.setDni(user);
+           m.setIdRol(a.getIdRol());
+           m.setIdProyecto(a.getIdProyecto());
+           m.setParticipacion(100);
+           miembroFacade.create(m);
+           request.getRequestDispatcher("exito.jsp").forward(request, response);
         }
-
-        request.getRequestDispatcher(rd).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

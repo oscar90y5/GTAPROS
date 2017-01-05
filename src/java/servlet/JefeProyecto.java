@@ -20,6 +20,7 @@ import persistencia.ProyectoFacadeLocal;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dominio.Miembro;
 import dominio.Usuario;
+import static java.lang.System.out;
 import java.util.ArrayList;
 import persistencia.MiembroFacadeLocal;
 import persistencia.UsuarioFacadeLocal;
@@ -63,6 +64,8 @@ public class JefeProyecto extends HttpServlet {
         List<Usuario> users = null;
         Proyecto proyect = proyectoFacade.findById(idProject);
         List<Actividad> activities = proyect.getActividadList();
+        
+       sesion.setAttribute("actividadesFailed","");
         String rd = "jefeProyecto.jsp";
         Miembro m = miembroFacade.findByDniAndIdProyecto(dni, idProject);
 
@@ -79,12 +82,22 @@ public class JefeProyecto extends HttpServlet {
                 rd = "usuarios.jsp";
             }
             if (accion.equals("Asignar personas a actividad")) {
-                for (Actividad a : activities) {
-                    if (!a.getEstado().equals("Abierto")) {
-                        activities.remove(a);
-                    }
+               List<Actividad> actividades = new ArrayList<>();
+               for (Actividad a : activities) {
+                   //SI LA ACTIVIDAD NO ES UN HITO Y NO SE HA CERRADO
+                    if (a.getDuracion()>=1 && a.getEstado().equals("Abierto")) {
+                        actividades.add(a);
+                    }                    
                 }
-                rd = "actividades.jsp";
+                activities = actividades;                
+                if(activities.size()>0){
+                    request.setAttribute("actividades", activities);
+                    String destino = "UsuariosDisponibles";
+                    request.setAttribute("destino", destino);
+                    request.getRequestDispatcher("actividades.jsp").forward(request, response);
+                }else{
+                    request.getRequestDispatcher("jefeProyecto.jsp?error=NoActividadesAbiertas").forward(request, response);
+                }
             }
             if (accion.equals("Fijar fin de actividad")) {
                 List<Actividad> actividades = new ArrayList<>();
@@ -94,10 +107,15 @@ public class JefeProyecto extends HttpServlet {
                     }
                 }
                 activities = actividades;
-                request.setAttribute("actividades", activities);
-                String destino = "FijarFinProyecto";
-                request.setAttribute("destino", destino);
-                request.getRequestDispatcher("actividades.jsp").forward(request, response);
+                if(!activities.isEmpty()){
+                    request.setAttribute("actividades", activities);
+                    String destino = "FijarFinProyecto";
+                    request.setAttribute("destino", destino);
+                    request.getRequestDispatcher("actividades.jsp").forward(request, response);
+                }else{
+                    request.getRequestDispatcher("jefeProyecto.jsp?error=NoActividades").forward(request, response);
+                }
+               
             }
             if (accion.equals("Obtener informes")) {
                 proyects = proyectoFacade.findAll();
