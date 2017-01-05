@@ -60,21 +60,16 @@ public class CargarInformeModificar extends HttpServlet {
             Integer idActividad = (Integer) sesion.getAttribute("idActividad");
             //sesion.removeAttribute("idActividad");
             Actividad actividad = actividadFacade.find(idActividad);
-            System.out.println("idProyecto -" + idProject + "- idActividad -" + idActividad + "- dni -" + dni + "-");
-            System.out.println("actividad string " + actividad);
             Miembro miembro = miembroFacade.findByDniAndIdProyecto(dni, idProject);
-            System.out.println("miembro " + miembro);
 
             String combo = request.getParameter("informeCombo");
-            System.out.println(combo);
-
+            
             if (combo == null || combo.equals("")) {
                 request.setAttribute("error", "Selecciona una opción en el selector por favor.");
                 rd = "seleccionModificarTarea.jsp";
             } else {
                 int pos = combo.indexOf('-');
                 int idInforme = Integer.parseInt(combo.substring(4, pos).trim());
-                System.out.println(idInforme);
                 List<Tarea> tareas = new ArrayList<Tarea>();
                 for (Tarea t : actividad.getTareaList()) {
                     if (t.getInformetareas().getId().equals(idInforme)) {

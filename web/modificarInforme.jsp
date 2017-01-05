@@ -32,7 +32,7 @@
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <h3 class="panel-title">Informe id = <%=informe.getId()%>
-                                <div class="right" style="text-align: right"><%=informe.getSemanaEnvioPrettyPrinter()%></div></h3>
+                                <div class="right" style="text-align: right"><%=informe.getSemanaPrettyPrinter()%></div></h3>
                         </div>
                         <input type="hidden" name="idInforme" id="idInforme" value="<%=informe.getId()%>"/>
                                <div class="panel-body">                           

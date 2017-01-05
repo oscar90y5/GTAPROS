@@ -22,8 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import persistencia.ActividadFacadeLocal;
 import persistencia.MiembroFacadeLocal;
-import persistencia.ProyectoFacadeLocal;
-import persistencia.UsuarioFacadeLocal;
 
 /**
  *
@@ -67,7 +65,7 @@ public class UsuariosDisponibles extends HttpServlet {
                 /*Si el miembro esta asignado al proyecto con el rol necesario
                 *para realizar la actividad
                 */
-               if(rolMiembro.equals(rolActividad)) {
+               if(rolMiembro.equals(rolActividad) && !a.getMiembroList().contains(m)){
                    usuariosDisponibles.add(dni);
                }
             }

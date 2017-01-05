@@ -26,7 +26,7 @@ import persistencia.UsuarioFacadeLocal;
  *
  * @author claramorrondo
  */
-@WebServlet(name = "AsignarUsuarioActividad", urlPatterns = {"/AsignarUsuarioActividad"})
+@WebServlet(name = "AsignarAActividad", urlPatterns = {"/AsignarAActividad"})
 public class AsignarAActividad extends HttpServlet {
 
     @EJB
@@ -54,12 +54,16 @@ public class AsignarAActividad extends HttpServlet {
         int id = (int) sesion.getAttribute("idActividad");
         Actividad a = actividadFacade.findById(id);
         Proyecto proyecto = a.getIdProyecto();
-        Usuario user = usuarioFacade.findByDni(dniUsuario);
-
-        Miembro m = miembroFacade.findByDniAndIdProyecto(user, proyecto);
+      
+        Miembro m = miembroFacade.findByDniAndIdProyecto(dniUsuario, proyecto.getId());
         List<Actividad> actividades = m.getActividadList();
         actividades.add(a);
         m.setActividadList(actividades);
+        List<Miembro> miembros = a.getMiembroList();
+        miembros.add(m);
+        a.setMiembroList(miembros);
+        miembroFacade.edit(m);
+        actividadFacade.edit(a);
 
         request.getRequestDispatcher("exito.jsp").forward(request, response);
     }
