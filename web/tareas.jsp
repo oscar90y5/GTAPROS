@@ -24,7 +24,6 @@
                     if (tareas == null || tareas.size() == 0) {%>
                 No existen tareas de la actividad seleccionada.
                 <%} else {
-
                 %>
                 <h3>Tareas de la actividad id = <%=tareas.get(0).getIdActividad().getId()%></h3>
                 <%
@@ -37,7 +36,7 @@
 
                     for (Informetareas i : lista) {
                         //Mostrar info informe
-                %>
+%>
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">Tareas del informe  id = <%=i.getId()%>
@@ -53,7 +52,7 @@
                                 for (Tarea t : tareas) {
                                     if (i.getId().equals(t.getInformetareas().getId())) {
                                         //Mostrar tareas                             
-%>
+                            %>
                             <tr>
                                 <td><%=t.getTareaPK().getTipo()%></td>
                                 <td class="text-center"><%=t.getEsfuerzoReal()%></td>

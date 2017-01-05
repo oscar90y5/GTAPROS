@@ -68,7 +68,7 @@ public class JefeProyecto extends HttpServlet {
 
         if (accion != null) {
             if (accion.equals("Cargar Plan de proyecto")) {
-                if(!proyect.getEstado().equals("Pendiente")){
+                if (!proyect.getEstado().equals("Pendiente")) {
                     request.setAttribute("error", "El proyecto ya ha sido cargado.");
                 }
                 rd = "cargarPlan.jsp";
@@ -104,7 +104,17 @@ public class JefeProyecto extends HttpServlet {
                 rd = "proyectos.jsp?accion=informes";
             }
             if (accion.equals("Consultar datos de actividad")) {
+                List<Actividad> actividades = new ArrayList<>();
+                for (Actividad a : activities) {
+                    if (a.getEstado().equals("Abierto")) {
+                        actividades.add(a);
+                    }
+                }
+                System.out.println("size+" + actividades.size());
+                request.setAttribute("actividades", actividades);
+                request.setAttribute("destino", "ConsultarTareas");
                 rd = "actividades.jsp";
+                request.getRequestDispatcher("actividades.jsp").forward(request, response);
             }
 
             if (accion.equals("Fijar vacaciones")) {
@@ -131,10 +141,9 @@ public class JefeProyecto extends HttpServlet {
         }
         if (!activities.isEmpty() && rd.equals("actividades.jsp")) {
             String json = mapper.writeValueAsString(activities);
-
             request.setAttribute("actividades", json);
         }
-
+        System.out.println("termina");
         request.getRequestDispatcher(rd).forward(request, response);
     }
 
