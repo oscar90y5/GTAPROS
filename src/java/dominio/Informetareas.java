@@ -94,6 +94,14 @@ public class Informetareas implements Serializable {
     public Date getSemana() {
         return semana;
     }
+ 
+     public String getSemanaPrettyPrinter() {
+         if (semana != null) {
+            SimpleDateFormat df = new SimpleDateFormat("'Semana' W '('dd/MM/yyyy')'");
+            return df.format(semana);
+        }
+        return "";
+    }
 
     public void setSemana(Date semana) {
         this.semana = semana;
@@ -141,11 +149,4 @@ public class Informetareas implements Serializable {
         return " - ";
     }
 
-    public String getSemanaEnvioPrettyPrinter() {
-        if (semana != null) {
-            SimpleDateFormat df = new SimpleDateFormat("'Semana' W '('dd/MM/yyyy')'");
-            return df.format(semana);
-        }
-        return "";
-    }
 }

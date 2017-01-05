@@ -58,6 +58,7 @@ public class AsignarAProyecto extends HttpServlet {
         String[] dnis = request.getParameterValues("dni");
         String[] categorias = request.getParameterValues("tipoCategoria");
         String[] participacion = request.getParameterValues("participacion");
+        int cont = 1;
         Integer idProject = (Integer) sesion.getAttribute("idProject");
         String rd = "exito.jsp";
         System.out.println("dnis " + dnis);
@@ -77,9 +78,9 @@ public class AsignarAProyecto extends HttpServlet {
                 rd = "usuarios.jsp?error=dni";
             }else{
                 for(int i=0; i< dnis.length; i++){
-                    System.out.println("servlet.AsignarAProyecto.processRequest()"+dnis.length+"*"+categorias.length+"*"+participacion.length);
                     //Comprobacion: estoy tomando un usuario checked
                     if(!dnis[i].equals("0")){
+                        System.out.println(dnis[i]+"-"+participacion[i-cont]+"-"+categorias[i]);
                         Miembro m = new Miembro();
                         Usuario u = usuarioFacade.find(dnis[i]);
                         m.setDni(u);
@@ -87,15 +88,16 @@ public class AsignarAProyecto extends HttpServlet {
                         m.setIdProyecto(p);
                         Rol r = rolFacade.findByNombreRolAndIdProyecto(categorias[i], p);
                         m.setIdRol(r);
-                        m.setParticipacion(Integer.parseInt(participacion[i]));
+                        m.setParticipacion(Integer.parseInt(participacion[i-cont]));
                         int id = miembroFacade.count()+1;
                         m.setIdMiembro(id);
                         miembroFacade.create(m);
+                        cont++;
                     }
-                        //Limpio sesion
-                        sesion.removeAttribute("usuarios");
-                        sesion.removeAttribute("participacion");
                 }
+                //Limpio sesion
+                sesion.removeAttribute("usuarios");
+                sesion.removeAttribute("participacion");
             }
         }
         request.getRequestDispatcher(rd).forward(request, response);

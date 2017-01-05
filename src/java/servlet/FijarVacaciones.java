@@ -164,11 +164,9 @@ public class FijarVacaciones extends HttpServlet {
         Date myDate = null;
         try {
             String dateString = partes[2] + "-" + partes[1] + "-" + partes[0];
-            DateFormat formatter = new SimpleDateFormat("dd-mm-yyyy");
+            DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             myDate = formatter.parse(dateString);
-        } catch (ParseException ex) {
-            Logger.getLogger(CargarPlan.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } catch (ParseException ex) { }
         return myDate;
     }
 }

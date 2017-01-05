@@ -53,7 +53,6 @@
                 <tr>
                     <input type="hidden" name="dni" value="0"/>
                     <td><input type="checkbox" name="dni" value="<%= u.getDni()%>"/></td>
-                    <input type="hidden" name="participacion" value="0"/>
                     <td><input type="number" name="participacion" min="1" max=<%=100 - porcents.get(i)%>/></td>
                     <td><%=u.getDni()%></td>
                     <td><%=u.getNombreCompleto()%></td>

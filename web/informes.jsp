@@ -36,7 +36,7 @@
                     %>
                     <input type="hidden" name="proyecto" value="<%=p.getId()%>"/>
                     <%if(inProject.equals("true") && vista.equals("desarrollador.jsp")){%>
-                    <input type="submit" name="informe" value="Informes Actividad por periodo semanal" class="btn btn-lg btn-primary btn-block"/>
+                    <input type="submit" name="informe" value="Datos Actividad por periodo semanal" class="btn btn-lg btn-primary btn-block"/>
                     <%}if(inProject.equals("true") && vista.equals("jefeProyecto.jsp")){%>
                     <input type="submit" name="informe" value="Trabajadores/Actividades por periodo semanal" class="btn btn-lg btn-primary btn-block"/>
                     <input type="submit" name="informe" value="Trabajadores/Informes pendientes de Envio" class="btn btn-lg btn-primary btn-block"/>
