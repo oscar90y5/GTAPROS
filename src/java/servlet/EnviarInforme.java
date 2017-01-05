@@ -44,7 +44,7 @@ public class EnviarInforme extends HttpServlet {
         informe.setFechaEnvio(Date.from(Instant.now()));
         informe.setEstado("PendienteAprobacion");
         informetareasFacade.edit(informe);
-        request.getRequestDispatcher("desarrollador.jsp").forward(request, response);
+        request.getRequestDispatcher("exito.jsp").forward(request, response);
 
         
     }
