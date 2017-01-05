@@ -110,7 +110,7 @@ public class IntroducirTareas extends HttpServlet {
                 } else {
                     informe.setEstado("PendienteEnvio");
                 }
-
+                System.out.println("id del informe" + informe.getId());
                 informetareasFacade.create(informe);
 
                 Integer idMiembro = miembroFacade.findByIdProyectoAndDni(proyecto, user).getIdMiembro();
@@ -135,6 +135,7 @@ public class IntroducirTareas extends HttpServlet {
                     nuevaTarea.setInformetareas(informe);
                     nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
                     tareaFacade.create(nuevaTarea);
+                    System.out.println("id del informe desde tarea" + nuevaTarea.getInformetareas().getId());
                 }
 
                 esfuerzo = request.getParameter("leerRevisarDocumentacion");

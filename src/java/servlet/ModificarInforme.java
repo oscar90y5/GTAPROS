@@ -86,7 +86,7 @@ public class ModificarInforme extends HttpServlet {
                 s = request.getParameter(nombre);
                 if (s != null && !s.equals("")) {
                     dur = Integer.parseInt(s);
-                    if (dur > 0 && !tareasModificadas.containsKey(nombre)) {
+                    if (!tareasModificadas.containsKey(nombre)) {
                         tareasModificadas.put(nombre, dur);
                     }
                 }
@@ -106,19 +106,33 @@ public class ModificarInforme extends HttpServlet {
             Tarea tar;
             for (String modif : tareasModificadas.keySet()) {
                 if ((tar = estaEnBD(modif, tareasInBD)) != null) {
-                    //Editar
-                    tar.setEsfuerzoReal(tareasModificadas.get(tar.getTareaPK().getTipo()));
-                    tareaFacade.edit(tar);
+                    //Editar o Borrar
+                    System.out.println("dur eo" + modif);
+                    System.out.println("dur eo" + tareasModificadas.get(tar.getTareaPK().getTipo()));
+                    if (tareasModificadas.get(tar.getTareaPK().getTipo()) > 0) {
+                        tar.setEsfuerzoReal(tareasModificadas.get(tar.getTareaPK().getTipo()));
+                        tareaFacade.edit(tar);
+                    } else {
+                        System.out.println("tar a borrar " + tar.getTareaPK().getTipo() + " " + tar.getTareaPK().getIdInforme());
+                        tareaFacade.remove(tar);
+                    }
                 } else {
-                    //Insertar
-                    tar = new Tarea(modif, i.getId());
-                    tar.setIdActividad(actividad);
-                    tar.setIdMiembro(miembro);
-                    tar.setEsfuerzoReal(tareasModificadas.get(tar.getTareaPK().getTipo()));
-                    tareaFacade.create(tar);
+                    System.out.println("a crear" + modif);
+                    System.out.println("dur " + tareasModificadas.get(modif));
+                    if (tareasModificadas.get(modif) > 0) {
+                        //Insertar
+                        System.out.println("informe " + i);
+                        tar = new Tarea(modif, i.getId());
+                        tar.setInformetareas(i);
+                        tar.setIdActividad(actividad);
+                        tar.setIdMiembro(miembro);
+                        tar.setEsfuerzoReal(tareasModificadas.get(tar.getTareaPK().getTipo()));
+                        System.out.println("id desde tarea " + tar.getInformetareas());
+                        System.out.println("id desde tareapk " + tar.getTareaPK().getIdInforme());
+                        tareaFacade.create(tar);
+                    }
                 }
             }
-            
             rd = "exito.jsp";
         }
         request.getRequestDispatcher(rd).forward(request, response);
