@@ -70,8 +70,9 @@ public class ModificarTarea extends HttpServlet {
                 tareas.add(t);
             }
         }
+
         request.setAttribute("tareas", tareas);
-        String rd = "seleccionModificarTarea.jsp";
+        String rd = "modificarTarea.jsp";
         request.getRequestDispatcher(rd).forward(request, response);
 
     }

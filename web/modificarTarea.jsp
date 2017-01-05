@@ -43,7 +43,7 @@
                         String error = null;
                         if ((error = (String) request.getAttribute("error")) != null) {
                     %><p style="color:red"><%=error%></p><%
-                                 }
+                        }
                     %>
                     <form role="form" action="CargarInformeModificar" method="post">
                         <label for="informeCombo">Selecciona un informe:</label>
@@ -51,7 +51,8 @@
                                 id="informeCombo" 
                                 name="informeCombo">
                             <option selected></option>
-                            <%                                for (Informetareas i : lista) {
+                            <%
+                                for (Informetareas i : lista) {
                             %>
                             <option>id = <%=i.getId()%> - <%=i.getSemanaPrettyPrinter()%></option>
                             <% } %>

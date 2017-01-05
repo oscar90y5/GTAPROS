@@ -5,6 +5,7 @@
  */
 package dominio;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -31,6 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Tarea.findByIdInforme", query = "SELECT t FROM Tarea t WHERE t.informetareas.id = :idInforme")
     , @NamedQuery(name = "Tarea.findByIdMiembro", query = "SELECT t FROM Tarea t WHERE t.idMiembro.idMiembro = :idMiembro")
     , @NamedQuery(name = "Tarea.findByIdActividadAndMiembro", query = "SELECT t FROM Tarea t WHERE t.idActividad.id = :idActividad AND t.idMiembro.idMiembro = :idMiembro")})
+@JsonIgnoreProperties(value={"informetareas"})
 public class Tarea implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -67,7 +67,6 @@ public class AltaProyecto extends HttpServlet {
                 roles.add((String) (request.getParameter("roles"+i)));
 
             int idNuevoProyecto = proyectoFacade.count()+1;
-            System.out.println("servlet.AltaProyecto.processRequest()"+idNuevoProyecto);
             List<Rol> listaRol = new ArrayList<>();
 
             Proyecto p = new Proyecto();
@@ -109,7 +108,7 @@ public class AltaProyecto extends HttpServlet {
                      //Si no está en la tabla de miembros es porque está disponible
                     if(!u.getEsAdmin() && (miembros==null || miembros.isEmpty()))
                          usuariosDisponibles.add(u); 
-                     /*Si está en la tabla de mimebros, ver que sea miembro
+                     /*Si está en la tabla de miembros, ver que sea miembro
                      * de 1 solo proyecto (maximo posible es 2) y si es miembro de 1 que no 
                      * sea ya jefe
                      */
