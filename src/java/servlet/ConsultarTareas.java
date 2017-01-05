@@ -100,7 +100,7 @@ public class ConsultarTareas extends HttpServlet {
                     tareas.add(t);
                     System.out.println("tarea " + t.getTareaPK().getTipo() + " = "
                             + t.getEsfuerzoReal()
-                            + " idInforme=" + t.getInformetareas()
+                            + " idInforme=" + t.getTareaPK().getIdInforme()
                             + " idActividad="
                             + t.getIdActividad().getId() + " idMiembro=" + t.getIdMiembro().getIdMiembro());
                 }
