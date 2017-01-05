@@ -6,6 +6,7 @@
 package servlet;
 
 import dominio.Actividad;
+import dominio.Informetareas;
 import dominio.Miembro;
 import dominio.Proyecto;
 import dominio.Tarea;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import persistencia.ActividadFacadeLocal;
+import persistencia.InformetareasFacadeLocal;
 import persistencia.MiembroFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
 import persistencia.UsuarioFacadeLocal;
@@ -33,6 +35,9 @@ import static servlet.JefeProyecto.mapper;
  */
 @WebServlet(name = "Desarrollador", urlPatterns = {"/Desarrollador"})
 public class Desarrollador extends HttpServlet {
+
+    @EJB
+    private InformetareasFacadeLocal informetareasFacade;
 
     @EJB
     private MiembroFacadeLocal miembroFacade;
@@ -95,7 +100,9 @@ public class Desarrollador extends HttpServlet {
             }
             
             if (accion.equals("Enviar informe")) {
-            
+                List<Informetareas> informes = informetareasFacade.findAll();
+                request.setAttribute("informes", informes);
+                rd = "informesTareas.jsp";
             }
             
             if (accion.equals("Modificar tareas activas")) {
