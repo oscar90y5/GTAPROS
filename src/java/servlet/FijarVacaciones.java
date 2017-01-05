@@ -12,7 +12,9 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,22 +55,29 @@ public class FijarVacaciones extends HttpServlet {
             throws ServletException, IOException, ParseException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
+        String idUser = (String) sesion.getAttribute("idUser");
+        Usuario user = usuarioFacade.find("idUser");
         String accion = (String) request.getParameter("accion");
         String rd = "exito.jsp";
         
-        if(accion.equals("Cancelar"))
-            rd = "jefeProyecto.jsp";
+        if(accion.equals("Cancelar")){
+            String vista = (String) sesion.getAttribute("vista");
+            if(vista.equals("administrador.jsp")) rd = "administrador.jsp";
+            if(vista.equals("desarrollador.jsp")) rd = "desarrollador.jsp";
+            if(vista.equals("administrador.jsp")) rd = "administrador.jsp";        
         
-        if(accion.equals("Aceptar")){
+        }if(accion.equals("Aceptar")){
             String fecha1 = (String) request.getParameter("fecha1");
             String fecha2 = (String) request.getParameter("fecha2");  
             Date fechaInicio = obtenerFecha(fecha1);
             Date fechaFinal =  obtenerFecha(fecha2);
-            Date fechaActual = new Date();
+            Calendar actual = new GregorianCalendar();      
+            Date fechaActual = obtenerFecha(Integer.toString(actual.get(Calendar.YEAR))+"-"+
+                    Integer.toString(actual.get(Calendar.MONTH +1))+"-"+
+                    Integer.toString(actual.get(Calendar.DATE)));
+            
             long diferencia = fechaFinal.getTime() - fechaInicio.getTime();
             long dias = diferencia / (1000 * 60 * 60 * 24);
-            String idUser = (String) sesion.getAttribute("idUser");
-            Usuario user = usuarioFacade.find("idUser");
             List<Vacaciones> vacaciones = vacacionesFacade.findByUser(idUser);
             int diasFijados =0;
 
@@ -151,15 +160,13 @@ public class FijarVacaciones extends HttpServlet {
     }// </editor-fold>
 
     public Date obtenerFecha(String fecha){
-        String[] partes = fecha.split("/");
+        String[] partes = fecha.split("-");
         Date myDate = null;
         try {
             String dateString = partes[2] + "-" + partes[1] + "-" + partes[0];
-            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             myDate = formatter.parse(dateString);
-        } catch (ParseException ex) {
-            Logger.getLogger(CargarPlan.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } catch (ParseException ex) { }
         return myDate;
     }
 }

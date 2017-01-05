@@ -8,6 +8,7 @@ package servlet;
 import dominio.Actividad;
 import dominio.Miembro;
 import dominio.Proyecto;
+import dominio.Tarea;
 import dominio.Usuario;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -24,6 +25,7 @@ import persistencia.ActividadFacadeLocal;
 import persistencia.MiembroFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
 import persistencia.UsuarioFacadeLocal;
+import static servlet.JefeProyecto.mapper;
 
 /**
  *
@@ -63,7 +65,7 @@ public class Desarrollador extends HttpServlet {
         Usuario user = usuarioFacade.find(dni);
         Miembro miembroActual = miembroFacade.findByIdProyectoAndDni(proyecto, user);
         //Proyecto proyect = proyectoFacade.find(idProject);
-        System.out.println("Desarrollador: dni " + dni + " idProject " + idProject);
+        List<Proyecto> proyects = null;
         String accion = request.getParameter("accion");
         String rd = "Desarrollador.jsp";
         if (accion != null) {
@@ -72,15 +74,12 @@ public class Desarrollador extends HttpServlet {
                 List<Actividad> actividades = actividadFacade.findActiveActivities(proyecto);
                 List<Miembro> miembros;
                 Actividad a;
-                System.out.println("actividades activas");
                 //si el for es de la forma: (Actividad a : actividades) falla al borrar elementos.
                 for (int i = 0; i < actividades.size(); i++) {
                     a = actividades.get(i);
                     if (!a.getMiembroList().contains(miembroActual)) {
-                        System.out.println("borramos");
                         actividades.remove(a);
                         i--;
-                        System.out.println("borrado");
                     }
                 }
                 System.out.println("actividades: " + actividades.size());
@@ -93,15 +92,14 @@ public class Desarrollador extends HttpServlet {
                     request.setAttribute("destino", "introducirTareas.jsp");
                     rd = "actividades.jsp";
                 }
-                System.out.println("salimos");
-
             }
             if (accion.equals("Modificar tareas activas")) {
-                // out.print("Modificar datos de tareas en desarrollo....");
                 List<Actividad> actividades = new ArrayList<>();
                 for (Actividad a : miembroActual.getActividadList()) {
-                    if(!a.getEstado().equalsIgnoreCase("Cerrado")){
-                        actividades.add(a);
+                    if (a.getEstado().equalsIgnoreCase("Abierto")) {
+                        if (hayInformesRechazadosOPendientesEnvio(a)) {
+                            actividades.add(a);
+                        }
                     }
                 }
                 request.setAttribute("actividades", actividades);
@@ -115,13 +113,14 @@ public class Desarrollador extends HttpServlet {
                         actividades.add(a);
                     }
                 }
-                System.out.println(actividades.size());
+                System.out.println("actividades size "+actividades.size());
                 request.setAttribute("actividades", actividades);
                 request.setAttribute("destino", "ConsultarTareas");
                 rd = "actividades.jsp";
             }
             if (accion.equals("Obtener informes")) {
-                // out.print("Obtener informes en desarrollo....");
+                proyects = proyectoFacade.findAll();
+                rd = "proyectos.jsp?accion=informes";
             }
             if (accion.equals("Fijar vacaciones")) {
                 rd = "vacaciones.jsp";
@@ -131,6 +130,12 @@ public class Desarrollador extends HttpServlet {
             }
 
         }
+        
+        if (proyects != null) {
+            String json = mapper.writeValueAsString(proyects);
+            request.setAttribute("proyectos", json);
+        }
+        
         request.getRequestDispatcher(rd).forward(request, response);
     }
 
@@ -172,5 +177,16 @@ public class Desarrollador extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private boolean hayInformesRechazadosOPendientesEnvio(Actividad a) {
+        boolean devolver = false;
+        for (Tarea t : a.getTareaList()) {
+            if (t.getInformetareas().getEstado().equalsIgnoreCase("PendienteEnvio")
+                    || t.getInformetareas().getEstado().equalsIgnoreCase("Rechazado")) {
+                devolver = true;
+            }
+        }
+        return devolver;
+    }
 
 }

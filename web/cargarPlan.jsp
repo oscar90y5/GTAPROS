@@ -15,6 +15,12 @@
             <div class="caja_principal">
                 <h2> Cargar plan de proyecto: </h2>
                 <div class="caja_small">
+                    <%
+                        String error = null;
+                        if ((error = (String) request.getAttribute("error")) != null) {
+                    %><p style="color:red"><%=error%></p><%
+                    } else {
+                    %>
                     <form role="form" action="CargarPlan" name="CargarPlan" enctype="multipart/form-data" method="post">
                         <div class="form-group">
                             <label for="fecha">Fecha de inicio:</label>
@@ -35,12 +41,18 @@
                             <input id="file" name="file" type="file" accept="text/plain" 
                                    class="form-control-file" />
                             <small id="fileHelp" class="form-text text-muted">El archivo debe ser un fichero de texto plano.</small>
-
                         </div>
-                        <button type="submit" class="btn btn-primary" name="accion" value="Cargar">Aceptar</button>
-                        <button type="submit" class="btn btn-danger" name="accion" value="Cancelar">Cancelar</button>
+                        <div class="box-footer text-right" style="margin-top: 10px">
+                            <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Aceptar</button>
+                            <button type="submit" class="btn btn-danger" name="accion" value="Cancelar">Cancelar</button>
+                        </div>
                     </form>
+                    <%}
+                    %>
                 </div>
+                <form role="form" action="VolverMenu" method="POST">
+                    <button type="submit" class="btn btn-primary" name="accion" value="Volver">Volver</button>
+                </form>
             </div>
         </div>
     </body>

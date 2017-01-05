@@ -61,7 +61,8 @@ public class ModificarTarea extends HttpServlet {
 
         List<Tarea> tareas = new ArrayList<Tarea>();
         for (Tarea t : actividad.getTareaList()) {
-            if (t.getMiembro().getIdMiembro().equals(miembro.getIdMiembro())) {
+            System.out.println("miembro en tarea " + t.getIdMiembro().getIdMiembro());
+            if (t.getIdMiembro().getIdMiembro().equals(miembro.getIdMiembro())) {
                 tareas.add(t);
             }
         }

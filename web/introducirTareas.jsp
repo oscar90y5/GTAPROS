@@ -7,15 +7,24 @@
         <title>GTAPROS</title>
         <%@include file="WEB-INF/jspf/includes.jspf" %>
         <% String actividad = request.getParameter("idActividad");
-        pageContext.setAttribute("idActividad", actividad, PageContext.APPLICATION_SCOPE);
+            pageContext.setAttribute("idActividad", actividad, PageContext.APPLICATION_SCOPE);
         %>
     </head>
     <body>
         <div class="container">
             <div class="caja_principal">
-                <h2> Introducir tareas de actividad <%=actividad %> :</h2>
+                <h2> Introducir tareas de actividad <%=actividad%> :</h2>
+                <% try {
+                        String error = (String) request.getParameter("error");
+                        if (error != null) {
+                %>
+                <p style="color:red">No se ha introducido una semana de Lunes a Domingo</p>
+                <%}
+                    } catch (NullPointerException e) {
+                    }%>
                 <div class="caja_small">
                     <form role="form" action='IntroducirTareas' method="post">
+                        <input type="hidden" name="idActividad" id="idActividad" value="<%=actividad%>"/>
                         <div class="form">
                             <p>
                                 <label for="tratoUsuarios">Trato con usuarios:</label>
@@ -42,13 +51,14 @@
                                 <input type="number" min="0" name="formar" placeholder="Tiempo dedicado (h/hombre)" />
                             </p>
                             <p>
-                                <label for="semana">Semana:</label>
-                                <input type="week" name="semana" placeholder="Numero de semana" />
+                                <label for="semana">Semana(LUNES-DOMINGO):</label>
+                                <input type="Date" name="fecha1" placeholder="Seleccione fecha inicio"/>
+                                <input type="Date" name="fecha2" placeholder="Seleccione fecha fin"/>
                             </p>
                         </div>
-                        </div>
                         <div class="box-footer text-right" style="margin-top: 10px">
-                            <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Aceptar</button>
+                            <button type="submit" class="btn btn-primary" name="accion" value="Ahora">Enviar ahora</button>
+                            <button type="submit" class="btn btn-primary" name="accion" value="Tarde">Enviar más tarde</button>
                             <button type="submit" class="btn btn-danger" name="accion" value="Cancelar">Cancelar</button>
                         </div>
                     </form>

@@ -26,12 +26,12 @@
                 <%} else {
 
                 %>
-                <h3>Tareas de la actividad id = <%=tareas.get(0).getActividad().getId()%></h3>
+                <h3>Tareas de la actividad id = <%=tareas.get(0).getIdActividad().getId()%></h3>
                 <%
                     List<Informetareas> lista = new ArrayList<Informetareas>();
                     for (Tarea t : tareas) {
-                        if (!lista.contains(t.getIdInforme())) {
-                            lista.add(t.getIdInforme());
+                        if (!lista.contains(t.getInformetareas())) {
+                            lista.add(t.getInformetareas());
                         }
                     }
 
@@ -41,7 +41,7 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">Tareas del informe  id = <%=i.getId()%>
-                            <div class="right" style="text-align: right"><%=i.getSemanaEnvioPrettyPrinter()%></div></h3>
+                            <div class="right" style="text-align: right"><%=i.getSemanaPrettyPrinter()%></div></h3>
                     </div>
                     <div class="panel-body">                           
                         <table class="table table-rol">
@@ -51,7 +51,7 @@
                             </tr>
                             <%
                                 for (Tarea t : tareas) {
-                                    if (i.getId().equals(t.getIdInforme().getId())) {
+                                    if (i.getId().equals(t.getInformetareas().getId())) {
                                         //Mostrar tareas                             
 %>
                             <tr>
@@ -65,7 +65,14 @@
                     </div>
                     <div class="panel-footer">
                         Estado: <%=i.getEstado()%>   <BR/>
-                        Fecha de envio: <%=i.getFechaEnvioPrettyPrinter()%>
+                        <% String fechaEnvio;
+                        try{
+                            fechaEnvio = i.getFechaEnvioPrettyPrinter();
+                        }catch(NullPointerException e){
+                            fechaEnvio = "";
+                        }
+                        %>
+                        Fecha de envio: <%=fechaEnvio%>
                     </div>
                 </div>
                 <%
@@ -73,7 +80,7 @@
                     }
                 %>
                 <form role="form" action="VolverMenu" method="POST">
-                    <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Volver</button>
+                    <button type="submit" class="btn btn-primary" name="accion" value="Volver">Volver</button>
                 </form>
             </div>
         </div>

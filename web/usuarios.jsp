@@ -51,10 +51,12 @@
                             Usuario u = users.get(i);
                 %>
                 <tr>
-                    <td><input type="checkbox" name="dni" value="<%= u.getDni()%>"></td>
-                    <td><input type="number" name="participacion" min="1" max=<%=100 - porcents.get(i)%> </td>
+                    <input type="hidden" name="dni" value="0"/>
+                    <td><input type="checkbox" name="dni" value="<%= u.getDni()%>"/></td>
+                    <td><input type="number" name="participacion" min="1" max=<%=100 - porcents.get(i)%>/></td>
                     <td><%=u.getDni()%></td>
                     <td><%=u.getNombreCompleto()%></td>
+                    <input type="hidden" name="tipoCategoria" value="0"/>
                     <td><select name="tipoCategoria">
                             <% switch(u.getTipoCategoria()){
                                 //El caso 1 y 2 son igual porque no podemos asignar JefeProyecto

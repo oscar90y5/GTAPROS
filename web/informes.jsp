@@ -18,9 +18,11 @@
     <body>
         <section class="container">
             <% 
+            HttpSession sesion = request.getSession();
             ObjectMapper mapper = new ObjectMapper();
             String json = (String) request.getAttribute("proyecto");
-            String inProject = request.getParameter("in");
+            try{
+                String inProject = request.getParameter("in");
             %>
             <div class="caja_principal">
                 <h2>Elija el informe que desea obtener:</h2>
@@ -30,9 +32,12 @@
                     <p>No hay informes que mostrar</p>
                     <%}else{
                     Proyecto p = mapper.readValue(json, Proyecto.class);
-                    if(inProject.equals("true")){
+                    String vista = (String) sesion.getAttribute("vista");
                     %>
                     <input type="hidden" name="proyecto" value="<%=p.getId()%>"/>
+                    <%if(inProject.equals("true") && vista.equals("desarrollador.jsp")){%>
+                    <input type="submit" name="informe" value="Datos Actividad por periodo semanal" class="btn btn-lg btn-primary btn-block"/>
+                    <%}if(inProject.equals("true") && vista.equals("jefeProyecto.jsp")){%>
                     <input type="submit" name="informe" value="Trabajadores/Actividades por periodo semanal" class="btn btn-lg btn-primary btn-block"/>
                     <input type="submit" name="informe" value="Trabajadores/Informes pendientes de Envio" class="btn btn-lg btn-primary btn-block"/>
                     <input type="submit" name="informe" value="Trabajadores/Informes pendientes de Aprobacion" class="btn btn-lg btn-primary btn-block"/>
@@ -40,10 +45,9 @@
                     <input type="submit" name="informe" value="Actividades con tiempo real mayor del esperado" class="btn btn-lg btn-primary btn-block"/>
                     <input type="submit" name="informe" value="Actividades/Recursos por periodo posterior" class="btn btn-lg btn-primary btn-block"/>
                     <input type="submit" name="informe" value="Trabajadores/Actividades/Tiempo por periodo posterior" class="btn btn-lg btn-primary btn-block"/>
-                    <%}if(p.getEstado().equals("Finalizado")){
-                    %>
+                    <%}if(p.getEstado().equals("Finalizado")){%>
                     <input type="submit" name="informe" value="Informe general" class="btn btn-lg btn-primary btn-block"/>
-                    <%}}%>
+                    <%}}}catch(NullPointerException e){ }%>
                 </form>
                 </div>
             </div>

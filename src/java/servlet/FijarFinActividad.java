@@ -63,7 +63,7 @@ public class FijarFinActividad extends HttpServlet {
           List<Tarea> listadoTareas = a.getTareaList();
           int count =0;
           for(Tarea t : listadoTareas){
-              Informetareas i = t.getIdInforme();
+              Informetareas i = t.getInformetareas();
               String estadoInforme = i.getEstado();
               if(!estadoInforme.equals("Cerrado")){
                   break;

@@ -23,7 +23,7 @@ public interface UsuarioFacadeLocal {
     void remove(Usuario usuario);
 
     Usuario find(Object id);
-    
+
     Usuario findByNombreCompleto(String nombreCompleto);
     Usuario findByDni(String dni);
 
@@ -31,11 +31,11 @@ public interface UsuarioFacadeLocal {
     List<Usuario> findAll();
 
     List<Usuario> findRange(int[] range);
-    
+
     List<Usuario> finByAdmin(Boolean admin);
-    
+
     List<Usuario> findByTipoCategoria(int tipoCategoria);
 
     int count();
-    
+
 }

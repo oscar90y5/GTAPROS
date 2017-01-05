@@ -29,7 +29,11 @@ public interface TareaFacadeLocal {
     List<Tarea> findRange(int[] range);
 
     int count();
-    
+
     List<Tarea> findByIdActividadAndMiembro(Object idActividad, Object idMiembro);
+    
+    List<Tarea> findByIdInforme(Object idInforme);
+    
+    List<Tarea> findByIdMiembro(Object idMiembro);
     
 }

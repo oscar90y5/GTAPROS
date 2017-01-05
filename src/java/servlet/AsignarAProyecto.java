@@ -40,7 +40,6 @@ public class AsignarAProyecto extends HttpServlet {
 
     @EJB
     private UsuarioFacadeLocal usuarioFacade;
-    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -56,37 +55,50 @@ public class AsignarAProyecto extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
         String accion = request.getParameter("accion");
-        String [] dnis = request.getParameterValues("dni");
-        String [] categorias = request.getParameterValues("tipoCategoria");
+        String[] dnis = request.getParameterValues("dni");
+        String[] categorias = request.getParameterValues("tipoCategoria");
         String[] participacion = request.getParameterValues("participacion");
+        int cont = 1;
         Integer idProject = (Integer) sesion.getAttribute("idProject");
         String rd = "exito.jsp";
-        
-        if(accion.equals("Cancelar"))
-            rd = "jefeProyecto.jsp";
-        if(accion.equals("Aceptar")){
-            if(dnis==null)
-                rd = "usuarios.jsp?error=dni";
-            else{
-                for(int i=0; i< dnis.length; i++){
-                    Miembro m = new Miembro();
-                    Usuario u = usuarioFacade.find(dnis[i]);
-                    m.setDni(u);
-                    Proyecto p = proyectoFacade.find(idProject);
-                    m.setIdProyecto(p);
-                    int idRol = rolFacade.count()+1;
-                    Rol r = rolFacade.findByNombreRolAndIdProyecto(categorias[i], idProject);
-                    m.setIdRol(r);
-                    m.setParticipacion(Integer.parseInt(participacion[i]));
-                    int id = miembroFacade.count()+1;
-                    m.setIdMiembro(id);
-                    miembroFacade.create(m);
-
-                    //Limpio sesion
-                    sesion.removeAttribute("usuarios");
-                    sesion.removeAttribute("participacion");
-                }
+        System.out.println("dnis " + dnis);
+        for (int x = 0; x < dnis.length; x++) {
+            System.out.print(dnis[x] + " ");
         }
+        System.out.println("participacion " + participacion);
+        for (int x = 0; x < participacion.length; x++) {
+            System.out.print("x=" + x + " +" + participacion[x] + " ");
+        }
+        System.out.println("participacion selected" + participacion[0]);
+        if (accion.equals("Cancelar")) {
+            rd = "jefeProyecto.jsp";
+        }
+        if (accion.equals("Aceptar")) {
+            if (dnis == null) {
+                rd = "usuarios.jsp?error=dni";
+            }else{
+                for(int i=0; i< dnis.length; i++){
+                    //Comprobacion: estoy tomando un usuario checked
+                    if(!dnis[i].equals("0")){
+                        System.out.println(dnis[i]+"-"+participacion[i-cont]+"-"+categorias[i]);
+                        Miembro m = new Miembro();
+                        Usuario u = usuarioFacade.find(dnis[i]);
+                        m.setDni(u);
+                        Proyecto p = proyectoFacade.find(idProject);
+                        m.setIdProyecto(p);
+                        Rol r = rolFacade.findByNombreRolAndIdProyecto(categorias[i], p);
+                        m.setIdRol(r);
+                        m.setParticipacion(Integer.parseInt(participacion[i-cont]));
+                        int id = miembroFacade.count()+1;
+                        m.setIdMiembro(id);
+                        miembroFacade.create(m);
+                        cont++;
+                    }
+                }
+                //Limpio sesion
+                sesion.removeAttribute("usuarios");
+                sesion.removeAttribute("participacion");
+            }
         }
         request.getRequestDispatcher(rd).forward(request, response);
 

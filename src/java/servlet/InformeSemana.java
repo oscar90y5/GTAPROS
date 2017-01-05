@@ -7,8 +7,11 @@ package servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dominio.Actividad;
+import dominio.Informetareas;
+import dominio.Miembro;
 import dominio.Proyecto;
 import dominio.Tarea;
+import dominio.Usuario;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -16,8 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,8 +26,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import persistencia.InformetareasFacadeLocal;
 import persistencia.MiembroFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
+import persistencia.TareaFacadeLocal;
+import persistencia.UsuarioFacadeLocal;
 
 /**
  *
@@ -34,6 +38,15 @@ import persistencia.ProyectoFacadeLocal;
  */
 @WebServlet(name = "InformeSemana", urlPatterns = {"/InformeSemana"})
 public class InformeSemana extends HttpServlet {
+
+    @EJB
+    private UsuarioFacadeLocal usuarioFacade;
+
+    @EJB
+    private TareaFacadeLocal tareaFacade;
+
+    @EJB
+    private InformetareasFacadeLocal informetareasFacade;
 
     @EJB
     private MiembroFacadeLocal miembroFacade;
@@ -56,57 +69,88 @@ public class InformeSemana extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession sesion = request.getSession();
+        String vista = (String) sesion.getAttribute("vista");
         String fecha1= null;
         String fecha2 = null;
-        String rd = "informeSemana.jsp";
+        String rd;
         try{
             fecha1 = (String) request.getParameter("fecha1");
             fecha2 = (String) request.getParameter("fecha2");
         }catch (NullPointerException e){ }
         
         if(fecha1==null || fecha2==null){
-            rd = "jefeProyecto.jsp";
+            rd = vista;
         }else{
             Date fechaInicio = obtenerFecha(fecha1);
             Date fechaFinal =  obtenerFecha(fecha2);
-            Date fechaActual = new Date();
             long diferencia = fechaFinal.getTime() - fechaInicio.getTime();
             long dias = diferencia / (1000 * 60 * 60 * 24);
             String stringP = (String) sesion.getAttribute("idP");
+            String idUser = (String) sesion.getAttribute("idUser");
+            Usuario user = usuarioFacade.find(idUser);
             int idP = Integer.parseInt(stringP);
             Proyecto p = proyectoFacade.find(idP);
-            List<Tarea> datosTarea = new ArrayList<>();
 
-            if(dias!=7){
+            if(dias%7!=0){
                 request.setAttribute("datos", "porBuscar");
                 rd = "informeSemana.jsp?error=dias";
             }else{
-                List<Actividad> actividades = p.getActividadList();
-                ArrayList<Actividad> actPeriodo = new ArrayList<>();
-                System.out.println("servlet.InformeSemana.processRequest()"+fecha1);
-                System.out.println("servlet.InformeSemana.processRequest()"+fecha2);
-                for(Actividad a: actividades){
-                    Date fechaIniA = null;
-                    Date fechaFinA = null;
-                    try{
-                        fechaIniA = a.getFechaInicio();
-                        fechaFinA = a.getFechaFin();
-                    }catch(NullPointerException e){ }
-                    //Si fechaIniA==null actividad no ha empezado, imposible que entre en periodo
-                    if(fechaIniA!=null && fechaFinA==null){
-                        if(fechaIniA.before(fechaInicio) || a.getFechaInicio().equals(fechaInicio))
-                            actPeriodo.add(a);
-                    }if(fechaIniA!=null && fechaFinA!=null){
-                        if((fechaIniA.before(fechaInicio) || fechaIniA.equals(fechaInicio))
-                            && (fechaFinal.before(fechaFinA) || fechaFinal.equals(fechaFinA)))
-                            actPeriodo.add(a);
+                if(vista.equals("desarrollador.jsp")){
+                    List<Miembro> miembros = miembroFacade.findByDni(user);
+                    int idM = 0;
+                    for(Miembro m: miembros){
+                        if(m.getIdProyecto().getId().equals(idP))
+                            idM = m.getIdMiembro();
                     }
+                    /*Nunca deberia darse idM=0 en este punto porque ya se ha comprobado
+                    * antes de llegar a generar el informe que el usuario pertecene a el
+                    */
+                    List<Informetareas> allInfor = informetareasFacade.findAll();
+                    List<Informetareas> informes = new ArrayList<>();
+                    
+                    for(Informetareas i: allInfor){
+                        List<Tarea> tareas = i.getTareaList();
+                        //Cojo una tarea cualquiera porque todas tiene el mismo idMiembro
+                        Tarea t = tareas.get(0);
+                        if(t.getIdMiembro().getIdMiembro()==idM){
+                            Date semana = i.getSemana();
+                            if((fechaInicio.before(semana) || fechaInicio.equals(semana)) && semana.before(fechaFinal))
+                                informes.add(i);
+                        }
+                    }
+                    
+                    request.setAttribute("fecha1", fecha1);
+                    request.setAttribute("fecha2", fecha2);
+                    request.setAttribute("datos", informes);
+                    sesion.removeAttribute("idP");
+                    
+                }if(vista.equals("jefeProyecto.jsp")){
+                    List<Actividad> actividades = p.getActividadList();
+                    ArrayList<Actividad> actPeriodo = new ArrayList<>();
+                    for(Actividad a: actividades){
+                        Date fechaIniA = null;
+                        Date fechaFinA = null;
+                        try{
+                            fechaIniA = a.getFechaInicio();
+                            fechaFinA = a.getFechaFin();
+                        }catch(NullPointerException e){ }
+                        //Si fechaIniA==null actividad no ha empezado, imposible que entre en periodo
+                        if(fechaIniA!=null && fechaFinA==null){
+                            if(fechaIniA.before(fechaInicio) || a.getFechaInicio().equals(fechaInicio))
+                                actPeriodo.add(a);
+                        }if(fechaIniA!=null && fechaFinA!=null){
+                            if((fechaIniA.before(fechaInicio) || fechaIniA.equals(fechaInicio))
+                                && (fechaFinal.before(fechaFinA) || fechaFinal.equals(fechaFinA)))
+                                actPeriodo.add(a);
+                        }
+                    }
+
+                    request.setAttribute("fecha1", fecha1);
+                    request.setAttribute("fecha2", fecha2);
+                    request.setAttribute("datos", actPeriodo);
+                    sesion.removeAttribute("idP");
                 }
-                
-                request.setAttribute("fecha1", fecha1);
-                request.setAttribute("fecha2", fecha2);
-                request.setAttribute("datos", actPeriodo);
-                sesion.removeAttribute("idP");
+
                 rd = "informeSemana.jsp";
             }
         }
@@ -153,16 +197,14 @@ public class InformeSemana extends HttpServlet {
         return "Short description";
     }// </editor-fold>
     
-    public Date obtenerFecha(String fecha){
-          String[] partes = fecha.split("/");
-          Date myDate = null;
-          try {
-              String dateString = partes[2] + "-" + partes[1] + "-" + partes[0];
-              DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-              myDate = formatter.parse(dateString);
-          } catch (ParseException ex) {
-              Logger.getLogger(CargarPlan.class.getName()).log(Level.SEVERE, null, ex);
-          }
-          return myDate;
-      }
+     public Date obtenerFecha(String fecha){
+        String[] partes = fecha.split("-");
+        Date myDate = null;
+        try {
+            String dateString = partes[2] + "-" + partes[1] + "-" + partes[0];
+            DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+            myDate = formatter.parse(dateString);
+        } catch (ParseException ex) { }
+        return myDate;
+    }
 }

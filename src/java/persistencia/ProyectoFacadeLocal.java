@@ -23,7 +23,7 @@ public interface ProyectoFacadeLocal {
     void remove(Proyecto proyecto);
 
     Proyecto find(Object id);
-    
+
     Proyecto findById(int id);
 
     List<Proyecto> findAll();
@@ -31,5 +31,5 @@ public interface ProyectoFacadeLocal {
     List<Proyecto> findRange(int[] range);
 
     int count();
-    
+
 }
