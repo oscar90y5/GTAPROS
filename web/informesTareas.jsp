@@ -21,20 +21,14 @@
                 <%
                     List<Informetareas> informes = (List<Informetareas>) request.getAttribute("informes");
                     if (informes == null || informes.size() == 0) {%>
-                <h3>No existen informes ppendientes de envio.</h3>
+                <h3>No existen informes pendientes de envio.</h3>
                 <%} else {
                 %>
                 <table class="table columna_caja_principal" >
                     <tr><h1>Selecciona una actividad:</h1></tr>
                     <tr style="align-content: center">
-                        <td><h4>Id</h4></td>
+                        <td><h4>Id informe</h4></td>
                         <td><h4>Semana</h4></td>
-                        <!--<td><h4>T1</h4></td>
-                        <td><h4>T2</h4></td>
-                        <td><h4>T3</h4></td>
-                        <td><h4>T4</h4></td>
-                        <td><h4>T5</h4></td>
-                        <td><h4>T6</h4></td>-->
                     </tr>
                     <%
                         for (Informetareas i : informes) {
@@ -45,7 +39,6 @@
                         onmouseover="this.style.color = '#2B58CC';" onmouseout="this.style.color = '#4E4E4E';">
                         <td><%=i.getId()%></td>
                         <td><%=i.getSemana() %></td>
-
                     </tr>
                     <%}
                         }
