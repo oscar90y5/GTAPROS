@@ -68,8 +68,9 @@ public class ModificarTarea extends HttpServlet {
             System.out.println("miembro en tarea " + t.getIdMiembro().getIdMiembro());
             if (t.getIdMiembro().getIdMiembro().equals(miembro.getIdMiembro())) {
                 tareas.add(t);
+            }
         }
-        
+
         request.setAttribute("tareas", tareas);
         String rd = "modificarTarea.jsp";
         request.getRequestDispatcher(rd).forward(request, response);
