@@ -24,17 +24,7 @@
                     <form role="form" action="CargarPlan" name="CargarPlan" enctype="multipart/form-data" method="post">
                         <div class="form-group">
                             <label for="fecha">Fecha de inicio:</label>
-                            <input id="fecha" name="fecha" class="form-control" type="text"/>
-                            <button id="fechaSel" class="form-control">Seleccionar fecha</button>
-                            <script type="text/javascript">
-                                Calendar.setup({
-                                    inputField: "fecha",
-                                    ifFormat: "%d/%m/%Y",
-                                    weekNumbers: false,
-                                    displayArea: "fechaSel",
-                                    daFormat: "%A, %d de %B de %Y"
-                                });
-                            </script>
+                            <input type="Date" name="fecha"/>
                         </div>
                         <div class="form-group">
                             <label for="file">Seleccionar archivo de carga de proyecto:</label>

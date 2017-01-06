@@ -48,7 +48,7 @@
                             String datos = (String) request.getAttribute("datos");   
                             if(datos.equals("porBuscar")){
                         %> 
-                        <div class="caja_small">
+                        <div class="form-group">
                                 <input type="Date" name="fecha1" class="form-control"/>
                                 <input type="Date" name="fecha2" class="form-control"/>
                         </div>

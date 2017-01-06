@@ -20,7 +20,6 @@ import persistencia.ProyectoFacadeLocal;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dominio.Miembro;
 import dominio.Usuario;
-import static java.lang.System.out;
 import java.util.ArrayList;
 import persistencia.MiembroFacadeLocal;
 import persistencia.UsuarioFacadeLocal;

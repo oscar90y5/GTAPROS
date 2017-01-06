@@ -65,7 +65,7 @@ public class FijarFinActividad extends HttpServlet {
           for(Tarea t : listadoTareas){
               Informetareas i = t.getInformetareas();
               String estadoInforme = i.getEstado();
-              if(!estadoInforme.equals("Cerrado")){
+              if(!estadoInforme.equals("Aceptado")){
                   break;
               } 
               else count++;
@@ -91,7 +91,7 @@ public class FijarFinActividad extends HttpServlet {
                 //Si todas las actividades están cerradas, cerramos el proyecto
                 if(contador == actividadesProyecto.size()){
                     p.setFechaFin(fechaFin);
-                    p.setEstado("Cerrado");
+                    p.setEstado("Finalizado");
                     proyectoFacade.edit(p);
                 }
                 response.sendRedirect("exito.jsp"); 
@@ -99,7 +99,7 @@ public class FijarFinActividad extends HttpServlet {
           }
           //Hay informes de tareas que no tienen estado cerrado
           else{
-            request.getRequestDispatcher("administrador.jsp?error=CierreInformes").forward(request, response);
+            request.getRequestDispatcher("jefeProyecto.jsp?error=CierreInformes").forward(request, response);
           }
         }
     }
