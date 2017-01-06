@@ -22,7 +22,6 @@ import dominio.Informetareas;
 import dominio.Miembro;
 import dominio.Tarea;
 import dominio.Usuario;
-import static java.lang.System.out;
 import java.util.ArrayList;
 import persistencia.InformetareasFacadeLocal;
 import persistencia.MiembroFacadeLocal;

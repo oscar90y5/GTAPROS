@@ -51,31 +51,11 @@
                             try{
                                 String datos = (String) request.getAttribute("datos");
                             if(datos.equals("porBuscar")){
-                        %>
-                                <input type="text" id="fecha1" name="fecha1" class="form-control" required/>
-                                <button id="fechaIni">Seleccione fecha inicio</button>
-                                <script type="text/javascript">
-                                   Calendar.setup({
-                                     inputField: "fecha1",
-                                     ifFormat:   "%d/%m/%Y",
-                                     weekNumbers: false,
-                                     displayArea: "fechaIni",
-                                     daFormat:    "%A, %d de %B de %Y"
-                                   });
-                                </script>
-                                <div class="form-group">
-                                <input type="text" id="fecha2" name="fecha2" class="form-control" required/>
-                                <button id="fechaFin">Seleccione fecha fin</button>
-                                <script type="text/javascript">
-                                   Calendar.setup({
-                                     inputField: "fecha2",
-                                     ifFormat:   "%d/%m/%Y",
-                                     weekNumbers: false,
-                                     displayArea: "fechaFin",
-                                     daFormat:    "%A, %d de %B de %Y"
-                                   });
-                                </script>
-                                </div>
+                    %>
+                    <div class="form-group">
+                        <input type="Date" name="fecha1" placeholder="Seleccione fecha inicio"/>
+                        <input type="Date" name="fecha2" placeholder="Seleccione fecha fin"/>
+                    </div>
                             <%}}catch(ClassCastException e){
                                 List<Actividad> datos = (List<Actividad>) request.getAttribute("datos");
                                 if(datos==null || datos.isEmpty()){
@@ -106,7 +86,9 @@
                                     <td><%=a.getDuracion()%></td>
                                     <td><%=tiempoReal%></td>
                                 </tr>
-                                <%}}if(estado.equals("recursos")){%>   
+                                <%}%>
+                            </table>
+                            <%}if(estado.equals("recursos")){%>   
                                 <table class="table columna_caja_principal" >
                                     <tr><p>Periodo: <%=fecha1%> - <%=fecha2%></p></tr>
                                     <tr>
@@ -117,9 +99,9 @@
                                     </tr>
                                     <%for(Actividad a: datos){
                                         List<Miembro> miembros = a.getMiembroList();
-                                        String recursos = "";
+                                        ArrayList<String> recursos = new ArrayList<String>();
                                         for(Miembro m: miembros){
-                                            recursos.concat(m.getDni().getNombreCompleto()+"\n");
+                                            recursos.add(m.getDni().getNombreCompleto());
                                         }
                                     %>
                                     <tr>
@@ -128,7 +110,9 @@
                                         <td><%=a.getFechaInicioPrettyString()%> - <%=a.getFechaFinPrettyString()%></td>
                                         <td><%=recursos%></td>
                                     </tr>
-                                    <%}}if(estado.equals("trabajadores")){%>   
+                                    <%}%>
+                                </table>
+                                <%}if(estado.equals("trabajadores")){%>   
                                 <table class="table columna_caja_principal" >
                                     <tr><p>Periodo: <%=fecha1%> - <%=fecha2%></p></tr>
                                     <tr>
@@ -152,11 +136,13 @@
                                         <td><%=a.getId()%></td>
                                         <td><%=a.getNombre()%></td>
                                         <td><%=tiempoTrabajado%></td>
-                                    </tr>
+                                     </tr>
                                     <%}}%>
                                 </table>
                         <%}}}}catch(NullPointerException e){ }%>
+                        <div class="box-footer text-right" style="margin-top: 10px">
                         <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Aceptar</button>
+                        </div>
                 </form>
             </div>
         </div>

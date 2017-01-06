@@ -3,66 +3,6 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/AltaTrabajador.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/vacaciones.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/MisProyectos.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/informe.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/Actividad.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/Rol.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/FijarFinActividad.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/misProyectos.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/ConsultarTareas.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/UsuariosDisponibles.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/proyecto.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/usuariosDisponibles.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/InformeSemana.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/introducirTareas.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/AsignarResponsable.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/CargarInformeModificar.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/error_404.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/VacacionesPK.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/informes.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/Vacaciones.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/informeSemana.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/TareaPK.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/AltaProyecto.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/tareas.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/desarrollador.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/FijarVacaciones.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/altaTrabajador.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/modificarInforme.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/proyectos.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/Miembro.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/VolverMenu.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/Informetareas.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/Tarea.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/usuarios.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/LoginServlet.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/Proyecto.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/GenerarInforme.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/jefeProyecto.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/Desarrollador.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/ModificarInforme.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/asignarResponsable.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/error_java.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/CargarPlan.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/informePeriodo.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/Administrador.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/index.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/ModificarTarea.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/IntroducirTareas.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/seleccionModificarTarea.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/nbproject/build-impl.xml</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/altaProyecto.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/InformePeriodo.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/AsignarAProyecto.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/dominio/Usuario.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/JefeProyecto.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/AsignarUsuarioActividad.java</file>
-            <file>file:/Users/claramorrondo/GTAPROS/web/cargarPlan.jsp</file>
-            <file>file:/Users/claramorrondo/GTAPROS/src/java/servlet/ObtenerInformes.java</file>
-=======
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/src/java/servlet/IntroducirTareas.java</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/web/informePeriodo.jsp</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/src/java/dominio/Informetareas.java</file>
@@ -78,7 +18,6 @@
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/web/usuarios.jsp</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/src/java/servlet/GenerarInforme.java</file>
             <file>file:/C:/Users/Rebeca/Documents/NetBeansProjects/GTAPROS/GTAPROS/src/java/servlet/JefeProyecto.java</file>
->>>>>>> 56970b84566f0811d0a24e29ec374cfa67e57bfd
         </group>
     </open-files>
 </project-private>

@@ -41,8 +41,6 @@
                     %>
                     <div class="form-group">
                         <input type="Date" name="fecha1" placeholder="Seleccione fecha inicio"/>
-                    </div>
-                     <div class="form-group">
                         <input type="Date" name="fecha2" placeholder="Seleccione fecha fin"/>
                     </div>
                     <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Aceptar</button>

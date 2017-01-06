@@ -127,7 +127,9 @@
                     <%}%>
                     </table>
                     <%}}%>
-                <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Aceptar</button>   
+                    <div class="box-footer text-right" style="margin-top: 10px">
+                        <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Aceptar</button>   
+                    </div>
                 </form>
             </div>
         </section>
