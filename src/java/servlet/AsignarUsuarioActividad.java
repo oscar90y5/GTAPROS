@@ -60,6 +60,7 @@ public class AsignarUsuarioActividad extends HttpServlet {
            int id = (int) sesion.getAttribute("idActividad");
            Actividad a = actividadFacade.findById(id);
            Usuario user = usuarioFacade.findByDni(dniUsuario);
+           
            Miembro m = new Miembro();
            m.setDni(user);
            m.setIdRol(a.getIdRol());
