@@ -6,6 +6,7 @@
 package servlet;
 
 import dominio.Actividad;
+import dominio.Informetareas;
 import dominio.Miembro;
 import dominio.Proyecto;
 import dominio.Tarea;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import persistencia.ActividadFacadeLocal;
+import persistencia.InformetareasFacadeLocal;
 import persistencia.MiembroFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
 import persistencia.UsuarioFacadeLocal;
@@ -31,6 +33,9 @@ import static servlet.JefeProyecto.mapper;
  */
 @WebServlet(name = "Desarrollador", urlPatterns = {"/Desarrollador"})
 public class Desarrollador extends HttpServlet {
+
+    @EJB
+    private InformetareasFacadeLocal informetareasFacade;
 
     @EJB
     private MiembroFacadeLocal miembroFacade;
@@ -87,13 +92,25 @@ public class Desarrollador extends HttpServlet {
                 }
             }
             
+            if (accion.equals("Enviar informe")) {
+                List<Informetareas> informes = informetareasFacade.findByIdProyectoAndEstadoAndDni(idProject, "PendienteEnvio", dni);
+                List<Informetareas> informes2 = new ArrayList<>();
+                for(Informetareas i : informes){
+                    if(!informes2.contains(i)){
+                        informes2.add(i);
+                    }
+                }
+                request.setAttribute("informes", informes2);
+                rd = "informesTareas.jsp";
+            }
+            
             if (accion.equals("Modificar tareas activas")) {
                 List<Actividad> actividades = new ArrayList<>();
                 for (Actividad a : miembroActual.getActividadList()) {
-                    if (a.getEstado().equalsIgnoreCase("Abierto")) {
-                        if (hayInformesRechazadosOPendientesEnvio(a)) {
-                            actividades.add(a);
-                        }
+                    if (a.getEstado().equalsIgnoreCase("Abierto")
+                            && hayInformesRechazadosOPendientesEnvio(a)) {
+                        actividades.add(a);
+
                     }
                 }
                 request.setAttribute("actividades", actividades);
@@ -108,6 +125,7 @@ public class Desarrollador extends HttpServlet {
                         actividades.add(a);
                     }
                 }
+                System.out.println("actividades size " + actividades.size());
                 request.setAttribute("actividades", actividades);
                 request.setAttribute("destino", "ConsultarTareas");
                 rd = "actividades.jsp";
@@ -124,12 +142,12 @@ public class Desarrollador extends HttpServlet {
             }
 
         }
-        
+
         if (proyects != null) {
             String json = mapper.writeValueAsString(proyects);
             request.setAttribute("proyectos", json);
         }
-        
+
         request.getRequestDispatcher(rd).forward(request, response);
     }
 

@@ -5,39 +5,28 @@
  */
 package servlet;
 
-import dominio.Actividad;
-import dominio.Miembro;
-import dominio.Tarea;
+import dominio.Informetareas;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Date;
+import java.time.Instant;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import persistencia.ActividadFacadeLocal;
-import persistencia.MiembroFacadeLocal;
-import persistencia.TareaFacadeLocal;
+import persistencia.InformetareasFacadeLocal;
 
 /**
  *
- * @author miki
+ * @author oscar
  */
-@WebServlet(name = "ModificarTarea", urlPatterns = {"/ModificarTarea"})
-public class ModificarTarea extends HttpServlet {
+@WebServlet(name = "EnviarInforme", urlPatterns = {"/EnviarInforme"})
+public class EnviarInforme extends HttpServlet {
 
     @EJB
-    private TareaFacadeLocal tareaFacade;
-
-    @EJB
-    private MiembroFacadeLocal miembroFacade;
-
-    @EJB
-    private ActividadFacadeLocal actividadFacade;
+    private InformetareasFacadeLocal informetareasFacade;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -51,30 +40,13 @@ public class ModificarTarea extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        System.out.println("ModificarTarea");
-        HttpSession sesion = request.getSession();
-        String dni = (String) sesion.getAttribute("idUser");
-        int idProject = (Integer) sesion.getAttribute("idProject");
-        Integer idActividad = Integer.parseInt(request.getParameter("idActividad"));
-        sesion.setAttribute("idActividad", idActividad);
-        Actividad actividad = actividadFacade.find(idActividad);
-        System.out.println("idProyecto -" + idProject + "- idActividad -" + idActividad + "- dni -" + dni + "-");
-        System.out.println("actividad string " + actividad);
-        Miembro miembro = miembroFacade.findByDniAndIdProyecto(dni, idProject);
-        System.out.println("miembro " + miembro);
+        Informetareas informe = informetareasFacade.find(Integer.valueOf(request.getParameter("idInforme")));
+        informe.setFechaEnvio(Date.from(Instant.now()));
+        informe.setEstado("PendienteAprobacion");
+        informetareasFacade.edit(informe);
+        request.getRequestDispatcher("exito.jsp").forward(request, response);
 
-        List<Tarea> tareas = new ArrayList<Tarea>();
-        for (Tarea t : tareaFacade.findAll()) {
-            System.out.println("miembro en tarea " + t.getIdMiembro().getIdMiembro());
-            if (t.getIdMiembro().getIdMiembro().equals(miembro.getIdMiembro())) {
-                tareas.add(t);
-            }
-        }
-
-        request.setAttribute("tareas", tareas);
-        String rd = "modificarTarea.jsp";
-        request.getRequestDispatcher(rd).forward(request, response);
-
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

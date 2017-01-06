@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.ejb.Local;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -99,7 +100,8 @@ public class InformePeriodo extends HttpServlet {
                 rd = "informePeriodo.jsp?infor=realplanificado";
                 
             }if(infor.equals("recursos")){
-                if(fechaInicio.before(fechaActual)){
+                if(fechaInicio.before(fechaActual) ||
+                        fechaInicio.equals(fechaActual)){
                     request.setAttribute("datos", "porBuscar");
                     rd = "informePeriodo.jsp?infor=recursos&error=dias";
                 }else{   

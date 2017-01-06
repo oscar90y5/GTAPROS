@@ -20,6 +20,7 @@
                         <h2> Elija qué desea hacer: </h2>
                         <form action="Desarrollador" method="POST" style="margin-top: 20px;">
                             <input type="submit" name="accion" value="Introducir tarea" class="btn btn-lg btn-primary btn-block"/>
+                            <input type="submit" name="accion" value="Enviar informe" class="btn btn-lg btn-primary btn-block"/>
                             <input type="submit" name="accion" value="Modificar tareas activas" class="btn btn-lg btn-primary btn-block"/>
                             <input type="submit" name="accion" value="Consultar datos de tareas" class="btn btn-lg btn-primary btn-block"/>
                             <input type="submit" name="accion" value="Obtener informes" class="btn btn-lg btn-primary btn-block"/>

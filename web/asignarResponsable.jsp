@@ -14,7 +14,7 @@
     </head>
     <body>
         <section class="container">
-            <section class="login-form">
+                <div class="caja_principal">    
             <form role="form" action="AsignarResponsable" name="AsignarResponsable" value="AsignarResponsable" method="post">
             <% try{
                 String nombreProyecto = (String) request.getAttribute("nombreProyecto");
@@ -24,19 +24,19 @@
                      if(proyectos==null){%>
             <p>No existen proyectos sin responsable asignado</p>
             <%}else{%>
-            <h2> Asignar Responsable al Proyecto:</h2>
+            <div class="form-group"><h2> Asignar Responsable al Proyecto:</h2>
                 <select name="proyectos" >
                     <%for(Proyecto p: proyectos){%>
                     <option><%=p.getId()%>- <%=p.getNombre()%></option>
                      <%}%>   
-                </select>
+                </select></div>
             <%}}catch(NullPointerException e){}
                 catch(ClassCastException e){}
             }else{%>
             <h2> Asignar Responsable al Proyecto: <%=nombreProyecto%></h2>    
             <%}}catch(NullPointerException e){ }%>
-             <div class="">
-                 <p>Seleccione el usuario que desea que sea jefe de proyecto:</p>
+             <div class="form-group">
+                 <p>Seleccione el usuario que desea que sea jefe de proyecto:
                 <%
                 try{
                     List<Usuario> usuariosDisponibles = (List<Usuario>) request.getAttribute("usuariosDisponibles");
@@ -48,22 +48,21 @@
                     <%for(Usuario u: usuariosDisponibles){%>
                       <option><%=u.getNombreCompleto()%></option>
                      <%}%>   
-                </select>
+                </select></p>
                 <%}}catch(NullPointerException e){ }
                     catch(ClassCastException e){}
                 %>
              </div>
-                <p>Participación:<p>
-                <input type="number" name="participacion" min="1" max="100"/>
-             <div>
-                 
+             <div class="form-group">
+                <p>Participación:
+                    <input type="number" name="participacion" min="1" max="100"/></p>
              </div>
          <div class="box-footer">
              <button type="submit" class="btn btn-primary" name="asignarJefe" value="asignarJefe">Asignar Jefe de Proyecto</button>
              <button type="submit" class="btn btn-danger" name="asignarJefe" value="cancelar">Cancelar</button>
          </div>
         </form>
-           </section>
+           </div>
         </section>
     </body>
 </html>

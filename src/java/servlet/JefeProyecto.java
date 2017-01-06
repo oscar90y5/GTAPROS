@@ -18,10 +18,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import persistencia.ProyectoFacadeLocal;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dominio.Informetareas;
 import dominio.Miembro;
+import dominio.Tarea;
 import dominio.Usuario;
 import java.util.ArrayList;
+import persistencia.InformetareasFacadeLocal;
 import persistencia.MiembroFacadeLocal;
+import persistencia.TareaFacade;
+import persistencia.TareaFacadeLocal;
 import persistencia.UsuarioFacadeLocal;
 
 /**
@@ -30,6 +35,12 @@ import persistencia.UsuarioFacadeLocal;
  */
 @WebServlet(name = "JefeProyecto", urlPatterns = {"/JefeProyecto"})
 public class JefeProyecto extends HttpServlet {
+
+    @EJB
+    private TareaFacadeLocal tareaFacade;
+
+    @EJB
+    private InformetareasFacadeLocal informetareasFacade;
 
     @EJB
     private MiembroFacadeLocal miembroFacade;
@@ -107,6 +118,33 @@ public class JefeProyecto extends HttpServlet {
                 rd= "actividades.jsp"; 
             }
             
+            if (accion.equals("Revisar informes de tareas")){
+                List<Informetareas> informes = informetareasFacade.findByEstado("PendienteAprobacion");
+                for(int i = 0; i<informes.size() ;i++){
+                    List<Tarea> tareas = tareaFacade.findByIdInforme(informes.get(i).getId());
+                    
+                    if(tareas.size()>0){
+                        if(tareas.get(0).getIdMiembro().getIdProyecto().getId()!= idProject){
+                            informes.remove(i);
+                            i--;
+                        }
+                    } else {
+                        informes.remove(i);
+                        i--;
+                    }
+                }
+                request.setAttribute("informes", informes);
+                
+                List<List<Tarea>> tareasDeInformes = new ArrayList<>();
+                for(int i=0; i<informes.size(); i++){
+                    tareasDeInformes.add(tareaFacade.findByIdInforme(informes.get(i).getId()));
+                }
+                request.setAttribute("tareas", tareasDeInformes);
+                
+                rd= "revisarInformes.jsp";
+            }
+
+                
             if (accion.equals("Obtener informes")) {
                 proyects = proyectoFacade.findAll();
                 rd = "proyectos.jsp?accion=informes";

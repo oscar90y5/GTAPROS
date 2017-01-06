@@ -24,10 +24,10 @@
                     <%if (estado.equals("pendienteEnvio")) {%>
                     <h2>Relacion Trabajadores/Actividades pendientes de envio:</h2>
                     <%}
-                    if (estado.equals("pendienteAprob")) {%>
+                        if (estado.equals("pendienteAprob")) {%>
                     <h2>Relacion Trabajadores/Actividades pendientes de aprobacion</h2>
                     <%}
-                    if (estado.equals("realmayor")) {%>
+                        if (estado.equals("realmayor")) {%>
                     <h2>Actividades con mayor tiempo real que estimado</h2>
                     <%}
                     if (estado.equals("general")){%>
@@ -71,17 +71,18 @@
                     <p>No existen actividades con mayor tiempo real que estimado</p>
                     <%}else{%>
                     <table class="table columna_caja_principal" >
-                    <tr>
-                        <td><h4>Id Actividad</h4></td>
-                        <td><h4>Nombre Actividad</h4></td>
-                        <td><h4>TiempoEstimado</h4></td>
-                        <td><h4>TiempoReal</h4></td>
-                    </tr>
-                    <%for(Actividad a: datos){
-                            List<Tarea> tareas = a.getTareaList();
-                            int tiempoReal = 0;
-                            for(Tarea t: tareas)
-                                tiempoReal += t.getEsfuerzoReal();
+                        <tr>
+                            <td><h4>Id Actividad</h4></td>
+                            <td><h4>Nombre Actividad</h4></td>
+                            <td><h4>TiempoEstimado</h4></td>
+                            <td><h4>TiempoReal</h4></td>
+                        </tr>
+                        <%for (Actividad a : datos) {
+                                List<Tarea> tareas = a.getTareaList();
+                                int tiempoReal = 0;
+                                for (Tarea t : tareas) {
+                                    tiempoReal += t.getEsfuerzoReal();
+                                }
                         %>
                     <tr>
                         <td><%=a.getId()%></td>

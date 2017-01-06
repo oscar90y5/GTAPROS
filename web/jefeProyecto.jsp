@@ -28,6 +28,7 @@
                             <input type="submit" name="accion" value="Asignar personas a proyecto" class="btn btn-lg btn-primary btn-block"/>
                             <input type="submit" name="accion" value="Asignar personas a actividad" class="btn btn-lg btn-primary btn-block"/>
                             <input type="submit" name="accion" value="Fijar fin de actividad" class="btn btn-lg btn-primary btn-block"/>
+                            <input type="submit" name="accion" value="Revisar informes de tareas" class="btn btn-lg btn-primary btn-block"/>
                             <input type="submit" name="accion" value="Obtener informes" class="btn btn-lg btn-primary btn-block"/>
                             <input type="submit" name="accion" value="Consultar datos de actividad" class="btn btn-lg btn-primary btn-block"/>
                             <input type="submit" name="accion" value="Fijar vacaciones" class="btn btn-lg btn-primary btn-block"/>
