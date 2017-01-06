@@ -34,4 +34,5 @@ public interface InformetareasFacadeLocal {
     
     List<Informetareas> findByIdProyectoAndEstadoAndDni(Object idProyecto, Object idEstado, Object dni);
 
+    List<Informetareas> findByEstado(Object estado);
 }
