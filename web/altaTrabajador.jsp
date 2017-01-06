@@ -9,23 +9,23 @@
     </head>
     <body>
         <section class="container">
-            <section class="login-form">
+            <div class="caja_principal">            
             <h2> Dar de alta nuevo Trabajador</h2>
             <form role="form" action="AltaTrabajador" name="AltaTrabajador" value="AltraTrabajador" method="post">
          <div class=>
-             <div class="">
+             <div class="form-group">
                  <label for="nombreProyecto">Nombre del trabajador</label>
-                 <input type="text" class="form-control" id="nombreTrabajador" placeholder="Introduzca el nombre del trabajador" name="nombreTrabajador">
+                 <input type="text" class="form-control input-lg" id="nombreTrabajador" placeholder="Introduzca el nombre del trabajador" name="nombreTrabajador">
              </div>
-             <div class="">
+             <div class="form-group">
                  <label for="nombreProyecto">DNI del trabajador</label>
-                 <input type="text" class="form-control" id="dniTrabajador" placeholder="Introduzca el dni del trabajador" name="dniTrabajador">
+                 <input type="text" class="form-control input-lg" id="dniTrabajador" placeholder="Introduzca el dni del trabajador" name="dniTrabajador">
              </div>
-             <div class="">
+             <div class="form-group">
                  <label for="nombreProyecto">Clave del trabajador</label>
-                 <input type="password" class="form-control" id="claveTrabajador" placeholder="Introduzca la clave del trabajador" name="claveTrabajador">
+                 <input type="password" class="form-control input-lg" id="claveTrabajador" placeholder="Introduzca la clave del trabajador" name="claveTrabajador">
              </div>
-             <div class="">
+             <div class="form-group">
                  <label for="nombreProyecto">Categoría trabajador</label>
                  <select class="" id="categoriaTrabajador" name="categoriaTrabajador">
                      <option>1-JefeProyecto</option>
@@ -38,12 +38,12 @@
                  </select>
              </div>
          </div><!-- /.box-body -->
-         <div class="box-footer">
-             <button type="submit" class="btn btn-primary" name="altaTrabajadorBtn" value="addTrabajador">Añadir Trabajador</button>
-             <button type="submit" class="btn btn-primary" name="altaTrabajadorBtn" value="cancelAddTrabajador">Cancelar</button>
+         <div class="box-footer text-right">
+             <button type="submit"  class="btn btn-primary" name="altaTrabajadorBtn" value="addTrabajador">Añadir Trabajador</button>
+             <button type="submit"  class="btn btn-danger" name="altaTrabajadorBtn" value="cancelAddTrabajador">Cancelar</button>
          </div>
         </form>
-           </section>
+            </div>
         </section>
     </body>
 </html>
