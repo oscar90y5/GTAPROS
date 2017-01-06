@@ -28,13 +28,10 @@
              <div class="form-group">
                  <label for="nombreProyecto">Categoría trabajador</label>
                  <select class="" id="categoriaTrabajador" name="categoriaTrabajador">
-                     <option>1-JefeProyecto</option>
-                     <option>2-Analista</option>
-                     <option>3-Diseñador</option>
-                     <option>3-AnalistaProgramador</option>
-                     <option>3-ResponsablePruebas</option>
-                     <option>4-Programador</option>
-                     <option>4-Probrador</option>
+                     <option>1</option>
+                     <option>2</option>
+                     <option>3</option>
+                     <option>4</option>
                  </select>
              </div>
          </div><!-- /.box-body -->
