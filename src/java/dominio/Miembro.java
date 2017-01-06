@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author miki
  */
 @Entity
-@Table(name = "miembro")
+@Table(name = "Miembro")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Miembro.findAll", query = "SELECT m FROM Miembro m")
@@ -38,7 +38,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Miembro.findByIdProyecto", query = "SELECT m FROM Miembro m WHERE m.idProyecto = :idProyecto")
     , @NamedQuery(name = "Miembro.findByIdMiembro", query = "SELECT m FROM Miembro m WHERE m.idMiembro = :idMiembro")
     , @NamedQuery(name = "Miembro.findByParticipacion", query = "SELECT m FROM Miembro m WHERE m.participacion = :participacion")
-    , @NamedQuery(name = "Miembro.findByIdProyectoAndDni", query = "SELECT m FROM Miembro m WHERE m.idProyecto = :idProyecto AND m.dni = :dni")
     , @NamedQuery(name = "Miembro.findByDniAndIdProyecto", query = "SELECT m FROM Miembro m WHERE m.idProyecto.id = :idProyecto AND m.dni.dni = :dni")})
 @JsonIgnoreProperties(value = {"actividadList", "tareaList"})
 public class Miembro implements Serializable {

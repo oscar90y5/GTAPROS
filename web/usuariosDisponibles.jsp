@@ -9,10 +9,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>GTAPROS</title>
         <%@include file="WEB-INF/jspf/includes.jspf" %>
-        <link rel="stylesheet" type="text/css" media="all" href="bootstrap/css/calendar-estilo.css" />
-        <script type="text/javascript" src="bootstrap/js/calendar.js"></script>
-        <script type="text/javascript" src="bootstrap/js/calendar-es.js"></script>
-        <script type="text/javascript" src="bootstrap/js/calendar-setup.js"></script>
     </head>
     <body>
         <div class="container">
@@ -35,7 +31,7 @@
                     
                     %>
                     <tr style="cursor:pointer" 
-                        onclick="document.location.href ='<%= destino%>?UsuarioDni=<%=u.getDni()%>'"
+                        onclick="document.location.href ='<%=destino%>?UsuarioDni=<%=u.getDni()%>'"
                         onmouseover="this.style.color = '#2B58CC';" onmouseout="this.style.color = '#4E4E4E';">
                         <td><%=u.getNombreCompleto()%></td>
                         <td><%=u.getDni()%></td>

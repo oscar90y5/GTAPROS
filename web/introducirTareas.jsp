@@ -52,8 +52,8 @@
                             </p>
                             <p>
                                 <label for="semana">Semana(LUNES-DOMINGO):</label>
-                                <input type="Date" name="fecha1" placeholder="Seleccione fecha inicio"/>
-                                <input type="Date" name="fecha2" placeholder="Seleccione fecha fin"/>
+                                <input type="Date" name="fecha1" placeholder="Seleccione fecha inicio" required/>
+                                <input type="Date" name="fecha2" placeholder="Seleccione fecha fin" required/>
                             </p>
                         </div>
                         <div class="box-footer text-right" style="margin-top: 10px">

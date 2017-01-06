@@ -72,7 +72,7 @@ public class CargarPlan extends HttpServlet {
         //Para despachar
         String rd = "cargarPlan.jsp";
         
-        if (accion.equals("Cargar")) {
+        if (accion.equals("Aceptar")) {
             //Obtencion Fecha de inicio
             String fecha = (String) request.getParameter("fecha");
             String[] partes = fecha.split("/");
@@ -143,6 +143,7 @@ public class CargarPlan extends HttpServlet {
             //Cambiar proyecto de Pendiente-->EnCurso
             proyect.setEstado("EnCurso");
             proyect.setFechaInicio(myDate);
+            proyect.setCargado(Boolean.TRUE);
             proyectoFacade.edit(proyect);
             rd = "exito.jsp";
         }

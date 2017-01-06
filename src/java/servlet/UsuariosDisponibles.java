@@ -22,8 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import persistencia.ActividadFacadeLocal;
 import persistencia.MiembroFacadeLocal;
-import persistencia.ProyectoFacadeLocal;
-import persistencia.UsuarioFacadeLocal;
 
 /**
  *
@@ -34,12 +32,6 @@ public class UsuariosDisponibles extends HttpServlet {
 
     @EJB
     private MiembroFacadeLocal miembroFacade;
-
-    @EJB
-    private ProyectoFacadeLocal proyectoFacade;
-
-    @EJB
-    private UsuarioFacadeLocal usuarioFacade;
 
     @EJB
     private ActividadFacadeLocal actividadFacade;
@@ -58,51 +50,29 @@ public class UsuariosDisponibles extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             HttpSession sesion = request.getSession();
-            String dniUsuario = (String) sesion.getAttribute("idUsuario");
             int id = Integer.valueOf(request.getParameter("idActividad"));              
             Actividad a = actividadFacade.findById(id);
             //ROL NECESARIO PARA LA ACTIVIDAD
-            int idRolActividad = a.getIdRol().getIdRol();  
-            //RECOGEMOS TODOS LOS USUARIOS ALMACENADOS
-            List<Usuario> usuarios =usuarioFacade.findAll();
+            String rolActividad = a.getIdRol().getNombreRol();
+            //Recogemos todos los miembros del proyecto
+            List<Miembro> miembros = miembroFacade.findByIdProyecto(a.getIdProyecto());
             List<Usuario> usuariosDisponibles = new ArrayList<>();
             Proyecto p = a.getIdProyecto();      
-            //PARA CADA USUARIO ALMACENADO MIRAMOS SU ROL
-            for(Usuario u : usuarios){
-                int tipoCategoriaUsuario = u.getTipoCategoria();
-                String dni = u.getDni();
-                //SI EL ROL DEL USUARIO ES IGUAL O MENOR QUE EL DE LA ACTIVIDAD LA PUEDE ASIGNAR
-               if(tipoCategoriaUsuario<=idRolActividad 
-                       && u.getEsAdmin().equals(false) &&
-                       !u.getDni().equals(dniUsuario)) {
-                //SI EL USUARIO NO ESTA EN LA TABLA MIEMBRO SE AÑADE
-                    List<Miembro> miembros = miembroFacade.findByDni(u);
-                    if(miembros.isEmpty()) usuariosDisponibles.add(u);
-                    
-                    //SI EL USUARIO ESTA EN LA TABLA MIEMBRO
-                    else{
-                        //RECOGEMOS TODAS LAS VECES QUE ESTA EN LA TABLA MIEMBRO
-                        for(Miembro m : miembros){
-                            //SI SE QUIERE AÑADIR A UNA ACTIVIDAD DEL MISMO PROYECTO
-                            //TIENE QUE SER EL JEFE DE PROYECTO
-                            if(m.getIdProyecto().equals(a.getIdProyecto()) && 
-                              (m.getIdRol().getIdRol()!=1)){
-                                usuariosDisponibles.add(u);
-                                break;
-                            }else{
-                                if(!m.getIdProyecto().equals(a.getIdProyecto())){
-                                    usuariosDisponibles.add(u);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
+            //Para cada miembro comprobamos su rol
+            for(Miembro m : miembros){
+                String rolMiembro = m.getIdRol().getNombreRol();
+                Usuario dni = m.getDni();
+                /*Si el miembro esta asignado al proyecto con el rol necesario
+                *para realizar la actividad
+                */
+               if(rolMiembro.equals(rolActividad) && !a.getMiembroList().contains(m)){
+                   usuariosDisponibles.add(dni);
+               }
             }
-            String destino = "AsignarUsuarioActividad";
+            String destino = "AsignarAActividad";
             int idActividad = a.getId();
             request.setAttribute("destino", destino);
-            sesion.setAttribute("idRolActividad", idRolActividad);
+            sesion.setAttribute("idRolActividad", rolActividad);
             sesion.setAttribute("idActividad", idActividad);
             sesion.setAttribute("idProyecto", p.getId());
             request.setAttribute("usuariosDisponibles", usuariosDisponibles);

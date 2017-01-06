@@ -1,3 +1,4 @@
+<%@page import="dominio.Informetareas"%>
 <%@page import="dominio.Tarea"%>
 <%@page import="dominio.Rol"%>
 <%@page import="dominio.Actividad"%>
@@ -18,41 +19,30 @@
         <div class="container">
             <div class="caja_principal">
                 <%
-                List<Actividad> actividades = (List<Actividad>) request.getAttribute("actividades");
-                if (actividades == null || actividades.isEmpty()) {%>
-                <h3>No existen actividades relevantes para la accion que usted quiere realizar.</h3>
+                    List<Informetareas> informes = (List<Informetareas>) request.getAttribute("informes");
+                    if (informes == null || informes.size() == 0) {%>
+                <h3>No existen informes pendientes de envio.</h3>
                 <%} else {
                 %>
                 <table class="table columna_caja_principal" >
                     <tr><h1>Selecciona una actividad:</h1></tr>
                     <tr style="align-content: center">
-                        <td><h4>Id</h4></td>
-                        <td><h4>Nombre</h4></td>
-                        <td><h4>Rol</h4></td>
-                        <td><h4>Estado</h4></td>
-                        <td><h4>Duracion (horas/hombre)</h4></td>
-                        <td><h4>Fecha de inicio</h4></td>
-                        <td><h4>Fecha de fin</h4></td>
-                        <td><h4>Descripcion</h4></td>
+                        <td><h4>Id informe</h4></td>
+                        <td><h4>Semana</h4></td>
                     </tr>
                     <%
-                        String destino = (String) request.getAttribute("destino");
-                        for (Actividad a : actividades) {
+                        for (Informetareas i : informes) {
                     %>
 
                     <tr style="cursor:pointer" 
-                        onclick="document.location.href = '<%= destino%>?idActividad=<%=a.getId()%>'"
+                        onclick="document.location.href = 'EnviarInforme?idInforme=<%=i.getId()%>'"
                         onmouseover="this.style.color = '#2B58CC';" onmouseout="this.style.color = '#4E4E4E';">
-                        <td><%=a.getId()%></td>
-                        <td><%=a.getNombre()%></td>
-                        <td><%=a.getIdRol().getNombreRol()%></td>
-                        <td><%=a.getEstado()%></td>
-                        <td><%=a.getDuracion()%></td>
-                        <td><%=a.getFechaInicioPrettyString()%></td>
-                        <td><%=a.getFechaFinPrettyString()%></td>
-                        <td><%=a.getDescripcion()%></td>
+                        <td><%=i.getId()%></td>
+                        <td><%=i.getSemana() %></td>
                     </tr>
-                    <%}}%>
+                    <%}
+                        }
+                    %>
                 </table>
                 <form role="form" action="VolverMenu" method="POST">
                     <button type="submit" class="btn btn-primary" name="accion" value="Volver">Volver</button>

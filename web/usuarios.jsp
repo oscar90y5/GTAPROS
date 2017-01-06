@@ -65,7 +65,7 @@
                                 <option value="Analista">Analista</option> 
                                 <option value="Disenador">Diseñador</option> 
                                 <option value="AnalistaProgramador">Analista-programador</option>
-                                <option value="RespEquipoPruebas">Responsable equipo de pruebas</option> 
+                                <option value="ResponsableEquipoPruebas">Responsable equipo de pruebas</option> 
                                 <option value="Programador">Programador</option> 
                                 <option value="Probador">Probador</option> 
                                 <%break;
@@ -73,7 +73,7 @@
                                 <option selected disabled>Elija categoria</option>
                                 <option value="Disenador">Diseñador</option> 
                                 <option value="AnalistaProgramador">Analista-programador</option>
-                                <option value="RespEquipoPruebas">Responsable equipo de pruebas</option> 
+                                <option value="ResponsableEquipoPruebas">Responsable equipo de pruebas</option> 
                                 <option value="Programador">Programador</option> 
                                 <option value="Probador">Probador</option> 
                                 <%break;

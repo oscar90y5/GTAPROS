@@ -8,18 +8,6 @@
         <%@include file="WEB-INF/jspf/includes.jspf" %>
     </head>
     <body>
-         <% 
-                String error = null;
-                try{
-                    error = (String) request.getParameter("error");
-                    if(error.equals("NoActividades")){
-                %>
-                <p style="color:red">No hay actividades para cerrar</p>
-                <%}
-                    if(error.equals("NoActividadesAbiertas")){ %>
-                <p style="color:red">No hay actividades sin asignar</p>
-                <%}}catch(NullPointerException e){ }
-                %>
         <section class="container">
             <div class="caja_principal2">
                 <div class="caja_small2">
@@ -31,6 +19,7 @@
                             <input type="submit" name="accion" value="Asignar personas a proyecto" class="btn btn-lg btn-primary btn-block"/>
                             <input type="submit" name="accion" value="Asignar personas a actividad" class="btn btn-lg btn-primary btn-block"/>
                             <input type="submit" name="accion" value="Fijar fin de actividad" class="btn btn-lg btn-primary btn-block"/>
+                            <input type="submit" name="accion" value="Revisar informes de tareas" class="btn btn-lg btn-primary btn-block"/>
                             <input type="submit" name="accion" value="Obtener informes" class="btn btn-lg btn-primary btn-block"/>
                             <input type="submit" name="accion" value="Consultar datos de actividad" class="btn btn-lg btn-primary btn-block"/>
                             <input type="submit" name="accion" value="Fijar vacaciones" class="btn btn-lg btn-primary btn-block"/>
