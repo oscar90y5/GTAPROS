@@ -47,8 +47,7 @@ public class AltaTrabajador extends HttpServlet {
                 dni = request.getParameter("dniTrabajador");
                 clave = request.getParameter("claveTrabajador");
                 String tipoCategoriaNombre = request.getParameter("categoriaTrabajador");
-                String[] parts = tipoCategoriaNombre.split("\\-");
-                tipoCategoria = Integer.valueOf(parts[0]);
+                tipoCategoria = Integer.valueOf(tipoCategoriaNombre);
                 Usuario u = new Usuario(dni, clave, tipoCategoria);
                 u.setNombreCompleto(nombre);
                 u.setEsAdmin(false);

@@ -38,7 +38,7 @@
                         onclick="document.location.href = 'EnviarInforme?idInforme=<%=i.getId()%>'"
                         onmouseover="this.style.color = '#2B58CC';" onmouseout="this.style.color = '#4E4E4E';">
                         <td><%=i.getId()%></td>
-                        <td><%=i.getSemana() %></td>
+                        <td><%=i.getSemanaPrettyPrinter()%></td>
                     </tr>
                     <%}
                         }

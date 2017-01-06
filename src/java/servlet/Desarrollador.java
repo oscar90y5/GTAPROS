@@ -5,6 +5,7 @@
  */
 package servlet;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dominio.Actividad;
 import dominio.Informetareas;
 import dominio.Miembro;
@@ -24,8 +25,6 @@ import persistencia.ActividadFacadeLocal;
 import persistencia.InformetareasFacadeLocal;
 import persistencia.MiembroFacadeLocal;
 import persistencia.ProyectoFacadeLocal;
-import persistencia.UsuarioFacadeLocal;
-import static servlet.JefeProyecto.mapper;
 
 /**
  *
@@ -45,6 +44,8 @@ public class Desarrollador extends HttpServlet {
 
     @EJB
     private ActividadFacadeLocal actividadFacade;
+    
+     public static final ObjectMapper mapper = new ObjectMapper();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
