@@ -25,7 +25,6 @@ import dominio.Usuario;
 import java.util.ArrayList;
 import persistencia.InformetareasFacadeLocal;
 import persistencia.MiembroFacadeLocal;
-import persistencia.TareaFacade;
 import persistencia.TareaFacadeLocal;
 import persistencia.UsuarioFacadeLocal;
 

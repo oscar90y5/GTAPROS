@@ -66,8 +66,6 @@ public class CargarPlan extends HttpServlet {
         HttpSession sesion = request.getSession();
         String accion = (String) request.getParameter("accion");
         int idProject = (Integer) sesion.getAttribute("idProject");
-        
-        System.out.println(accion + " " + idProject);
         Proyecto proyect = proyectoFacade.find(idProject);
         //Para despachar
         String rd = "cargarPlan.jsp";
@@ -136,7 +134,6 @@ public class CargarPlan extends HttpServlet {
                     actual.setFechaInicio(myDate);
                 }
                 //Modificacion
-                System.out.println("Actividad agregada" + actual.toString());
                 actividadFacade.edit(actual);
             }
 

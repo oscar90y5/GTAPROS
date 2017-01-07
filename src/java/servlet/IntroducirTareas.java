@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import persistencia.ActividadFacade;
 import persistencia.ActividadFacadeLocal;
 import persistencia.InformetareasFacadeLocal;
 import persistencia.MiembroFacadeLocal;
@@ -110,7 +109,6 @@ public class IntroducirTareas extends HttpServlet {
                 } else {
                     informe.setEstado("PendienteEnvio");
                 }
-                System.out.println("id del informe" + informe.getId());
                 informetareasFacade.create(informe);
 
                 Integer idMiembro = miembroFacade.findByDniAndIdProyecto(user.getDni(), proyecto.getId()).getIdMiembro();
@@ -135,7 +133,6 @@ public class IntroducirTareas extends HttpServlet {
                     nuevaTarea.setInformetareas(informe);
                     nuevaTarea.setEsfuerzoReal(Integer.valueOf(esfuerzo));
                     tareaFacade.create(nuevaTarea);
-                    System.out.println("id del informe desde tarea" + nuevaTarea.getInformetareas().getId());
                 }
 
                 esfuerzo = request.getParameter("leerRevisarDocumentacion");

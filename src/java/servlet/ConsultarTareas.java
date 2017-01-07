@@ -60,52 +60,24 @@ public class ConsultarTareas extends HttpServlet {
         int idProject = (Integer) sesion.getAttribute("idProject");
         Integer idActividad = Integer.parseInt(request.getParameter("idActividad"));
         Actividad actividad = actividadFacade.find(idActividad);
-        System.out.println("idProyecto -" + idProject + "- idActividad -" + idActividad + "- dni -" + dni + "-");
-        System.out.println("actividad string " + actividad);
         Miembro miembro = miembroFacade.findByDniAndIdProyecto(dni, idProject);
-        System.out.println("miembro " + miembro);
 
-        List<Tarea> tareas;
+        List<Tarea> tareas = new ArrayList<Tarea>();;
         if (miembro.getIdRol().getNombreRol().equals("JefeProyecto")) {
             //Todas las tareas del proyecto
-            tareas = new ArrayList<Tarea>();
             for (Tarea t : tareaFacade.findAll()) {
-                //Mostrar tarea
                 if (t.getIdActividad().getId().equals(idActividad)) {
                     tareas.add(t);
-                    System.out.println("tarea " + t.getTareaPK().getTipo() + " = "
-                            + t.getEsfuerzoReal()
-                            + " idInforme=" + t.getInformetareas()
-                            + " idActividad="
-                            + t.getIdActividad().getId() + " idMiembro=" + t.getIdMiembro().getIdMiembro());
                 }
             }
         } else {
-            System.out.println("ei");
-            for (Tarea t : actividad.getTareaList()) {
-                //Mostrar tarea
-                if (t.getIdMiembro().getIdMiembro().equals(miembro.getIdMiembro())) {
-                    System.out.println("tarea " + t.getTareaPK().getTipo() + " = "
-                            + t.getEsfuerzoReal() + " idInforme=" + t.getInformetareas().getId() + " idActividad="
-                            + t.getIdActividad().getId() + " idMiembro=" + t.getIdMiembro().getIdMiembro());
-                }
-            }
-            System.out.println("ei");
-            System.out.println("empieza");
-            tareas = new ArrayList<Tarea>();
+            //Solo las tareas de la actividad que ha seleccionado
             for (Tarea t : tareaFacade.findAll()) {
-                //Mostrar tarea
                 if (t.getIdActividad().getId().equals(idActividad)
                         && t.getIdMiembro().getIdMiembro().equals(miembro.getIdMiembro())) {
                     tareas.add(t);
-                    System.out.println("tarea " + t.getTareaPK().getTipo() + " = "
-                            + t.getEsfuerzoReal()
-                            + " idInforme=" + t.getTareaPK().getIdInforme()
-                            + " idActividad="
-                            + t.getIdActividad().getId() + " idMiembro=" + t.getIdMiembro().getIdMiembro());
                 }
             }
-            System.out.println("no llega");
         }
 
         request.setAttribute("tareas", tareas);

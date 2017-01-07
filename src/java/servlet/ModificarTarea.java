@@ -9,7 +9,6 @@ import dominio.Actividad;
 import dominio.Miembro;
 import dominio.Tarea;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -51,26 +50,20 @@ public class ModificarTarea extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        System.out.println("ModificarTarea");
         HttpSession sesion = request.getSession();
         String dni = (String) sesion.getAttribute("idUser");
         int idProject = (Integer) sesion.getAttribute("idProject");
         Integer idActividad = Integer.parseInt(request.getParameter("idActividad"));
         sesion.setAttribute("idActividad", idActividad);
         Actividad actividad = actividadFacade.find(idActividad);
-        System.out.println("idProyecto -" + idProject + "- idActividad -" + idActividad + "- dni -" + dni + "-");
-        System.out.println("actividad string " + actividad);
         Miembro miembro = miembroFacade.findByDniAndIdProyecto(dni, idProject);
-        System.out.println("miembro " + miembro);
         
         List<Tarea> tareas = new ArrayList<Tarea>();
         for (Tarea t : tareaFacade.findAll()) {
-            System.out.println("miembro en tarea " + t.getIdMiembro().getIdMiembro());
             if (t.getIdMiembro().getIdMiembro().equals(miembro.getIdMiembro())
                     && t.getIdActividad().getId().equals(idActividad)) {
                 if (t.getInformetareas().getEstado().equals("PendienteEnvio")
                         || t.getInformetareas().getEstado().equals("Rechazado")) {
-                    System.out.println("tipo " + t.getInformetareas().getEstado());
                     tareas.add(t);
                 }
             }

@@ -57,7 +57,6 @@ public class ModificarInforme extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        System.out.println("ModificarInforme");
         String accion = request.getParameter("accion");
         String rd = "VolverMenu";
         if (accion.equals("Aceptar")) {
@@ -67,11 +66,8 @@ public class ModificarInforme extends HttpServlet {
             Integer idActividad = (Integer) sesion.getAttribute("idActividad");
             sesion.removeAttribute("idActividad");
             Actividad actividad = actividadFacade.find(idActividad);
-            System.out.println("idProyecto -" + idProject + "- idActividad -" + idActividad + "- dni -" + dni + "-");
             int idInforme = Integer.parseInt(request.getParameter("idInforme"));
-            System.out.println("idInforme " + idInforme);
             Miembro miembro = miembroFacade.findByDniAndIdProyecto(dni, idProject);
-            System.out.println("miembro " + miembro);
 
             Informetareas i = informetareasFacade.find(idInforme);
 
@@ -91,16 +87,11 @@ public class ModificarInforme extends HttpServlet {
                     }
                 }
             }
-            for (String una : tareasModificadas.keySet()) {
-                System.out.println(una + " - " + tareasModificadas.get(una));
-            }
-
             //Extraemos tareas de la BD
             List<Tarea> tareasInBD = new ArrayList<Tarea>();
             for (Tarea t : tareaFacade.findAll()) {
                 if (t.getInformetareas().getId().equals(i.getId())) {
                     tareasInBD.add(t);
-                    System.out.println("en bd " + t.getTareaPK().getTipo() + " - " + t.getEsfuerzoReal());
                 }
             }
             //Comparamos con las tareas del informe
@@ -108,32 +99,29 @@ public class ModificarInforme extends HttpServlet {
             for (String modif : tareasModificadas.keySet()) {
                 if ((tar = estaEnBD(modif, tareasInBD)) != null) {
                     //Editar o Borrar
-                    System.out.println("dur eo" + modif);
-                    System.out.println("dur eo" + tareasModificadas.get(tar.getTareaPK().getTipo()));
                     if (tareasModificadas.get(tar.getTareaPK().getTipo()) > 0) {
                         tar.setEsfuerzoReal(tareasModificadas.get(tar.getTareaPK().getTipo()));
                         tareaFacade.edit(tar);
                     } else {
-                        System.out.println("tar a borrar " + tar.getTareaPK().getTipo() + " " + tar.getTareaPK().getIdInforme());
                         tareaFacade.remove(tar);
                     }
                 } else {
-                    System.out.println("a crear" + modif);
-                    System.out.println("dur " + tareasModificadas.get(modif));
                     if (tareasModificadas.get(modif) > 0) {
                         //Insertar
-                        System.out.println("informe " + i);
                         tar = new Tarea(modif, i.getId());
                         tar.setInformetareas(i);
                         tar.setIdActividad(actividad);
-                        System.out.println("actividad en tarea " + actividad);
                         tar.setIdMiembro(miembro);
                         tar.setEsfuerzoReal(tareasModificadas.get(tar.getTareaPK().getTipo()));
-                        System.out.println("id desde tarea " + tar.getInformetareas());
-                        System.out.println("id desde tareapk " + tar.getTareaPK().getIdInforme());
                         tareaFacade.create(tar);
                     }
                 }
+            }
+
+            //Si es rechazado se pone como pendiente de envio
+            if (i.getEstado().equals("Rechazado")) {
+                i.setEstado("PendienteEnvio");
+                informetareasFacade.edit(i);
             }
             rd = "exito.jsp";
         }

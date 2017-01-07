@@ -62,12 +62,10 @@ public class CargarInformeModificar extends HttpServlet {
             String dni = (String) sesion.getAttribute("idUser");
             int idProject = (Integer) sesion.getAttribute("idProject");
             Integer idActividad = (Integer) sesion.getAttribute("idActividad");
-            //sesion.removeAttribute("idActividad");
             Actividad actividad = actividadFacade.find(idActividad);
             Miembro miembro = miembroFacade.findByDniAndIdProyecto(dni, idProject);
 
             String combo = request.getParameter("informeCombo");
-            
             if (combo == null || combo.equals("")) {
                 request.setAttribute("error", "Selecciona una opción en el selector por favor.");
                 rd = "seleccionModificarTarea.jsp";
@@ -77,16 +75,9 @@ public class CargarInformeModificar extends HttpServlet {
                 List<Tarea> tareas = new ArrayList<Tarea>();
                 for(Tarea t: tareaFacade.findAll()){
                     if(t.getInformetareas().getId().equals(idInforme)){
-                         System.out.println("en informe " + t.getTareaPK().getTipo() + " - " + t.getEsfuerzoReal());
                         tareas.add(t);
                     }
                 }
-//                for (Tarea t : actividad.getTareaList()) {
-//                    if (t.getInformetareas().getId().equals(idInforme)) {
-//                        System.out.println("en informe " + t.getTareaPK().getTipo() + " - " + t.getEsfuerzoReal());
-//                        tareas.add(t);
-//                    }
-//                }
                 request.setAttribute("tareas", tareas);
                 rd = "modificarInforme.jsp";
             }
