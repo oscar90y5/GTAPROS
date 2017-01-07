@@ -29,13 +29,13 @@ import persistencia.TareaFacadeLocal;
  */
 @WebServlet(name = "ModificarTarea", urlPatterns = {"/ModificarTarea"})
 public class ModificarTarea extends HttpServlet {
-
+    
     @EJB
     private TareaFacadeLocal tareaFacade;
-
+    
     @EJB
     private MiembroFacadeLocal miembroFacade;
-
+    
     @EJB
     private ActividadFacadeLocal actividadFacade;
 
@@ -62,11 +62,12 @@ public class ModificarTarea extends HttpServlet {
         System.out.println("actividad string " + actividad);
         Miembro miembro = miembroFacade.findByDniAndIdProyecto(dni, idProject);
         System.out.println("miembro " + miembro);
-
+        
         List<Tarea> tareas = new ArrayList<Tarea>();
         for (Tarea t : tareaFacade.findAll()) {
             System.out.println("miembro en tarea " + t.getIdMiembro().getIdMiembro());
-            if (t.getIdMiembro().getIdMiembro().equals(miembro.getIdMiembro())) {
+            if (t.getIdMiembro().getIdMiembro().equals(miembro.getIdMiembro())
+                    && t.getIdActividad().getId().equals(idActividad)) {
                 if (t.getInformetareas().getEstado().equals("PendienteEnvio")
                         || t.getInformetareas().getEstado().equals("Rechazado")) {
                     System.out.println("tipo " + t.getInformetareas().getEstado());
@@ -74,11 +75,11 @@ public class ModificarTarea extends HttpServlet {
                 }
             }
         }
-
+        
         request.setAttribute("tareas", tareas);
         String rd = "modificarTarea.jsp";
         request.getRequestDispatcher(rd).forward(request, response);
-
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
