@@ -67,7 +67,11 @@ public class ModificarTarea extends HttpServlet {
         for (Tarea t : tareaFacade.findAll()) {
             System.out.println("miembro en tarea " + t.getIdMiembro().getIdMiembro());
             if (t.getIdMiembro().getIdMiembro().equals(miembro.getIdMiembro())) {
-                tareas.add(t);
+                if (t.getInformetareas().getEstado().equals("PendienteEnvio")
+                        || t.getInformetareas().getEstado().equals("Rechazado")) {
+                    System.out.println("tipo " + t.getInformetareas().getEstado());
+                    tareas.add(t);
+                }
             }
         }
 

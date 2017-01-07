@@ -20,34 +20,41 @@
     <body>
         <div class="container">
             <div class="caja_principal">
-            <h2>Elija la fecha de vacaciones:</h2>
-            <div class="caja_small">
-                <form role="form" action="FijarVacaciones" name="FijarVacaciones" method="POST">
-                    <%
-                    try{
-                        String error = request.getParameter("error");
-                        if(error.equals("fechaPasada")){%>
+                <h2>Elija la fecha de vacaciones:</h2>
+                <div class="caja_small">
+                    <form role="form" action="FijarVacaciones" name="FijarVacaciones" method="POST">
+                        <%
+                            try {
+                                String error = request.getParameter("error");
+                            if (error.equals("fechaPasada")) {%>
                         <p style="color:red">La fecha Inicial ya ha pasado</p> 
-                        <%}if(error.equals("fechaAnterior")){%>
+                        <%}
+                            if (error.equals("fechaAnterior")) {%>
                         <p style="color:red">La fecha Inicial es posterior a la final</p>  
-                        <%}if(error.equals("maxFijadas")){%>
+                        <%}
+                            if (error.equals("maxFijadas")) {%>
                         <p style="color:red">Ya tienes fijadas el maximo de vacaciones/año</p>  
-                        <%}if(error.equals("maxDias")){%>
+                        <%}
+                            if (error.equals("maxDias")) {%>
                         <p style="color:red">No puedes fijar vacaciones de más de 2 semanas de duración</p> 
-                        <%}if(error.equals("excedeDias")){%>
+                        <%}
+                            if (error.equals("excedeDias")) {%>
                         <p style="color:red">No puedes fijar tantos días, excedes el máximo de vacaciones/año</p> 
                         <%}
-                    }catch(NullPointerException e){ }
-                    %>
-                    <div class="form-group">
-                        <input type="Date" name="fecha1" placeholder="Seleccione fecha inicio"/>
-                        <input type="Date" name="fecha2" placeholder="Seleccione fecha fin"/>
-                    </div>
-                    <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Aceptar</button>
-                    <button type="submit" class="btn btn-danger" name="accion" value="Cancelar">Cancelar</button>
-                </form>
+                            } catch (NullPointerException e) {
+                            }
+                        %>
+                        <div class="form-group">
+                            <input type="Date" name="fecha1" placeholder="Seleccione fecha inicio"/>
+                            <input type="Date" name="fecha2" placeholder="Seleccione fecha fin"/>
+                        </div>
+                        <div class="box-footer text-right" style="margin-top: 10px">
+                            <button type="submit" class="btn btn-primary" name="accion" value="Aceptar">Aceptar</button>
+                            <button type="submit" class="btn btn-danger" name="accion" value="Cancelar">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
         </div>
     </body>
 </html>

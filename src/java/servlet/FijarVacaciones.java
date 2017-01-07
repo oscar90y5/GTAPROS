@@ -59,49 +59,60 @@ public class FijarVacaciones extends HttpServlet {
         Usuario user = usuarioFacade.find("idUser");
         String accion = (String) request.getParameter("accion");
         String rd = "exito.jsp";
-        
-        if(accion.equals("Cancelar")){
+
+        if (accion.equals("Cancelar")) {
             String vista = (String) sesion.getAttribute("vista");
-            if(vista.equals("administrador.jsp")) rd = "administrador.jsp";
-            if(vista.equals("desarrollador.jsp")) rd = "desarrollador.jsp";
-            if(vista.equals("administrador.jsp")) rd = "administrador.jsp";        
-        
-        }if(accion.equals("Aceptar")){
+            if (vista.equals("administrador.jsp")) {
+                rd = "administrador.jsp";
+            }
+            if (vista.equals("desarrollador.jsp")) {
+                rd = "desarrollador.jsp";
+            }
+            if (vista.equals("jefeProyecto.jsp")) {
+                rd = "jefeProyecto.jsp";
+            }
+
+        }
+        if (accion.equals("Aceptar")) {
             String fecha1 = (String) request.getParameter("fecha1");
-            String fecha2 = (String) request.getParameter("fecha2");  
+            String fecha2 = (String) request.getParameter("fecha2");
             Date fechaInicio = obtenerFecha(fecha1);
-            Date fechaFinal =  obtenerFecha(fecha2);
-            Calendar actual = new GregorianCalendar();      
-            Date fechaActual = obtenerFecha(Integer.toString(actual.get(Calendar.YEAR))+"-"+
-                    Integer.toString(actual.get(Calendar.MONTH +1))+"-"+
-                    Integer.toString(actual.get(Calendar.DATE)));
-            
+            Date fechaFinal = obtenerFecha(fecha2);
+            Calendar actual = new GregorianCalendar();
+            Date fechaActual = obtenerFecha(Integer.toString(actual.get(Calendar.YEAR)) + "-"
+                    + Integer.toString(actual.get(Calendar.MONTH + 1)) + "-"
+                    + Integer.toString(actual.get(Calendar.DATE)));
+
             long diferencia = fechaFinal.getTime() - fechaInicio.getTime();
             long dias = diferencia / (1000 * 60 * 60 * 24);
             List<Vacaciones> vacaciones = vacacionesFacade.findByUser(idUser);
-            int diasFijados =0;
+            int diasFijados = 0;
 
-
-            for(Vacaciones v: vacaciones){
+            for (Vacaciones v : vacaciones) {
                 Date fechaIni = v.getVacacionesPK().getFechaInicio();
                 Date fechaFin = v.getFechaFin();
                 diferencia = fechaFin.getTime() - fechaIni.getTime();
                 diasFijados += diferencia / (1000 * 60 * 60 * 24);
-                }
+            }
 
-            if(fechaInicio.before(fechaActual))
+            if (fechaInicio.before(fechaActual)) {
                 rd = "vacaciones.jsp?error=fechaPasada";
-            if(fechaFinal.before(fechaInicio))
+            }
+            if (fechaFinal.before(fechaInicio)) {
                 rd = "vacaciones.jsp?error=fechaAnterior";
-            if(diasFijados==28)
+            }
+            if (diasFijados == 28) {
                 rd = "vacaciones.jsp?error=maxFijadas";
-            if(dias>14)
+            }
+            if (dias > 14) {
                 rd = "vacaciones.jsp?error=maxDias";
-            if(diasFijados+dias>=28)
+            }
+            if (diasFijados + dias >= 28) {
                 rd = "vacaciones.jsp?error=excedeDias";
+            }
             //NO SE PUEDE FIJAR EN EPOCA DE PROYECTO
 
-            if(rd.equals("exito.jsp")){
+            if (rd.equals("exito.jsp")) {
                 Vacaciones v = new Vacaciones();
                 v.setUsuario(user);
                 v.setFechaFin(fechaFinal);
@@ -159,14 +170,15 @@ public class FijarVacaciones extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    public Date obtenerFecha(String fecha){
+    public Date obtenerFecha(String fecha) {
         String[] partes = fecha.split("-");
         Date myDate = null;
         try {
             String dateString = partes[2] + "-" + partes[1] + "-" + partes[0];
             DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
             myDate = formatter.parse(dateString);
-        } catch (ParseException ex) { }
+        } catch (ParseException ex) {
+        }
         return myDate;
     }
 }
