@@ -11,7 +11,7 @@
         <h1>Crear nuevo Proyecto</h1>
         <form role="form" action="proyecto" name="proyecto" value="crearProyecto" method="post">
          <div class=>
-             <div class="">
+             <div class="form-group">
                  <label for="nombreProyecto">Nombre del proyecto</label>
                  <input type="text" class="form-control" id="nombreProyecto" placeholder="Introduzca el nombre del proyecto" name="nombreProyecto">
              </div>
